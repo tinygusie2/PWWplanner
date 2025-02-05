@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Schedule Uploader</title>
+  <style>
+    @font-face {
+      font-family: 'Product Sans';
+      src: url('https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2') format('woff2'),
+           url('https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff') format('woff');
+      font-weight: 400;
+    }
+
+    :root {
+      --st-font-family-primary: 'Product Sans', sans-serif;
+      --st-font-family-secondary: 'Product Sans', sans-serif;
+    }
+
+    body {
+      font-family: 'Product Sans', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 28px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+
+    .schedule {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .date-group {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #ffffff;
+      border-left: 6px solid #3498db;
+      border-radius: 6px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .date-group h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #2980b9;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 5px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      padding: 5px 0;
+      font-size: 16px;
+    }
+
+    strong {
+      color: #2c3e50;
+    }
+
+    .upload-section {
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Product Sans', sans-serif;
+    }
+
+    input {
+      background: #ecf0f1;
+      margin-right: 10px;
+    }
+
+    button {
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .status {
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .klaar {
+      color: green;
+    }
+
+    .niet-klaar {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📅 Upload je Studierooster</h1>
+    <div class="upload-section">
+      <input type="file" id="fileInput" accept=".txt">
+      <button id="uploadButton">Upload</button>
+    </div>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const dagen = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+
+    document.getElementById('uploadButton').addEventListener('click', function() {
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = '';
+
+      const fileInput = document.getElementById('fileInput');
+      if (!fileInput.files || fileInput.files.length === 0) {
+        outputDiv.innerHTML = '<p class="error">⚠️ Geen bestand geselecteerd. Kies een bestand om te uploaden.</p>';
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const content = e.target.result;
+        if (!content.trim()) {
+          outputDiv.innerHTML = '<p class="error">⚠️ Geen data gevonden in het bestand.</p>';
+          return;
+        }
+        
+        const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
+        
+        if (lines.length % 2 !== 0) {
+          outputDiv.innerHTML = '<p class="error">⚠️ Bestandsformaat is incorrect. Elke vakregel moet worden gevolgd door een datum en beschrijving.</p>';
+          return;
+        }
+
+        const scheduleByDate = {};
+
+        for (let i = 0; i < lines.length; i += 2) {
+          const subject = lines[i].trim();
+          const dateDescLine = lines[i + 1].trim();
+          
+          const match = dateDescLine.match(/^(\d{4})-(\d{2})-(\d{2})\s+(.*?)\s*(klaar|niet klaar)?$/);
+          if (!match) {
+            outputDiv.innerHTML = `<p class="error">⚠️ Bestandsformaat incorrect op regel ${i + 2}. Verwacht een datum in YYYY-MM-DD formaat gevolgd door de beschrijving en optioneel "klaar" of "niet klaar".</p>`;
+            return;
+          }
+          
+          const jaar = match[1];
+          const maand = match[2];
+          const dag = match[3];
+          const description = match[4].trim();
+          const status = match[5] || 'niet klaar'; 
+
+          const dateStr = `${jaar}-${maand}-${dag}`;
+          const dateObj = new Date(dateStr);
+          if (isNaN(dateObj.getTime())) {
+            outputDiv.innerHTML = `<p class="error">⚠️ Ongeldige datum op regel ${i + 2}: ${dateStr}</p>`;
+            return;
+          }
+
+          const dagVanDeWeek = dagen[dateObj.getDay()];
+          const datumZonderJaar = `${dag}-${maand}`;
+
+          if (!scheduleByDate[dateStr]) {
+            scheduleByDate[dateStr] = { dag: dagVanDeWeek, datumKort: datumZonderJaar, entries: [] };
+          }
+          scheduleByDate[dateStr].entries.push({ subject: subject, description: description, status: status });
+        }
+        
+        const sortedDates = Object.keys(scheduleByDate).sort();
+        let html = '<div class="schedule">';
+        sortedDates.forEach(date => {
+          html += `<div class="date-group">`;
+          html += `<h2>📅 ${scheduleByDate[date].dag}, ${scheduleByDate[date].datumKort}</h2>`;
+          html += '<ul>';
+          scheduleByDate[date].entries.forEach(entry => {
+            const statusClass = entry.status === 'klaar' ? 'klaar' : 'niet-klaar';
+            const statusEmoji = entry.status === 'klaar' ? '✔️' : '❌';
+            html += `<li>📖 <strong>${entry.subject}:</strong> ${entry.description} <span class="status ${statusClass}">${statusEmoji} ${entry.status}</span></li>`;
+          });
+          html += '</ul></div>';
+        });
+        html += '</div>';
+        
+        outputDiv.innerHTML = html;
+      };
+
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>
