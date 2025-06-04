@@ -1,224 +1,771 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Study Schedule Uploader</title>
-  <link rel="icon" type="image/png" href="grappig.png">
-  <style>
-    @font-face {
-      font-family: 'Product Sans';
-      src: url('https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2') format('woff2'),
-           url('https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff') format('woff');
-      font-weight: 400;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 Mijn PWW Dashboard</title>
+    <!-- Google Fonts Import -->
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Google+Sans+Text:400,400italic,500,500italic,600,600italic,700,700italic|Roboto+Mono:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Font Styles */
+        body {
+            font-family: 'Google Sans Text', Arial, sans-serif; /* Added fallbacks */
+            font-weight: 400;
+            line-height: 1.6;
+            color: #374151; /* Default light mode text color */
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f0f4f8; /* Default light mode background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+        }
 
-    :root {
-      --st-font-family-primary: 'Product Sans', sans-serif;
-      --st-font-family-secondary: 'Product Sans', sans-serif;
-    }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Google Sans', Arial, sans-serif; /* Added fallbacks */
+            font-weight: 500;
+            color: #1f2937; /* Default light mode heading color */
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
 
-    body {
-      font-family: 'Product Sans', sans-serif;
-      background-color: #f4f7fc;
-      color: #333;
-      text-align: center;
-      padding: 20px;
-    }
+        h1 {
+            font-size: 2.5rem; /* Slightly larger for impact */
+            text-align: center;
+            color: #1a237e; /* Darker blue for heading */
+            margin-bottom: 0.5rem; /* Reduced margin to fit quote */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
 
-    h1 {
-      color: #2c3e50;
-      font-size: 28px;
-    }
+        #quote-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+        #quote-display {
+            font-family: 'Google Sans Text', Arial, sans-serif; /* Ensured correct font */
+            font-size: 1.1rem;
+            font-style: italic;
+            text-align: center;
+            color: #555;
+            margin-bottom: 0.5rem; /* Space between quote and button */
+            transition: color 0.3s ease;
+        }
 
-    .error {
-      color: red;
-      font-weight: bold;
-    }
+        #newQuoteButton {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-family: 'Google Sans Text', Arial, sans-serif;
+        }
+        #newQuoteButton:hover {
+            background-color: #45a049;
+        }
 
-    .schedule {
-      margin-top: 20px;
-      text-align: left;
-    }
 
-    .date-group {
-      margin-bottom: 20px;
-      padding: 15px;
-      background: #ffffff;
-      border-left: 6px solid #3498db;
-      border-radius: 6px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      transition: 0.3s;
-    }
+        h2 {
+            font-size: 1.8rem;
+            color: #2c3e50; /* Darker grey for subheadings */
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
 
-    .date-group h2 {
-      margin: 0 0 10px;
-      font-size: 20px;
-      color: #2980b9;
-      border-bottom: 2px solid #3498db;
-      padding-bottom: 5px;
-    }
+        /* Main container for the dashboard */
+        #study-dashboard {
+            width: 100%;
+            max-width: 1000px; /* Limit max width for better readability on large screens */
+            background-color: #ffffff; /* Default light mode card background */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+            padding: 2.5rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* For positioning the toggle button */
+        }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+        /* Dark mode toggle button */
+        #darkModeToggle {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: #607d8b; /* Blue-grey */
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-family: 'Google Sans Text', Arial, sans-serif; /* Ensured correct font */
+        }
+        #darkModeToggle:hover {
+            background-color: #455a64;
+        }
 
-    li {
-      padding: 5px 0;
-      font-size: 16px;
-    }
+        /* Card styles for each day */
+        .card {
+            background-color: #fdfdfd; /* Default light mode card background */
+            border-radius: 1.25rem; /* Rounded corners for cards */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: transform 0.2s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    strong {
-      color: #2c3e50;
-    }
+        .card:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+        }
 
-    .upload-section {
-      margin-bottom: 20px;
-    }
+        /* Grid for subjects */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Flexible columns */
+            gap: 1rem; /* Space between items */
+            margin-top: 1rem;
+        }
 
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      font-family: 'Product Sans', sans-serif;
-    }
+        /* Individual subject item */
+        .subject-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
 
-    input {
-      background: #ecf0f1;
-      margin-right: 10px;
-    }
+        /* Button styles */
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Align text to left */
+            width: 100%; /* Full width for buttons */
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem; /* Rounded button corners */
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle button shadow */
+            font-family: 'Google Sans Text', Arial, sans-serif; /* Ensured correct font */
+        }
 
-    button {
-      background: #3498db;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+        /* Unchecked button style */
+        .button.unchecked-style {
+            background-color: #e3f2fd; /* Light blue */
+            color: #1e88e5; /* Medium blue */
+        }
 
-    button:hover {
-      background: #2980b9;
-    }
+        .button.unchecked-style:hover {
+            background-color: #bbdefb; /* Lighter blue on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    .status {
-      font-weight: bold;
-      display: inline-flex;
-      align-items: center;
-    }
+        /* Checked button style */
+        .button.checked-style {
+            background-color: #e8f5e9; /* Light green */
+            color: #43a047; /* Medium green */
+            text-decoration: line-through; /* Strikethrough when checked */
+            opacity: 0.8;
+        }
 
-    .klaar {
-      color: green;
-    }
+        .button.checked-style:hover {
+            background-color: #c8e6c9; /* Lighter green on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    .niet-klaar {
-      color: red;
-    }
-  </style>
+        /* Detail text for subjects */
+        .subject-detail {
+            font-size: 0.9rem;
+            color: #616161; /* Darker gray for detail text */
+            padding-left: 1.5rem; /* Indent detail text */
+            transition: color 0.3s ease;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+
+        body.dark-mode h1 {
+            color: #90caf9; /* Lighter blue for dark mode heading */
+            text-shadow: none;
+        }
+
+        body.dark-mode #quote-display {
+            color: #a0aec0; /* Lighter grey for dark mode quote */
+        }
+
+        body.dark-mode #newQuoteButton {
+            background-color: #68d391; /* Darker green for dark mode button */
+            color: #1a202c;
+        }
+        body.dark-mode #newQuoteButton:hover {
+            background-color: #48bb78;
+        }
+
+        body.dark-mode h2 {
+            color: #cbd5e0; /* Lighter grey for dark mode subheadings */
+            border-color: #4a5568; /* Darker border */
+        }
+
+        body.dark-mode #study-dashboard {
+            background-color: #2d3748; /* Darker background for main container */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Darker shadow */
+        }
+
+        body.dark-mode .card {
+            background-color: #4a5568; /* Darker background for cards */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .button.unchecked-style {
+            background-color: #4299e1; /* Blue for dark mode unchecked */
+            color: #e2e8f0;
+        }
+        body.dark-mode .button.unchecked-style:hover {
+            background-color: #3182ce;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .button.checked-style {
+            background-color: #48bb78; /* Green for dark mode checked */
+            color: #e2e8f0;
+        }
+        body.dark-mode .button.checked-style:hover {
+            background-color: #38a169;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .subject-detail {
+            color: #a0aec0; /* Lighter grey for dark mode detail text */
+        }
+
+        body.dark-mode #darkModeToggle {
+            background-color: #a0aec0; /* Lighter grey for dark mode toggle */
+            color: #1a202c;
+            font-family: 'Google Sans Text', Arial, sans-serif; /* Ensured correct font */
+        }
+        body.dark-mode #darkModeToggle:hover {
+            background-color: #cbd5e0;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #study-dashboard {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            #quote-display {
+                font-size: 1rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .subjects-grid {
+                grid-template-columns: 1fr; /* Single column on smaller screens */
+            }
+            #darkModeToggle {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            #study-dashboard {
+                padding: 1rem;
+                border-radius: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            #quote-display {
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .button {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .subject-detail {
+                font-size: 0.8rem;
+                padding-left: 1rem;
+            }
+            #darkModeToggle {
+                top: 0.8rem;
+                right: 0.8rem;
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📅 Upload je Studierooster</h1>
-    <div class="upload-section">
-      <input type="file" id="fileInput" accept=".txt">
-      <button id="uploadButton">Upload</button>
+    <div id="study-dashboard">
+        <h1>📘 Mijn PWW Dashboard</h1>
+        <button id="darkModeToggle">Dark Mode</button>
+        <div id="quote-container">
+            <p id="quote-display"></p> <!-- Placeholder for the quote -->
+            <button id="newQuoteButton">Nieuwe Quote</button>
+        </div>
+        <div id="schedule-container"></div>
     </div>
-    <div id="output"></div>
-  </div>
 
-  <script>
-    const dagen = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+    <script>
+        // Helper functions for date manipulation
+        const addDays = (date, days) => {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        };
 
-    document.getElementById('uploadButton').addEventListener('click', function() {
-      const outputDiv = document.getElementById('output');
-      outputDiv.innerHTML = '';
+        const subDays = (date, days) => {
+            const result = new Date(date);
+            result.setDate(result.getDate() - days);
+            return result;
+        };
 
-      const fileInput = document.getElementById('fileInput');
-      if (!fileInput.files || fileInput.files.length === 0) {
-        outputDiv.innerHTML = '<p class="error">⚠️ Geen bestand geselecteerd. Kies een bestand om te uploaden.</p>';
-        return;
-      }
+        const format = (date, formatStr) => {
+            const day = date.getDate();
+            const month = date.getMonth();
+            const year = date.getFullYear();
+            const weekday = date.getDay();
 
-      const file = fileInput.files[0];
-      const reader = new FileReader();
+            const weekdays = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+            const months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
 
-      reader.onload = function(e) {
-        const content = e.target.result;
-        if (!content.trim()) {
-          outputDiv.innerHTML = '<p class="error">⚠️ Geen data gevonden in het bestand.</p>';
-          return;
+            let formatted = formatStr;
+
+            // Replace weekday (EEEE)
+            formatted = formatted.replace(/EEEE/, weekdays[weekday]);
+            // Replace day of month (d) - use regex with word boundary to ensure only the 'd' for day number is replaced
+            formatted = formatted.replace(/\bd\b/, day);
+            // Replace month (MMMM)
+            formatted = formatted.replace(/MMMM/, months[month]);
+            // Replace year (yyyy)
+            formatted = formatted.replace(/yyyy/, year);
+
+            // Special case for ISO date format for internal use (e.g., date comparisons)
+            if (formatStr === "yyyy-MM-dd") {
+                const y = date.getFullYear();
+                const m = (date.getMonth() + 1).toString().padStart(2, '0');
+                const d = date.getDate().toString().padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            return formatted;
+        };
+
+        // Subject data with content and test dates
+        const subjectsData = [
+            {
+                name: "Aardrijkskunde",
+                content: ["4.2", "4.3", "4.4", "4.5", "4.6", "4.7", "4.9", "begrippen doornemen", "begrippen", "(herhalen)"],
+                testDate: "2025-06-20" // vr 20 juni
+            },
+            {
+                name: "Biologie",
+                content: ["3.1", "3.2", "3.3", "3.5", "3.6", "hart", "bloedsomloop", "biologiepagina.nl", "afsluittoets online", "(herhalen)"],
+                testDate: "2025-06-23" // ma 23 juni
+            },
+            {
+                name: "Duits",
+                content: ["woordjes 1 + 2", "w 3 + 4", "w 5 + 6", "zinnen 1/10", "zinnen 11/20", "St. ww 35 t/m 37", "St. ww 38 t/m 39", "oefentoets", "doorkijken", "(herhalen)" ],
+                testDate: "2025-06-19" // do 19 juni
+            },
+            {
+                name: "Engels",
+                content: ["Unit 6 grammar",  "Unit 6 grammar", "Unit 6 grammar", "Unit 6 grammar", "Unit 6 grammar", "Unit 6 w", "Unit 6 w", "Unit 6 w", "doorkijken","(herhalen)"],
+                testDate: "2025-06-18" // wo 18 juni
+            },
+            {
+                name: "Frans",
+                content: ["woordjes 3 7", "woordjes 3", "schrift regels", "schrift regels", "Chapitre 7", "zinnen 7", "zinnen",  "zinnen", "oefentoets", "(herhalen)"],
+                testDate: "2025-06-25" // wo 25 juni
+            },
+            {
+                name: "Geschiedenis",
+                content: ["Begrippen m9", "begrippen", "tijdlijn", "bekende mensen", "begrippen", "leerteksten", "leerteksten", "podcast", "oefentoets", "(herhalen)"],
+                testDate: "2025-06-18" // wo 18 juni
+            },
+            {
+                name: "Natuurkunde",
+                content: ["6.1 + 6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "7.1", "7.2","7.3", "(herhalen)"],
+                testDate: "2025-06-24" // di 24 juni
+            },
+            {
+                name: "Nederlands",
+                content: ["Leesvaardigheid 1", "Leesvaardigheid 2", "Leesvaardigheid 3", "Leesvaardigheid 4", "Leesvaardigheid 5", "Leesvaardigheid 6", "Leesvaardigheid 7", "Leesvaardigheid 8", "Leesvaardigheid 9", "(herhalen)"],
+                testDate: "2025-06-23" // ma 23 juni
+            },
+            {
+                name: "Wiskunde",
+                content: ["8.1", "8.2", "8.3 en 4", "8.5", "10.1", "10.2", "10.3", "10.4", "10.5", "(herhalen)",],
+                testDate: "2025-06-19" // do 19 juni
+            }
+        ];
+
+        const startDate = new Date("2025-06-06");
+        const endDate = new Date("2025-06-25");
+        const studyWindow = 10; // 9 learning days + 1 repeat day
+
+        // State management for checked tasks (no Firebase)
+        let checkedTasks = JSON.parse(localStorage.getItem('checkedTasks')) || [];
+        let isDarkMode = JSON.parse(localStorage.getItem('darkModeEnabled')) || false;
+
+        // Function to save checked tasks to local storage
+        function saveCheckedTasks() {
+            localStorage.setItem('checkedTasks', JSON.stringify(checkedTasks));
         }
-        
-        const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
-        
-        if (lines.length % 2 !== 0) {
-          outputDiv.innerHTML = '<p class="error">⚠️ Bestandsformaat is incorrect. Elke vakregel moet worden gevolgd door een datum en beschrijving.</p>';
-          return;
+
+        // Function to toggle dark mode and save preference
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkModeEnabled', JSON.stringify(isDarkMode));
+            applyDarkMode();
         }
 
-        const scheduleByDate = {};
-
-        for (let i = 0; i < lines.length; i += 2) {
-          const subject = lines[i].trim();
-          const dateDescLine = lines[i + 1].trim();
-          
-          const match = dateDescLine.match(/^(\d{4})-(\d{2})-(\d{2})\s+(.*?)\s*(klaar|niet klaar)?$/);
-          if (!match) {
-            outputDiv.innerHTML = `<p class="error">⚠️ Bestandsformaat incorrect op regel ${i + 2}. Verwacht een datum in YYYY-MM-DD formaat gevolgd door de beschrijving en optioneel "klaar" of "niet klaar".</p>`;
-            return;
-          }
-          
-          const jaar = match[1];
-          const maand = match[2];
-          const dag = match[3];
-          const description = match[4].trim();
-          const status = match[5] || 'niet klaar'; 
-
-          const dateStr = `${jaar}-${maand}-${dag}`;
-          const dateObj = new Date(dateStr);
-          if (isNaN(dateObj.getTime())) {
-            outputDiv.innerHTML = `<p class="error">⚠️ Ongeldige datum op regel ${i + 2}: ${dateStr}</p>`;
-            return;
-          }
-
-          const dagVanDeWeek = dagen[dateObj.getDay()];
-          const datumZonderJaar = `${dag}-${maand}`;
-
-          if (!scheduleByDate[dateStr]) {
-            scheduleByDate[dateStr] = { dag: dagVanDeWeek, datumKort: datumZonderJaar, entries: [] };
-          }
-          scheduleByDate[dateStr].entries.push({ subject: subject, description: description, status: status });
+        // Function to apply dark mode based on state
+        function applyDarkMode() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
         }
-        
-        const sortedDates = Object.keys(scheduleByDate).sort();
-        let html = '<div class="schedule">';
-        sortedDates.forEach(date => {
-          html += `<div class="date-group">`;
-          html += `<h2>📅 ${scheduleByDate[date].dag}, ${scheduleByDate[date].datumKort}</h2>`;
-          html += '<ul>';
-          scheduleByDate[date].entries.forEach(entry => {
-            const statusClass = entry.status === 'klaar' ? 'klaar' : 'niet-klaar';
-            const statusEmoji = entry.status === 'klaar' ? '✔️' : '❌';
-            html += `<li>📖 <strong>${entry.subject}:</strong> ${entry.description} <span class="status ${statusClass}">${statusEmoji} ${entry.status}</span></li>`;
-          });
-          html += '</ul></div>';
+
+        const motivationalQuotes = [
+            "De weg naar succes is altijd in aanbouw.",
+            "Begin waar je bent. Gebruik wat je hebt. Doe wat je kunt.",
+            "Geloof dat je het kunt en je bent halverwege.",
+            "Succes is de som van kleine inspanningen, dag in dag uit herhaald.",
+            "De beste manier om de toekomst te voorspellen, is deze te creëren.",
+            "Het geheim van vooruitkomen is beginnen.",
+            "Val zeven keer, sta acht keer op.",
+            "Je bent sterker dan je denkt.",
+            "Elke dag is een nieuwe kans om te schitteren.",
+            "Hard werken verslaat talent als talent niet hard werkt.",
+            "De enige manier om geweldig werk te doen, is door van wat je doet te houden.",
+            "Je grenzen zijn slechts je startpunten.",
+            "Verander je gedachten en je verandert je wereld.",
+            "De toekomst behoort toe aan degenen die geloven in de schoonheid van hun dromen.",
+            "Wees de verandering die je in de wereld wilt zien.",
+            "Je kunt alles bereiken als je er maar lang genoeg voor vecht.",
+            "De grootste glorie in het leven ligt niet in nooit vallen, maar in elke keer weer opstaan.",
+            "Succes is geen sleutel tot geluk. Geluk is de sleutel tot succes.",
+            "Wat je ook bent, wees een goede.",
+            "De beste wraak is massaal succes.",
+            "Als je een droom hebt, moet je die beschermen.",
+            "Het is altijd te vroeg om op te geven.",
+            "De enige limiet is je verbeelding.",
+            "Elke expert was ooit een beginner.",
+            "De actie is de fundamentele sleutel tot elk succes.",
+            "Doe vandaag iets waar je toekomstige zelf je dankbaar voor zal zijn.",
+            "De moeilijkste stap is altijd de eerste.",
+            "Je tijd is beperkt, verspil hem niet aan het leven van iemand anders.",
+            "De enige manier om groots werk te doen, is door lief te hebben wat je doet.",
+            "Moed is niet de afwezigheid van angst, maar de triomf erover.",
+            "De reis van duizend mijl begint met een enkele stap.",
+            "Succes is niet definitief, falen is niet fataal: het is de moed om door te gaan die telt.",
+            "De beste manier om te beginnen is om te stoppen met praten en te beginnen met doen.",
+            "Als je de wind niet kunt veranderen, pas dan de zeilen aan.",
+            "Geduld, doorzettingsvermogen en zweet vormen een onverslaanbare combinatie voor succes.",
+            "De enige plaats waar succes vóór werk komt, is in het woordenboek.",
+            "De sleutel tot succes is focus en discipline.",
+            "Je leert meer van falen dan van succes. Laat het je niet tegenhouden.",
+            "Het is niet wat je hebt, maar wat je doet met wat je hebt.",
+            "Wees de beste versie van jezelf.",
+            "De beste investering is in jezelf.",
+            "Droom groots en durf te falen.",
+            "Je bent geboren om te winnen, maar om een winnaar te zijn, moet je plannen om te winnen, je voorbereiden om te winnen en verwachten te winnen.",
+            "De enige manier om de top te bereiken, is door te blijven klimmen.",
+            "Verander je leven vandaag. Gok niet op de toekomst, handel nu, zonder uitstel.",
+            "De grootste ontdekking van mijn generatie is dat een mens zijn leven kan veranderen door zijn houding te veranderen.",
+            "De wil om te winnen, de wens om te slagen, de drang om je volledige potentieel te bereiken... dit zijn de sleutels die de deur naar persoonlijke uitmuntendheid zullen ontgrendelen.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            "De beste manier om iets te doen, is om het te doen.",
+            "Als je niet bereid bent om te leren, kan niemand je helpen. Als je vastbesloten bent om te leren, kan niemand je stoppen.",
+            "De overwinning is zoeter als je het gevecht kent.",
+            "Het is niet de berg die we overwinnen, maar onszelf.",
+            "De grootste prestatie is om jezelf te overwinnen.",
+            "De enige echte fout is degene waar we niets van leren.",
+            "De beste manier om je dromen waar te maken, is wakker worden.",
+            "Begin met het doen van wat nodig is; doe dan wat mogelijk is; en plotseling doe je het onmogelijke.",
+            "De sleutel tot succes is actie, en de essentiële actie is doorzettingsvermogen.",
+            "Als je niet kunt vliegen, ren dan. Als je niet kunt rennen, loop dan. Als je niet kunt lopen, kruip dan. Maar wat je ook doet, blijf vooruitgaan.",
+            "De wil om te slagen is belangrijk, maar wat nog belangrijker is, is de wil om je voor te bereiden.",
+            "De enige plek waar je dromen onmogelijk zijn, is in je eigen hoofd.",
+            "Succes is een gemoedstoestand. Als je succes wilt, begin dan aan jezelf te denken als een succes.",
+            ""
+        ];
+
+        // Function to fetch and display a random quote
+        function displayRandomQuote() {
+            if (motivationalQuotes.length > 0) {
+                const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+                document.getElementById('quote-display').textContent = motivationalQuotes[randomIndex];
+            } else {
+                document.getElementById('quote-display').textContent = "Blijf gemotiveerd!"; // Fallback if no quotes found
+            }
+        }
+
+
+        // Function to generate the schedule based on subjectsData
+        function generateSchedule() {
+            let days = [];
+            for (let d = new Date(startDate); d <= endDate; d = addDays(d, 1)) {
+                const dateStr = format(d, "yyyy-MM-dd");
+                days.push({
+                    date: new Date(d),
+                    dateStr: dateStr,
+                    tasks: [],
+                    isRest: false // No more pause day
+                });
+            }
+
+            for (const subject of subjectsData) {
+                const testDate = new Date(subject.testDate);
+                const repeatDayDate = subDays(testDate, 1); // Day before the test for review
+                const firstStudyDayDate = subDays(testDate, studyWindow); // 10 days before the test
+
+                // Separate learning content from potential review content
+                let learningContent = [...subject.content];
+                let reviewTaskDetail = "";
+
+                // Check if the last item is intended as a specific review task
+                if (learningContent.length > 0 && learningContent[learningContent.length - 1].includes("(herhalen)")) {
+                    reviewTaskDetail = learningContent.pop(); // Take the last item as specific review detail
+                } else {
+                    // If no specific review item, the general review task will cover all content
+                    reviewTaskDetail = subject.content.join(", ");
+                }
+
+                // Filter study days for learning new content
+                const studyDaysForLearning = days.filter(
+                    (day) =>
+                        day.date >= firstStudyDayDate &&
+                        day.date < repeatDayDate // Exclude the repeat day
+                );
+
+                if (studyDaysForLearning.length > 0) {
+                    const contentPerDay = Math.ceil(learningContent.length / studyDaysForLearning.length);
+                    let contentQueue = [...learningContent];
+
+                    for (const day of studyDaysForLearning) {
+                        const todayChunks = contentQueue.splice(0, contentPerDay);
+                        if (todayChunks.length > 0) {
+                            day.tasks.push({
+                                id: `${day.dateStr}-${subject.name}-${todayChunks.join("-")}`, // Simple unique ID
+                                subject: subject.name,
+                                detail: todayChunks.join(", "),
+                                completed: false // Initial state
+                            });
+                        }
+                    }
+                } else {
+                    console.warn(`No study days available for learning new content for ${subject.name} within the window.`);
+                }
+
+                // Assign the review task to the repeat day
+                const repeatDayObj = days.find(
+                    (day) => format(day.date, "yyyy-MM-dd") === format(repeatDayDate, "yyyy-MM-dd")
+                );
+
+                if (repeatDayObj) {
+                    repeatDayObj.tasks.push({
+                        id: `${repeatDayObj.dateStr}-${subject.name}-herhaling`, // Simple unique ID
+                        subject: `${subject.name} (herhaling)`,
+                        detail: reviewTaskDetail, // Use the specific review detail or general content
+                        completed: false
+                    });
+                } else {
+                    console.warn(`Repeat day not found for ${subject.name}.`);
+                }
+            }
+            return days;
+        }
+
+        // Function to toggle task completion status
+        function toggleTaskCompletion(taskId) {
+            const index = checkedTasks.indexOf(taskId);
+            if (index > -1) {
+                checkedTasks.splice(index, 1); // Remove if already checked
+            } else {
+                checkedTasks.push(taskId); // Add if not checked
+            }
+            saveCheckedTasks(); // Save updated state
+            renderSchedule(); // Re-render to reflect changes
+        }
+
+        // Function to render the schedule to the DOM
+        function renderSchedule() {
+            const schedule = generateSchedule();
+            const scheduleContainer = document.getElementById('schedule-container');
+            scheduleContainer.innerHTML = ''; // Clear previous content
+
+            schedule.forEach(day => {
+                const card = document.createElement('div');
+                card.className = "card";
+
+                const heading = document.createElement('h2');
+                heading.textContent = format(day.date, "EEEE d MMMM");
+
+                card.appendChild(heading);
+
+                const subjectsGrid = document.createElement('div');
+                subjectsGrid.className = "subjects-grid";
+
+                // Display existing tasks
+                day.tasks.forEach(task => {
+                    const isCompleted = checkedTasks.includes(task.id);
+
+                    const subjectDiv = document.createElement('div');
+                    subjectDiv.className = "subject-item";
+
+                    const button = document.createElement('button');
+                    button.className = `button ${isCompleted ? "checked-style" : "unchecked-style"}`;
+                    button.innerHTML = `${isCompleted ? "✓ " : "⬜ "} ${task.subject}`;
+                    button.onclick = () => toggleTaskCompletion(task.id);
+
+                    const detailSpan = document.createElement('span');
+                    detailSpan.className = "subject-detail";
+                    detailSpan.textContent = task.detail;
+
+                    subjectDiv.appendChild(button);
+                    subjectDiv.appendChild(detailSpan);
+                    subjectsGrid.appendChild(subjectDiv);
+                });
+
+                card.appendChild(subjectsGrid);
+                scheduleContainer.appendChild(card);
+            });
+        }
+
+        // Initial setup when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            applyDarkMode(); // Apply dark mode preference on load
+            displayRandomQuote(); // Display a random quote on load
+            renderSchedule(); // Render the schedule
+
+            // Add event listener for the dark mode toggle button
+            const darkModeToggleButton = document.getElementById('darkModeToggle');
+            if (darkModeToggleButton) {
+                darkModeToggleButton.addEventListener('click', toggleDarkMode);
+            }
+
+            // Add event listener for the new quote button
+            const newQuoteButton = document.getElementById('newQuoteButton');
+            if (newQuoteButton) {
+                newQuoteButton.addEventListener('click', displayRandomQuote);
+            }
         });
-        html += '</div>';
-        
-        outputDiv.innerHTML = html;
-      };
-
-      reader.readAsText(file);
-    });
-  </script>
+    </script>
 </body>
 </html>
