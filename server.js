@@ -70,7 +70,9 @@ app.get('/api/planner-data', async (req, res) => {
 
 app.post('/api/planner-data', async (req, res) => {
   try {
-    await writeJSON(plannerDataPath, req.body);
+    const existingPlannerData = await readJSON(plannerDataPath);
+    const updatedPlannerData = { ...existingPlannerData, ...req.body };
+    await writeJSON(plannerDataPath, updatedPlannerData);
     res.status(200).json({ message: 'Planner data saved' });
   } catch (err) {
     res.status(500).json({ error: 'Error saving planner data' });

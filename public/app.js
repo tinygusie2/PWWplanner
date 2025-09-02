@@ -437,6 +437,11 @@ if (document.getElementById('planner-page')) {
     let currentDate = new Date();
 
     async function renderPlanner() {
+        const savedPlannerData = await fetchData('planner-data');
+        if (savedPlannerData && savedPlannerData.currentDate) {
+            currentDate = new Date(savedPlannerData.currentDate);
+        }
+
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
 
@@ -477,13 +482,15 @@ if (document.getElementById('planner-page')) {
         }
     }
 
-    prevMonthBtn.addEventListener('click', () => {
+    prevMonthBtn.addEventListener('click', async () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
+        await postData('planner-data', { currentDate: currentDate.toISOString() });
         renderPlanner();
     });
 
-    nextMonthBtn.addEventListener('click', () => {
+    nextMonthBtn.addEventListener('click', async () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
+        await postData('planner-data', { currentDate: currentDate.toISOString() });
         renderPlanner();
     });
 

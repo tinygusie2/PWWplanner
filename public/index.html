@@ -309,21 +309,34 @@
             now.setHours(0, 0, 0, 0);
 
             const upcomingTests = items
-                .filter(item => item.type === 'Toets' && new Date(item.date) >= now)
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, 5);
+                .filter(item => item.type && item.type.toLowerCase() === 'toets' && new Date(item.date) >= now)
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // Voeg scrollbare stijl toe aan de container
+            testsContainer.style.maxHeight = '200px';
+            testsContainer.style.overflowY = 'auto';
+            testsContainer.style.paddingRight = '5px';
 
             if (upcomingTests.length > 0) {
                 testsContainer.innerHTML = upcomingTests.map(item => {
                     const itemDate = new Date(item.date);
                     const formattedDate = itemDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+                    
+                    // Bereken dagen tot de toets
+                    const diffTime = Math.abs(itemDate - now);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const daysText = diffDays === 1 ? '1 dag' : `${diffDays - 1} dagen`;
+                    
                     return `
                         <div class="list-item">
                             <div class="item-info">
                                 <p class="title">${item.title}</p>
                                 <p class="subject">${item.vak}</p>
                             </div>
-                            <div class="item-date">${formattedDate}</div>
+                            <div class="item-date">
+                                <div>${formattedDate}</div>
+                                <div class="days-until">Nog ${daysText}</div>
+                            </div>
                         </div>
                     `;
                 }).join('');
@@ -349,10 +362,19 @@
             if (todayItems.length > 0) {
                 todoContainer.innerHTML = todayItems.map(item => `
                     <div class="task-item">
-                        <input type="checkbox" id="task-${item.id}" data-task-id="${item.id}" />
+                        <input type="checkbox" id="task-${item.id}" data-task-id="${item.id}" ${item.completed ? 'checked' : ''} />
                         <label for="task-${item.id}">${item.title} <span class="subject">(${item.vak})</span></label>
                     </div>
                 `).join('');
+                
+                // Event listeners voor checkboxes
+                const checkboxes = todoContainer.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', async function() {
+                        const taskId = this.dataset.taskId;
+                        await updateTaskCompletionStatus(taskId, this.checked);
+                    });
+                });
             } else {
                 todoContainer.innerHTML = `
                     <div class="empty-state">
@@ -363,6 +385,29 @@
             }
             staggerAnimation(todoContainer.children);
         }
+        
+        // Functie om taak status bij te werken
+        async function updateTaskCompletionStatus(taskId, isCompleted) {
+            try {
+                // Haal alle items op
+                const items = await fetchData('items') || [];
+                
+                // Vind het item en update de status
+                const updatedItems = items.map(item => {
+                    if (item.id === taskId) {
+                        return { ...item, completed: isCompleted };
+                    }
+                    return item;
+                });
+                
+                // Sla de bijgewerkte items op
+                await postData('items', updatedItems);
+                
+                console.log(`Taak ${taskId} is nu ${isCompleted ? 'voltooid' : 'niet voltooid'}`);
+            } catch (error) {
+                console.error('Fout bij het bijwerken van taakstatus:', error);
+            }
+        }
 
         async function updatePWWProgress() {
             const progressCircleFg = document.getElementById('progress-circle-fg');
@@ -370,10 +415,15 @@
             const progressSubText = document.getElementById('progress-text');
 
             try {
-                const plannerData = await fetchData('planner-data');
+                let plannerData = await fetchData('planner-data');
 
                 if (!plannerData || !plannerData.startDate || !plannerData.endDate) {
-                    throw new Error('Geen planningsdata gevonden.');
+                    // If no planner data, set default values and save them
+                    const defaultStartDate = new Date();
+                    const defaultEndDate = new Date();
+                    defaultEndDate.setDate(defaultEndDate.getDate() + 30); // Default to 30 days from now
+                    await postData('planner-data', { startDate: defaultStartDate.toISOString(), endDate: defaultEndDate.toISOString() });
+                    plannerData = { startDate: defaultStartDate.toISOString(), endDate: defaultEndDate.toISOString() };
                 }
 
                 const startDate = new Date(plannerData.startDate);

@@ -130,6 +130,25 @@
             background-color: #93000a; /* Darker red */
             border-color: #ffb4ab; /* Lighter red */
         }
+        
+        /* Multiple choice button styles */
+        .mcq-option {
+            border: 2px solid var(--outline);
+            transition: all 0.2s ease-in-out;
+        }
+        .mcq-option:not([disabled]):hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .mcq-option.correct {
+            background-color: #005312;
+            border-color: #80db73;
+        }
+        .mcq-option.incorrect {
+            background-color: #93000a;
+            border-color: #ffb4ab;
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -192,50 +211,63 @@
                 </div>
 
                 <div id="view-flashcards" class="hidden">
-    <div class="flashcard-container w-full h-80 max-w-2xl mx-auto mb-4">
-        <div id="flashcard" class="flashcard w-full h-full relative">
-            <div id="flashcard-front" class="flashcard-face absolute w-full h-full flex items-center justify-center p-6 text-center text-2xl rounded-2xl"></div>
-            <div id="flashcard-back" class="flashcard-face flashcard-back absolute w-full h-full flex items-center justify-center p-6 text-center text-2xl rounded-2xl"></div>
-        </div>
-    </div>
-    <div class="flex justify-center items-center gap-4 mb-4">
-        <button id="prev-card" class="nav-button p-3 rounded-full"><span class="material-symbols-outlined">arrow_back</span></button>
-        <div id="card-counter" class="text-lg font-medium">1 / N</div>
-        <button id="next-card" class="nav-button p-3 rounded-full"><span class="material-symbols-outlined">arrow_forward</span></button>
-        <button id="shuffle-cards" class="nav-button p-3 rounded-full" title="Kaarten Schudden"><span class="material-symbols-outlined">shuffle</span></button>
-    </div>
-    <div class="text-center text-gray-400">
-        <p>Gebruik <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">Spatie</kbd> om om te draaien, <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">←</kbd> voor 'Niet gekend' en <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">→</kbd> voor 'Gekend'.</p>
-    </div>
+                    <div class="flashcard-container w-full h-80 max-w-2xl mx-auto mb-4">
+                        <div id="flashcard" class="flashcard w-full h-full relative">
+                            <div id="flashcard-front" class="flashcard-face absolute w-full h-full flex items-center justify-center p-6 text-center text-2xl rounded-2xl"></div>
+                            <div id="flashcard-back" class="flashcard-face flashcard-back absolute w-full h-full flex items-center justify-center p-6 text-center text-2xl rounded-2xl"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center items-center gap-4 mb-4">
+                        <button id="prev-card" class="nav-button p-3 rounded-full"><span class="material-symbols-outlined">arrow_back</span></button>
+                        <div id="card-counter" class="text-lg font-medium">1 / N</div>
+                        <button id="next-card" class="nav-button p-3 rounded-full"><span class="material-symbols-outlined">arrow_forward</span></button>
+                        <button id="shuffle-cards" class="nav-button p-3 rounded-full" title="Kaarten Schudden"><span class="material-symbols-outlined">shuffle</span></button>
+                    </div>
+                    <div class="text-center text-gray-400">
+                        <p>Gebruik <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">Spatie</kbd> om om te draaien, <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">←</kbd> voor 'Ken ik Niet' en <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">→</kbd> voor 'Ken ik'.</p>
+                    </div>
 
-    <div id="flashcard-feedback-screen" class="hidden absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-center">
-        <h2 class="text-4xl font-bold text-white mb-4">Sessie voltooid!</h2>
-        <div class="text-lg text-white">
-            <p>Gekend: <span id="known-count" class="font-bold text-green-400">0</span></p>
-            <p>Nog te leren: <span id="unknown-count" class="font-bold text-red-400">0</span></p>
-        </div>
-        <div class="mt-6 flex gap-4">
-             <button id="restart-flashcards-btn" class="button"><span class="material-symbols-outlined">replay</span>Opnieuw</button>
-             <button id="learn-unknown-btn" class="primary-btn font-bold py-3 px-6 rounded-full"><span class="material-symbols-outlined">school</span>Oefen moeilijke woorden</button>
-        </div>
-    </div>
-</div>
+                    <div id="flashcard-feedback-screen" class="hidden absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-center z-10">
+                        <h2 class="text-4xl font-bold text-white mb-4">Sessie voltooid!</h2>
+                        <div class="text-lg text-white">
+                            <p>Gekend: <span id="known-count" class="font-bold text-green-400">0</span></p>
+                            <p>Nog te leren: <span id="unknown-count" class="font-bold text-red-400">0</span></p>
+                        </div>
+                        <div class="mt-6 flex gap-4">
+                             <button id="restart-flashcards-btn" class="button"><span class="material-symbols-outlined">replay</span>Opnieuw</button>
+                             <button id="learn-unknown-btn" class="primary-btn font-bold py-3 px-6 rounded-full hidden"><span class="material-symbols-outlined">school</span>Oefen moeilijke woorden</button>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="view-learn" class="hidden max-w-2xl mx-auto">
                     <div class="flex justify-between items-center mb-2 text-sm text-gray-400">
                         <span id="learn-mastered-count">Beheerst: 0 / N</span>
-                        <div class="flex items-center gap-1">
-                             <span class="material-symbols-outlined text-orange-400">local_fire_department</span>
-                             <span id="learn-streak-counter" class="font-bold"> Streak: 0</span>
-                        </div>
+                        <span id="learn-queue-info"></span>
                     </div>
                     <div id="learn-progress-bar-container" class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
                         <div id="learn-progress-bar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%"></div>
                     </div>
-                    <p id="learn-prompt" class="text-xl p-8 rounded-lg text-center" style="background-color: var(--surface-variant);"></p>
-                    <input id="learn-input" type="text" class="styled-input w-full p-4 mt-6 text-xl text-center rounded-lg" placeholder="Typ je antwoord...">
+
+                    <div id="learn-show-panel" class="hidden">
+                        <p class="text-xl p-4 rounded-lg text-left" style="background-color: var(--surface-variant);"><strong id="learn-show-prompt" class="block mb-2"></strong><span id="learn-show-answer"></span></p>
+                        <button id="learn-show-next-btn" class="button mt-4 float-right">Volgende</button>
+                    </div>
+                    
+                    <div id="learn-mcq-panel" class="hidden">
+                        <p id="learn-mcq-prompt" class="text-xl p-8 rounded-lg text-center" style="background-color: var(--surface-variant);"></p>
+                        <div id="learn-mcq-options" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+                            </div>
+                    </div>
+                    
+                    <div id="learn-type-panel" class="hidden">
+                        <p id="learn-prompt" class="text-xl p-8 rounded-lg text-center" style="background-color: var(--surface-variant);"></p>
+                        <input id="learn-input" type="text" class="styled-input w-full p-4 mt-6 text-xl text-center rounded-lg" placeholder="Typ je antwoord...">
+                    </div>
+                    
                     <div id="learn-feedback" class="mt-4 text-center font-bold h-10"></div>
                 </div>
+
 
                 <div id="view-match" class="hidden">
                     <div class="flex justify-between items-center mb-4">
@@ -286,931 +318,1066 @@
     </div>
 
     <script src="/app.js"></script>
-    <script>
-        // --- NEW: Robust TTS Voice Loading ---
-        let availableVoices = [];
-        function loadVoices() {
-          availableVoices = speechSynthesis.getVoices();
-          if (availableVoices.length > 0) {
-            console.log("Available TTS voices:", availableVoices);
-            // Once voices are loaded, we don't need the listener anymore.
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-               speechSynthesis.onvoiceschanged = null;
-            }
-          }
-        }
-        // Initial attempt to load voices.
-        loadVoices();
-        // If the list is empty, set up the event listener to populate it when ready.
+<script>
+    // --- NEW: Robust TTS Voice Loading ---
+    let availableVoices = [];
+    function loadVoices() {
+      availableVoices = speechSynthesis.getVoices();
+      if (availableVoices.length > 0) {
+        console.log("Available TTS voices:", availableVoices);
+        // Once voices are loaded, we don't need the listener anymore.
         if (speechSynthesis.onvoiceschanged !== undefined) {
-          speechSynthesis.onvoiceschanged = loadVoices;
+            speechSynthesis.onvoiceschanged = null;
         }
-        // --- END NEW ---
+      }
+    }
+    // Initial attempt to load voices.
+    loadVoices();
+    // If the list is empty, set up the event listener to populate it when ready.
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    // --- END NEW ---
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- STATE MANAGEMENT ---
-            let studySet = [];
-            let currentCardIndex = 0;
-            let currentMode = 'upload';
-            let isLoadedFromURL = false;
-            let allWordLists = []; // Cache for search
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- STATE MANAGEMENT ---
+        let originalStudySet = []; // Keep the original list for restarting
+        let studySet = [];
+        let currentCardIndex = 0;
+        let currentMode = 'upload';
+        let isLoadedFromURL = false;
+        let allWordLists = []; // Cache for search
 
-            // Study Settings State
-            let termLanguage = 'nl-NL';
-            let definitionLanguage = 'nl-NL';
-            let askWith = 'definition'; // or 'term'
+        // Flashcards state
+        let knownWords = [];
+        let unknownWords = [];
 
-            // Learn Mode State
-            let learnQueue = [];
-            let currentStreak = 0;
-            let currentLearnItem = null;
+        // Study Settings State
+        let termLanguage = 'nl-NL';
+        let definitionLanguage = 'nl-NL';
+        let askWith = 'definition'; // or 'term'
 
-            // Match Mode State
-            let matchTimerInterval;
-            let firstSelection = null;
+        // Learn Mode State
+        const CHUNK_SIZE = 4; // Adjusted for the new stage
+        const STAGE_SHOW = 0;
+        const STAGE_MULTIPLE_CHOICE = 1; // NEW STAGE
+        const STAGE_HINTED = 2;
+        const STAGE_TYPE = 3;
+        const STAGE_MASTERED = 4;
 
-            // Overhoor Mode State
-            let overhoorQueue = [];
-            let currentOverhoorItem = null;
-            let isAnswerProcessed = false;
-            
-            // --- DOM ELEMENTS ---
-            const views = {
-                upload: document.getElementById('view-upload'),
-                flashcards: document.getElementById('view-flashcards'),
-                learn: document.getElementById('view-learn'),
-                match: document.getElementById('view-match'),
-                overhoor: document.getElementById('view-overhoor'),
-                empty: document.getElementById('view-initial'),
-                'edit-wordlist': document.getElementById('view-edit-wordlist'),
-            };
+        let unseenQueue = [];
+        let learningQueues = [[], [], [], []]; // Adjusted for new stage
+        let activeQuestionQueue = [];
+        let masteredCount = 0;
+        let currentLearnItem = null;
 
-            // Upload/Search View Elements
-            const tabUpload = document.getElementById('tab-upload');
-            const tabSearch = document.getElementById('tab-search');
-            const contentUpload = document.getElementById('content-upload');
-            const contentSearch = document.getElementById('content-search');
-            const searchInput = document.getElementById('search-wordlist-input');
-            const searchResults = document.getElementById('search-results');
-            
-            const processBtn = document.getElementById('process-btn');
-            const wordlistInput = document.getElementById('wordlist-input');
-            const uploadFeedback = document.getElementById('upload-feedback');
-            
-            // Flashcards
-            const flashcard = document.getElementById('flashcard');
-            const flashcardFront = document.getElementById('flashcard-front');
-            const flashcardBack = document.getElementById('flashcard-back');
-            const prevCardBtn = document.getElementById('prev-card');
-            const nextCardBtn = document.getElementById('next-card');
-            const shuffleCardsBtn = document.getElementById('shuffle-cards');
-            const cardCounter = document.getElementById('card-counter');
 
-            // Learn
-            const learnPrompt = document.getElementById('learn-prompt');
-            const learnInput = document.getElementById('learn-input');
-            const learnFeedback = document.getElementById('learn-feedback');
-            const learnProgressBar = document.getElementById('learn-progress-bar');
-            const learnStreakCounter = document.getElementById('learn-streak-counter');
-            const learnMasteredCount = document.getElementById('learn-mastered-count');
+        // Match Mode State
+        let matchTimerInterval;
+        let firstSelection = null;
 
-            // Match
-            const matchGrid = document.getElementById('match-grid');
-            const matchTimer = document.getElementById('match-timer');
-            const matchWinScreen = document.getElementById('match-win-screen');
-            const winTime = document.getElementById('win-time');
-            const playAgainBtn = document.getElementById('play-again-btn');
+        // Overhoor Mode State
+        let overhoorQueue = [];
+        let currentOverhoorItem = null;
+        let isAnswerProcessed = false;
+        
+        // --- DOM ELEMENTS ---
+        const views = {
+            upload: document.getElementById('view-upload'),
+            flashcards: document.getElementById('view-flashcards'),
+            learn: document.getElementById('view-learn'),
+            match: document.getElementById('view-match'),
+            overhoor: document.getElementById('view-overhoor'),
+            empty: document.getElementById('view-initial'),
+            'edit-wordlist': document.getElementById('view-edit-wordlist'),
+        };
 
-            // Overhoor
-            const overhoorPrompt = document.getElementById('overhoor-prompt-display');
-            const overhoorTranscript = document.getElementById('overhoor-transcript');
+        // Upload/Search View Elements
+        const tabUpload = document.getElementById('tab-upload');
+        const tabSearch = document.getElementById('tab-search');
+        const contentUpload = document.getElementById('content-upload');
+        const contentSearch = document.getElementById('content-search');
+        const searchInput = document.getElementById('search-wordlist-input');
+        const searchResults = document.getElementById('search-results');
+        
+        const processBtn = document.getElementById('process-btn');
+        const wordlistInput = document.getElementById('wordlist-input');
+        const uploadFeedback = document.getElementById('upload-feedback');
+        
+        // Flashcards
+        const flashcard = document.getElementById('flashcard');
+        const flashcardFront = document.getElementById('flashcard-front');
+        const flashcardBack = document.getElementById('flashcard-back');
+        const prevCardBtn = document.getElementById('prev-card');
+        const nextCardBtn = document.getElementById('next-card');
+        const shuffleCardsBtn = document.getElementById('shuffle-cards');
+        const cardCounter = document.getElementById('card-counter');
+        const feedbackScreen = document.getElementById('flashcard-feedback-screen');
+        const knownCountEl = document.getElementById('known-count');
+        const unknownCountEl = document.getElementById('unknown-count');
+        const restartFlashcardsBtn = document.getElementById('restart-flashcards-btn');
+        const learnUnknownBtn = document.getElementById('learn-unknown-btn');
 
-            // Edit Wordlist
-            const editWordlistTextarea = document.getElementById('edit-wordlist-textarea');
-            const saveWordlistBtn = document.getElementById('save-wordlist-btn');
-            const overhoorFeedback = document.getElementById('overhoor-feedback');
-            const overhoorStartBtn = document.getElementById('overhoor-start-btn');
-            const overhoorNextBtn = document.getElementById('overhoor-next-btn');
+        // Learn
+        const learnShowPanel = document.getElementById('learn-show-panel');
+        const learnShowPrompt = document.getElementById('learn-show-prompt');
+        const learnShowAnswer = document.getElementById('learn-show-answer');
+        const learnShowNextBtn = document.getElementById('learn-show-next-btn');
+        const learnMcqPanel = document.getElementById('learn-mcq-panel'); // NEW
+        const learnMcqPrompt = document.getElementById('learn-mcq-prompt'); // NEW
+        const learnMcqOptions = document.getElementById('learn-mcq-options'); // NEW
+        const learnTypePanel = document.getElementById('learn-type-panel');
+        const learnPrompt = document.getElementById('learn-prompt');
+        const learnInput = document.getElementById('learn-input');
+        const learnFeedback = document.getElementById('learn-feedback');
+        const learnProgressBar = document.getElementById('learn-progress-bar');
+        const learnMasteredCount = document.getElementById('learn-mastered-count');
+        const learnQueueInfo = document.getElementById('learn-queue-info');
 
-            // --- CORE LOGIC ---
+        // Match
+        const matchGrid = document.getElementById('match-grid');
+        const matchTimer = document.getElementById('match-timer');
+        const matchWinScreen = document.getElementById('match-win-screen');
+        const winTime = document.getElementById('win-time');
+        const playAgainBtn = document.getElementById('play-again-btn');
 
-            const showView = (viewName) => {
-                if (studySet.length === 0 && viewName !== 'upload') {
-                    viewName = 'empty';
+        // Overhoor
+        const overhoorPrompt = document.getElementById('overhoor-prompt-display');
+        const overhoorTranscript = document.getElementById('overhoor-transcript');
+
+        // Edit Wordlist
+        const editWordlistTextarea = document.getElementById('edit-wordlist-textarea');
+        const saveWordlistBtn = document.getElementById('save-wordlist-btn');
+        const overhoorFeedback = document.getElementById('overhoor-feedback');
+        const overhoorStartBtn = document.getElementById('overhoor-start-btn');
+        const overhoorNextBtn = document.getElementById('overhoor-next-btn');
+
+        // --- CORE LOGIC ---
+
+        const showView = (viewName) => {
+            if (studySet.length === 0 && viewName !== 'upload') {
+                viewName = 'empty';
+            }
+            Object.values(views).forEach(view => view.classList.add('hidden'));
+            if (views[viewName]) {
+                views[viewName].classList.remove('hidden');
+            }
+            currentMode = viewName;
+
+            if (viewName === 'flashcards') initFlashcards();
+            if (viewName === 'learn') initLearn();
+            if (viewName === 'match') initMatch();
+            if (viewName === 'overhoor') initOverhoor();
+            if (viewName === 'edit-wordlist') initEditWordlist();
+        };
+
+        // --- EDIT WORDLIST MODE ---
+        const initEditWordlist = () => {
+            editWordlistTextarea.value = studySet.map(item => `${item.term}	${item.definition}`).join('\n');
+        };
+
+        saveWordlistBtn.addEventListener('click', () => {
+            const text = editWordlistTextarea.value.trim();
+            if (!text) {
+                alert('Woordenlijst kan niet leeg zijn.');
+                return;
+            }
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+            if (lines.length === 0) {
+                alert('Woordenlijst kan niet leeg zijn.');
+                return;
+            }
+            studySet = lines.map((line, index) => {
+                const parts = line.split('\t'); // Assuming tab-separated for editing
+                return { id: index, term: parts[0] || '', definition: parts[1] || '', strength: 0 };
+            });
+            originalStudySet = [...studySet]; // Update original set as well
+            alert('Woordenlijst opgeslagen!');
+            showView('flashcards'); // Go back to flashcards after saving
+        });
+
+        const processWordList = () => {
+            uploadFeedback.textContent = '';
+            const text = wordlistInput.value.trim();
+            if (!text) {
+                uploadFeedback.textContent = 'Plak je woordenlijst.';
+                return;
+            }
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+            if (lines.length < 1) {
+                uploadFeedback.textContent = 'Geef ten minste één term en definitie op.';
+                return;
+            }
+            const potentialSeparators = ['\t', ',', '-', ':'];
+            let detectedSeparator = null;
+            for (const sep of potentialSeparators) {
+                if (lines[0].includes(sep)) {
+                    detectedSeparator = sep;
+                    break;
                 }
-                Object.values(views).forEach(view => view.classList.add('hidden'));
-                if (views[viewName]) {
-                    views[viewName].classList.remove('hidden');
-                }
-                currentMode = viewName;
-
-                if (viewName === 'flashcards') initFlashcards();
-                if (viewName === 'learn') initLearn();
-                if (viewName === 'match') initMatch();
-                if (viewName === 'overhoor') initOverhoor();
-                if (viewName === 'edit-wordlist') initEditWordlist();
-            };
-
-            // --- EDIT WORDLIST MODE ---
-            const initEditWordlist = () => {
-                editWordlistTextarea.value = studySet.map(item => `${item.term}	${item.definition}`).join('\n');
-            };
-
-            saveWordlistBtn.addEventListener('click', () => {
-                const text = editWordlistTextarea.value.trim();
-                if (!text) {
-                    alert('Woordenlijst kan niet leeg zijn.');
-                    return;
-                }
-                const lines = text.split('\n').map(line => line.trim()).filter(line => line);
-                if (lines.length === 0) {
-                    alert('Woordenlijst kan niet leeg zijn.');
-                    return;
-                }
+            }
+            if (detectedSeparator) {
                 studySet = lines.map((line, index) => {
-                    const parts = line.split('\t'); // Assuming tab-separated for editing
-                    return { id: index, term: parts[0] || '', definition: parts[1] || '', strength: 0 };
-                });
-                alert('Woordenlijst opgeslagen!');
-                showView('flashcards'); // Go back to flashcards after saving
+                    const separatorIndex = line.indexOf(detectedSeparator);
+                    if (separatorIndex === -1) return null;
+                    const term = line.substring(0, separatorIndex).trim();
+                    const definition = line.substring(separatorIndex + 1).trim();
+                    if (!term || !definition) return null;
+                    return { id: index, term, definition, strength: 0 };
+                }).filter(item => item !== null);
+            } else {
+                studySet = [];
+                for (let i = 0; i < lines.length; i += 2) {
+                    const term = lines[i];
+                    const definition = lines[i + 1];
+                    if (term && definition) {
+                        studySet.push({ id: i / 2, term, definition, strength: 0 });
+                    }
+                }
+            }
+            if (studySet.length > 0) {
+                originalStudySet = [...studySet];
+                createToolUI();
+                showView('flashcards');
+            } else {
+                uploadFeedback.textContent = 'Kon geen geldige termen ontleden. Controleer het formaat.';
+            }
+        };
+        
+        function createToolUI() {
+            const mainContent = document.querySelector('.main-content');
+            let navContainer = document.getElementById('tool-nav-container');
+            if (navContainer) navContainer.remove();
+
+            navContainer = document.createElement('div');
+            navContainer.id = 'tool-nav-container';
+            navContainer.className = 'flex justify-center gap-2 mb-4';
+            navContainer.innerHTML = `
+                <button data-view="flashcards" class="button tool-nav-btn active"><span class="material-symbols-outlined">flip_to_front</span>Flashcards</button>
+                <button data-view="learn" class="button tool-nav-btn"><span class="material-symbols-outlined">school</span>Leren</button>
+                <button data-view="match" class="button tool-nav-btn"><span class="material-symbols-outlined">gamepad</span>Matchen</button>
+                <button data-view="overhoor" class="button tool-nav-btn"><span class="material-symbols-outlined">bolt</span>Overhoor mij</button>
+                <button data-view="edit-wordlist" class="button tool-nav-btn"><span class="material-symbols-outlined">edit</span>Bewerk Lijst</button>
+            `;
+            mainContent.prepend(navContainer);
+            
+            navContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.tool-nav-btn');
+                if (btn) {
+                    const view = btn.dataset.view;
+                    document.querySelectorAll('.tool-nav-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    showView(view);
+                }
             });
 
-            const processWordList = () => {
-                uploadFeedback.textContent = '';
-                const text = wordlistInput.value.trim();
-                if (!text) {
-                    uploadFeedback.textContent = 'Plak je woordenlijst.';
+            createStudySettingsUI(mainContent);
+
+            if (!isLoadedFromURL) {
+                createSaveUI(mainContent);
+            }
+        }
+
+        function createStudySettingsUI(container) {
+            let settingsContainer = document.getElementById('study-settings-container');
+            if (settingsContainer) settingsContainer.remove();
+
+            settingsContainer = document.createElement('div');
+            settingsContainer.id = 'study-settings-container';
+            settingsContainer.className = 'flex flex-wrap justify-center items-center gap-4 mb-4 p-2 rounded-lg';
+            settingsContainer.style.backgroundColor = 'var(--surface-container)';
+            settingsContainer.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <label for="term-lang-select" class="text-sm">Begrip:</label>
+                    <select id="term-lang-select" class="styled-input p-1 rounded-md text-sm"></select>
+                </div>
+                <div class="flex items-center gap-2">
+                     <label for="def-lang-select" class="text-sm">Definitie:</label>
+                    <select id="def-lang-select" class="styled-input p-1 rounded-md text-sm"></select>
+                </div>
+                <button id="swap-direction-btn" class="button" title="Wissel vraag en antwoord"><span class="material-symbols-outlined">swap_horiz</span><span id="direction-label" class="ml-1 text-sm">Definitie &rarr; Begrip</span></button>
+            `;
+            
+            const toolNav = document.getElementById('tool-nav-container');
+            toolNav.insertAdjacentElement('afterend', settingsContainer);
+            
+            populateLanguageSelectors();
+
+            document.getElementById('term-lang-select').addEventListener('change', (e) => {
+                termLanguage = e.target.value;
+            });
+             document.getElementById('def-lang-select').addEventListener('change', (e) => {
+                definitionLanguage = e.target.value;
+            });
+            document.getElementById('swap-direction-btn').addEventListener('click', () => {
+                askWith = (askWith === 'definition') ? 'term' : 'definition';
+                updateDirectionLabel();
+                // Re-initialize the current view to reflect the change
+                showView(currentMode); 
+            });
+            updateDirectionLabel();
+        }
+        
+        function updateDirectionLabel() {
+             const label = document.getElementById('direction-label');
+             if (label) {
+                 label.textContent = askWith === 'definition' ? 'Definitie → Begrip' : 'Begrip → Definitie';
+             }
+        }
+
+        function populateLanguageSelectors() {
+            const languages = [
+                { code: 'nl-NL', name: 'Nederlands' },
+                { code: 'en-US', name: 'Engels (US)' },
+                { code: 'en-GB', name: 'Engels (UK)' },
+                { code: 'de-DE', name: 'Duits' },
+                { code: 'fr-FR', name: 'Frans' },
+                { code: 'es-ES', name: 'Spaans' },
+                { code: 'it-IT', name: 'Italiaans' },
+                { code: 'ja-JP', name: 'Japans' },
+                { code: 'ru-RU', name: 'Russisch' },
+            ];
+            const termSelect = document.getElementById('term-lang-select');
+            const defSelect = document.getElementById('def-lang-select');
+            
+            [termSelect, defSelect].forEach(select => {
+                select.innerHTML = '';
+                languages.forEach(lang => {
+                    const option = document.createElement('option');
+                    option.value = lang.code;
+                    option.textContent = lang.name;
+                    select.appendChild(option);
+                });
+                select.value = 'nl-NL';
+            });
+        }
+        
+        // Helper to get question/answer based on settings
+        function getQuestionAndAnswer(item) {
+            if (!item) return { question: '', answer: '' };
+            if (askWith === 'definition') {
+                return { question: item.definition, answer: item.term };
+            } else {
+                return { question: item.term, answer: item.definition };
+            }
+        }
+
+        function createSaveUI(container) {
+            let saveContainer = document.getElementById('save-container');
+            if (saveContainer) saveContainer.remove();
+            saveContainer = document.createElement('div');
+            saveContainer.id = 'save-container';
+            saveContainer.className = 'mt-4 p-4 rounded-lg';
+            saveContainer.style.backgroundColor = 'var(--surface-container-high)';
+            saveContainer.innerHTML = `
+                <h3 class="text-lg font-medium mb-2">Sla deze lijst op</h3>
+                <div class="flex items-center gap-4">
+                    <input type="text" id="wordlist-name" class="styled-input flex-grow" placeholder="Naam van de woordenlijst">
+                    <select id="subject-select" class="styled-input"></select>
+                    <button id="save-wordlist-btn-action" class="button button-primary">Opslaan</button>
+                </div>
+                <p id="save-feedback" class="text-green-400 mt-2 h-5"></p>
+            `;
+            const settingsUI = document.getElementById('study-settings-container');
+            settingsUI.insertAdjacentElement('afterend', saveContainer);
+            document.getElementById('save-wordlist-btn-action').addEventListener('click', saveWordList);
+            loadSubjectsForSave();
+        }
+
+        async function loadSubjectsForSave() {
+            const select = document.getElementById('subject-select');
+            select.innerHTML = '<option>Laden...</option>';
+            try {
+                const response = await fetch('/api/subjects');
+                if (!response.ok) throw new Error('Kon vakken niet laden.');
+                const subjects = await response.json();
+                select.innerHTML = '';
+                if (subjects.length === 0) {
+                    select.innerHTML = '<option>Geen vakken gevonden</option>';
                     return;
                 }
-                const lines = text.split('\n').map(line => line.trim()).filter(line => line);
-                if (lines.length < 1) {
-                    uploadFeedback.textContent = 'Geef ten minste één term en definitie op.';
-                    return;
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                select.innerHTML = `<option>Error!</option>`;
+                console.error(error);
+            }
+        }
+
+        async function saveWordList() {
+            const nameInput = document.getElementById('wordlist-name');
+            const subjectSelect = document.getElementById('subject-select');
+            const feedbackEl = document.getElementById('save-feedback');
+            const listName = nameInput.value.trim();
+            const subjectId = subjectSelect.value;
+
+            if (!listName) {
+                feedbackEl.textContent = 'Geef de lijst een naam.';
+                feedbackEl.style.color = '#ffb4ab';
+                return;
+            }
+            if (!subjectId || subjectId === 'Geen vakken gevonden') {
+                feedbackEl.textContent = 'Selecteer een vak.';
+                feedbackEl.style.color = '#ffb4ab';
+                return;
+            }
+            feedbackEl.textContent = 'Opslaan...';
+            feedbackEl.style.color = '#9cf890';
+            try {
+                const subjectsResponse = await fetch('/api/subjects');
+                if (!subjectsResponse.ok) throw new Error('Kon vakken niet ophalen.');
+                const subjects = await subjectsResponse.json();
+                const subjectToUpdate = subjects.find(s => s.id === parseInt(subjectId));
+                if (!subjectToUpdate) throw new Error('Geselecteerde vak niet gevonden.');
+                
+                const newWordList = {
+                    name: listName,
+                    termLang: termLanguage,
+                    defLang: definitionLanguage,
+                    words: studySet.map(({ term, definition }) => ({ term, definition }))
+                };
+                
+                if (!subjectToUpdate.wordlists) {
+                    subjectToUpdate.wordlists = [];
                 }
-                const potentialSeparators = ['\t', ',', '-', ':'];
-                let detectedSeparator = null;
-                for (const sep of potentialSeparators) {
-                    if (lines[0].includes(sep)) {
-                        detectedSeparator = sep;
-                        break;
+                subjectToUpdate.wordlists.push(newWordList);
+                
+                const updateResponse = await fetch(`/api/subjects/${subjectId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subjectToUpdate)
+                });
+                
+                if (!updateResponse.ok) {
+                    throw new Error('Opslaan op de server is mislukt.');
+                }
+                
+                feedbackEl.textContent = `Lijst '${listName}' opgeslagen in ${subjectToUpdate.name}!`;
+                nameInput.value = '';
+                setTimeout(() => { feedbackEl.textContent = ''; }, 3000);
+            } catch (error) {
+                console.error('Save error:', error);
+                feedbackEl.textContent = error.message;
+                feedbackEl.style.color = '#ffb4ab';
+            }
+        }
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+        
+        // --- FLASHCARDS MODE ---
+        const initFlashcards = () => {
+            feedbackScreen.classList.add('hidden');
+            knownWords = [];
+            unknownWords = [];
+            currentCardIndex = 0;
+            if (studySet.length > 0) {
+                 updateFlashcard();
+            } else {
+                 showView('empty');
+            }
+        };
+
+        const updateFlashcard = () => {
+            if (currentCardIndex >= studySet.length) {
+                showFeedback();
+                return;
+            }
+            flashcard.classList.remove('is-flipped');
+            const card = studySet[currentCardIndex];
+            const { question, answer } = getQuestionAndAnswer(card);
+            flashcardFront.textContent = question;
+            flashcardBack.textContent = answer;
+            cardCounter.textContent = `${currentCardIndex + 1} / ${studySet.length}`;
+        };
+        
+        const handleCardReview = (isKnown) => {
+            if (currentCardIndex >= studySet.length) return;
+
+            const currentCard = studySet[currentCardIndex];
+            if (isKnown) {
+                knownWords.push(currentCard);
+            } else {
+                unknownWords.push(currentCard);
+            }
+            currentCardIndex++;
+            updateFlashcard();
+        };
+
+        const showFeedback = () => {
+            knownCountEl.textContent = knownWords.length;
+            unknownCountEl.textContent = unknownWords.length;
+            if (unknownWords.length > 0) {
+                learnUnknownBtn.classList.remove('hidden');
+            } else {
+                learnUnknownBtn.classList.add('hidden');
+            }
+            feedbackScreen.classList.remove('hidden');
+        };
+
+        // --- LEARN MODE (NEW PIPELINE ALGORITHM) ---
+        const initLearn = () => {
+            unseenQueue = shuffleArray([...studySet]);
+            unseenQueue.forEach(item => item.strength = STAGE_SHOW); // Start all at stage 0
+            learningQueues = [[], [], [], []]; // [Show, MCQ, Hint, Type]
+            activeQuestionQueue = [];
+            masteredCount = 0;
+            learnFeedback.textContent = '';
+            nextLearnQuestion();
+        };
+
+        const buildActiveQueue = () => {
+            // Promote words
+            learningQueues[3].push(...learningQueues[2]); // Hinted -> Type
+            learningQueues[2] = [];
+            learningQueues[2].push(...learningQueues[1]); // MCQ -> Hinted
+            learningQueues[1] = [];
+            learningQueues[1].push(...learningQueues[0]); // Show -> MCQ
+            learningQueues[0] = [];
+            
+            // Add a new chunk to phase 0 (Show)
+            const newChunk = unseenQueue.splice(0, CHUNK_SIZE);
+            learningQueues[0].push(...newChunk);
+
+            // Build active queue from all learning words
+            activeQuestionQueue = shuffleArray([...learningQueues[0], ...learningQueues[1], ...learningQueues[2], ...learningQueues[3]]);
+        }
+
+        const nextLearnQuestion = () => {
+            if (activeQuestionQueue.length === 0) {
+                buildActiveQueue();
+            }
+
+            if (activeQuestionQueue.length === 0 && unseenQueue.length === 0) {
+                 learnTypePanel.classList.add('hidden');
+                 learnMcqPanel.classList.add('hidden');
+                learnShowPanel.classList.remove('hidden');
+                learnShowPrompt.textContent = "🎉 Gefeliciteerd!";
+                learnShowAnswer.textContent = "Je hebt alle termen geleerd!";
+                learnShowNextBtn.classList.remove('hidden');
+                learnShowNextBtn.textContent = "Opnieuw";
+                learnShowNextBtn.onclick = initLearn;
+                updateLearnProgress();
+                return;
+            }
+
+            currentLearnItem = activeQuestionQueue.shift();
+            const { question, answer } = getQuestionAndAnswer(currentLearnItem);
+
+            learnFeedback.textContent = '';
+            learnInput.value = '';
+            learnInput.className = 'styled-input w-full p-4 mt-6 text-xl text-center rounded-lg';
+            
+            learnShowPanel.classList.add('hidden');
+            learnMcqPanel.classList.add('hidden');
+            learnTypePanel.classList.add('hidden');
+            
+            if (currentLearnItem.strength === STAGE_SHOW) {
+                learnShowPanel.classList.remove('hidden');
+                learnShowPrompt.textContent = question;
+                learnShowAnswer.textContent = answer;
+                learnShowNextBtn.classList.remove('hidden');
+                learnShowNextBtn.textContent = "Ik heb het gezien";
+                learnShowNextBtn.onclick = () => {
+                    currentLearnItem.strength++;
+                    nextLearnQuestion();
+                };
+            } else if (currentLearnItem.strength === STAGE_MULTIPLE_CHOICE) {
+                learnMcqPanel.classList.remove('hidden');
+                learnMcqPrompt.textContent = question;
+                generateMcqOptions(currentLearnItem);
+            } else {
+                learnTypePanel.classList.remove('hidden');
+                learnPrompt.textContent = question;
+
+                if (currentLearnItem.strength === STAGE_HINTED) {
+                    const hint = answer.split('').map(char => (char === ' ' ? ' ' : '_')).join('');
+                    learnInput.placeholder = `${answer[0]}${hint.substring(1)}`;
+                } else { // STAGE_TYPE
+                    learnInput.placeholder = "Typ je antwoord...";
+                }
+                learnInput.focus();
+            }
+            updateLearnProgress();
+        };
+
+        const generateMcqOptions = (item) => {
+            const { answer } = getQuestionAndAnswer(item);
+            let options = [answer];
+            
+            const otherAnswers = studySet
+                .filter(i => i.id !== item.id)
+                .map(i => getQuestionAndAnswer(i).answer);
+            
+            shuffleArray(otherAnswers);
+
+            for (let i = 0; options.length < 4 && i < otherAnswers.length; i++) {
+                if (!options.includes(otherAnswers[i])) {
+                    options.push(otherAnswers[i]);
+                }
+            }
+            
+            // Fill with dummy options if not enough unique answers
+            while(options.length < 4) options.push(`Optie ${options.length + 1}`);
+
+            learnMcqOptions.innerHTML = '';
+            shuffleArray(options).forEach(optionText => {
+                const button = document.createElement('button');
+                button.className = 'mcq-option p-4 rounded-lg text-left';
+                button.textContent = optionText;
+                button.onclick = () => checkMcqAnswer(button, optionText, answer);
+                learnMcqOptions.appendChild(button);
+            });
+        };
+
+        const checkMcqAnswer = (button, selectedAnswer, correctAnswer) => {
+            const allButtons = learnMcqOptions.querySelectorAll('button');
+            allButtons.forEach(btn => btn.disabled = true); // Disable all buttons
+
+            const isCorrect = normalizeAnswer(selectedAnswer) === normalizeAnswer(correctAnswer);
+
+            if(isCorrect) {
+                button.classList.add('correct');
+                currentLearnItem.strength++;
+                learnFeedback.textContent = "Correct!";
+                learnFeedback.style.color = '#9cf890';
+                setTimeout(nextLearnQuestion, 1200);
+            } else {
+                button.classList.add('incorrect');
+                // Highlight the correct one
+                allButtons.forEach(btn => {
+                    if (normalizeAnswer(btn.textContent) === normalizeAnswer(correctAnswer)) {
+                        btn.classList.add('correct');
                     }
+                });
+                
+                currentLearnItem.strength = STAGE_SHOW; // Reset to first stage
+                // Re-add to the unseen queue to start over in a later chunk
+                unseenQueue.unshift(currentLearnItem);
+                // Remove from current learning queue
+                for (let i = 0; i < learningQueues.length; i++) {
+                    learningQueues[i] = learningQueues[i].filter(item => item.id !== currentLearnItem.id);
                 }
-                if (detectedSeparator) {
-                    studySet = lines.map((line, index) => {
-                        const separatorIndex = line.indexOf(detectedSeparator);
-                        if (separatorIndex === -1) return null;
-                        const term = line.substring(0, separatorIndex).trim();
-                        const definition = line.substring(separatorIndex + 1).trim();
-                        if (!term || !definition) return null;
-                        return { id: index, term, definition, strength: 0 };
-                    }).filter(item => item !== null);
+
+                learnFeedback.textContent = `Incorrect. Het juiste antwoord is: ${correctAnswer}`;
+                learnFeedback.style.color = '#ffb4ab';
+                setTimeout(nextLearnQuestion, 2500);
+            }
+        };
+
+        // --- NEW: Normalization function ---
+        const normalizeAnswer = (answer) => {
+            return answer
+                .trim()
+                .toLowerCase()
+                .replace(/\s*\(.*\)\s*/g, '') // Remove anything in parentheses
+                .trim();
+        };
+
+        const checkLearnAnswer = () => {
+            const userAnswer = learnInput.value;
+            const { answer: correctAnswerText } = getQuestionAndAnswer(currentLearnItem);
+
+            const possibleAnswers = correctAnswerText.split(',').map(s => normalizeAnswer(s));
+            const isCorrect = possibleAnswers.includes(normalizeAnswer(userAnswer));
+
+            if (isCorrect) {
+                currentLearnItem.strength++;
+                learnFeedback.textContent = "Correct!";
+                learnFeedback.style.color = '#9cf890';
+                learnInput.classList.add('correct-answer');
+
+                if (currentLearnItem.strength >= STAGE_MASTERED) {
+                    // Remove from its original learning queue
+                    for (let i = 0; i < learningQueues.length; i++) {
+                        learningQueues[i] = learningQueues[i].filter(item => item.id !== currentLearnItem.id);
+                    }
+                    masteredCount++;
+                    learnFeedback.textContent = `Correct! "${correctAnswerText.split(',')[0]}" beheerst!`;
+                }
+                setTimeout(nextLearnQuestion, 1200);
+            } else {
+                currentLearnItem.strength = STAGE_SHOW; // Reset to first stage
+                 // Re-add to the unseen queue to start over in a later chunk
+                unseenQueue.unshift(currentLearnItem);
+                 // Remove from current learning queue
+                for (let i = 0; i < learningQueues.length; i++) {
+                    learningQueues[i] = learningQueues[i].filter(item => item.id !== currentLearnItem.id);
+                }
+
+                learnFeedback.textContent = `Incorrect. Het juiste antwoord is: ${correctAnswerText}`;
+                learnFeedback.style.color = '#ffb4ab';
+                learnInput.classList.add('incorrect-answer');
+                
+                setTimeout(nextLearnQuestion, 2500);
+            }
+        };
+        
+        const updateLearnProgress = () => {
+            const totalCount = studySet.length;
+            if (totalCount === 0) return;
+            const progress = (masteredCount / totalCount) * 100;
+            learnProgressBar.style.width = `${progress}%`;
+            learnMasteredCount.textContent = `Beheerst: ${masteredCount} / ${totalCount}`;
+            learnQueueInfo.textContent = `Nieuw: ${unseenQueue.length} | Leren: ${learningQueues.flat().length}`;
+        };
+
+
+        // --- MATCH MODE ---
+        const initMatch = () => {
+            matchGrid.innerHTML = '';
+            matchWinScreen.classList.add('hidden');
+            stopMatchTimer();
+            matchTimer.textContent = '0.0';
+            let items = [];
+            const shuffledSet = shuffleArray([...studySet]);
+            const pairsToMatch = Math.min(shuffledSet.length, 8);
+            for (let i = 0; i < pairsToMatch; i++) {
+                items.push({ text: shuffledSet[i].term, matchId: i });
+                items.push({ text: shuffledSet[i].definition, matchId: i });
+            }
+            shuffleArray(items).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'match-item flex items-center justify-center p-4 rounded-lg text-center h-24';
+                div.textContent = item.text;
+                div.dataset.matchId = item.matchId;
+                div.addEventListener('click', onMatchItemClick);
+                matchGrid.appendChild(div);
+            });
+            startMatchTimer();
+        };
+        const startMatchTimer = () => {
+            const startTime = Date.now();
+            matchTimerInterval = setInterval(() => {
+                const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+                matchTimer.textContent = elapsedTime;
+            }, 100);
+        };
+        const stopMatchTimer = () => {
+            clearInterval(matchTimerInterval);
+        };
+        const onMatchItemClick = (e) => {
+            const clickedItem = e.target;
+            if (clickedItem.classList.contains('matched') || clickedItem.classList.contains('selected')) {
+                return;
+            }
+            clickedItem.classList.add('selected');
+            if (!firstSelection) {
+                firstSelection = clickedItem;
+            } else {
+                if (firstSelection.dataset.matchId === clickedItem.dataset.matchId) {
+                    firstSelection.classList.add('matched');
+                    clickedItem.classList.add('matched');
+                    firstSelection.classList.remove('selected');
+                    clickedItem.classList.remove('selected');
+                    firstSelection = null;
+                    checkWinCondition();
                 } else {
-                    studySet = [];
-                    for (let i = 0; i < lines.length; i += 2) {
-                        const term = lines[i];
-                        const definition = lines[i + 1];
-                        if (term && definition) {
-                            studySet.push({ id: i / 2, term, definition, strength: 0 });
-                        }
-                    }
+                    const first = firstSelection;
+                    const second = clickedItem;
+                    setTimeout(() => {
+                        first.classList.remove('selected');
+                        second.classList.remove('selected');
+                    }, 500);
+                    firstSelection = null;
                 }
+            }
+        };
+        const checkWinCondition = () => {
+            const allItems = matchGrid.querySelectorAll('.match-item');
+            const matchedItems = matchGrid.querySelectorAll('.matched');
+            if (allItems.length === matchedItems.length && allItems.length > 0) {
+                stopMatchTimer();
+                winTime.textContent = matchTimer.textContent;
+                matchWinScreen.classList.remove('hidden');
+            }
+        };
+        
+        // --- EVENT LISTENERS ---
+        processBtn.addEventListener('click', processWordList);
+        flashcard.addEventListener('click', () => flashcard.classList.toggle('is-flipped'));
+        
+        nextCardBtn.addEventListener('click', () => handleCardReview(true));
+        prevCardBtn.addEventListener('click', () => handleCardReview(false)); 
+        shuffleCardsBtn.addEventListener('click', () => {
+            studySet = shuffleArray(studySet);
+            initFlashcards();
+        });
+        
+        learnInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && currentLearnItem && currentLearnItem.strength > STAGE_MULTIPLE_CHOICE) {
+                checkLearnAnswer();
+            }
+        });
+        playAgainBtn.addEventListener('click', initMatch);
+        
+        restartFlashcardsBtn.addEventListener('click', () => {
+            studySet = [...originalStudySet];
+            initFlashcards();
+        });
+
+        learnUnknownBtn.addEventListener('click', () => {
+            if (unknownWords.length > 0) {
+                studySet = [...unknownWords];
+                initFlashcards();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (currentMode !== 'flashcards' || feedbackScreen.classList.contains('hidden') === false) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                flashcard.classList.toggle('is-flipped');
+            } else if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                handleCardReview(true);
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                handleCardReview(false);
+            }
+        });
+
+
+        // --- OVERHOOR MIJ MODE ---
+        let welcomeMessagePlayed = false;
+        const initOverhoor = () => {
+            if (!annyang) {
+                overhoorPrompt.textContent = 'Sorry, spraakherkenning wordt niet ondersteund in je browser.';
+                overhoorStartBtn.classList.add('hidden');
+                return;
+            }
+            overhoorQueue = shuffleArray([...studySet]);
+            currentOverhoorItem = null;
+            overhoorTranscript.textContent = '';
+            overhoorFeedback.textContent = '';
+            overhoorPrompt.textContent = 'Klik op "Start" om te beginnen.';
+            overhoorStartBtn.classList.remove('hidden');
+            overhoorNextBtn.classList.add('hidden');
+            overhoorStartBtn.textContent = 'Start';
+            if (!welcomeMessagePlayed) {
+                speak('Welkom bij de overhoor modus. Klik op start om te beginnen.', 'nl-NL', () => {});
+                welcomeMessagePlayed = true;
+            }
+            if (!document.getElementById('overhoor-tip')) {
+                overhoorPrompt.insertAdjacentHTML('afterend', '<p id="overhoor-tip" class="text-sm text-gray-400 mt-2">Zorg dat de definitie eerst staat, zodat je alleen het begrip hoeft te zeggen bij lange betekenissen.</p>');
+            }
+        };
+
+        const nextOverhoorQuestion = () => {
+            isAnswerProcessed = false;
+            overhoorTranscript.textContent = '';
+            overhoorFeedback.textContent = '';
+            if (overhoorQueue.length === 0) {
+                overhoorPrompt.textContent = "Gefeliciteerd! Je hebt alle termen gehad!";
+                overhoorStartBtn.classList.remove('hidden');
+                overhoorStartBtn.textContent = 'Opnieuw Starten';
+                overhoorNextBtn.classList.add('hidden');
+                return;
+            }
+            currentOverhoorItem = overhoorQueue.pop();
+            overhoorPrompt.textContent = 'Luister...';
+            
+            const { question, answer } = getQuestionAndAnswer(currentOverhoorItem);
+            const questionLang = askWith === 'definition' ? definitionLanguage : termLanguage;
+            const answerLang = askWith === 'definition' ? termLanguage : definitionLanguage;
+
+            speak(question, questionLang, () => {
+                overhoorPrompt.innerHTML = '<span class="material-symbols-outlined animate-pulse">mic</span> Zeg het juiste antwoord...';
+                startListening(answerLang);
+            });
+        };
+
+        const speak = (text, lang, onEndCallback) => {
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            let selectedVoice = availableVoices.find(voice => voice.lang === lang && voice.name.includes('Google'));
+            if (!selectedVoice) selectedVoice = availableVoices.find(voice => voice.lang === lang);
+            if (selectedVoice) utterance.voice = selectedVoice;
+            utterance.rate = 1.05; 
+            utterance.pitch = 1;
+            utterance.onend = onEndCallback;
+            speechSynthesis.speak(utterance);
+        };
+
+        const startListening = (lang) => {
+            if (annyang) {
+                annyang.setLanguage(lang);
+                annyang.start({ autoRestart: false, continuous: false });
+            }
+        };
+
+        const checkOverhoorAnswer = (spokenAnswer) => {
+             if (isAnswerProcessed) return;
+             isAnswerProcessed = true;
+            const { answer: correctAnswerText } = getQuestionAndAnswer(currentOverhoorItem);
+            const possibleAnswers = correctAnswerText.split(',').map(s => normalizeAnswer(s));
+
+            if (possibleAnswers.includes(normalizeAnswer(spokenAnswer))) {
+                overhoorFeedback.textContent = "Correct!";
+                overhoorFeedback.style.color = '#9cf890';
+            } else {
+                overhoorFeedback.textContent = `Incorrect. Het juiste antwoord was: ${correctAnswerText.split(',')[0]}`;
+                overhoorFeedback.style.color = '#ffb4ab';
+            }
+             overhoorNextBtn.classList.remove('hidden');
+        };
+
+        if (annyang) {
+            annyang.addCallback('result', (phrases) => {
+                annyang.abort();
+                const spokenText = phrases[0];
+                if (spokenText && !isAnswerProcessed) {
+                    overhoorTranscript.textContent = spokenText;
+                    checkOverhoorAnswer(spokenText);
+                }
+            });
+            annyang.addCallback('error', (error) => {
+                if (isAnswerProcessed) return;
+                 if (error.error === 'no-speech' || error.error === 'audio-capture') {
+                     overhoorFeedback.textContent = 'Ik kon je niet horen. Probeer het opnieuw.';
+                } else if (error.error !== 'aborted') {
+                     overhoorFeedback.textContent = `Er is een fout opgetreden.`;
+                }
+                 overhoorFeedback.style.color = '#ffb4ab';
+                overhoorNextBtn.classList.remove('hidden');
+            });
+        }
+
+        overhoorStartBtn.addEventListener('click', () => {
+            if (overhoorStartBtn.textContent === 'Opnieuw Starten') initOverhoor();
+            overhoorStartBtn.classList.add('hidden');
+            nextOverhoorQuestion();
+        });
+        overhoorNextBtn.addEventListener('click', nextOverhoorQuestion);
+
+        // --- SEARCH/UPLOAD TABS ---
+        tabUpload.addEventListener('click', () => {
+            tabUpload.classList.add('border-green-500', 'text-white');
+            tabUpload.classList.remove('border-transparent', 'text-gray-400');
+            tabSearch.classList.add('border-transparent', 'text-gray-400');
+            tabSearch.classList.remove('border-green-500', 'text-white');
+            contentUpload.classList.remove('hidden');
+            contentSearch.classList.add('hidden');
+        });
+
+        tabSearch.addEventListener('click', () => {
+            tabSearch.classList.add('border-green-500', 'text-white');
+            tabSearch.classList.remove('border-transparent', 'text-gray-400');
+            tabUpload.classList.add('border-transparent', 'text-gray-400');
+            tabUpload.classList.remove('border-green-500', 'text-white');
+            contentSearch.classList.remove('hidden');
+            contentUpload.classList.add('hidden');
+            if (allWordLists.length === 0) fetchAllWordLists();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filteredLists = allWordLists.filter(list => 
+                list.listName.toLowerCase().includes(query) || 
+                list.subjectName.toLowerCase().includes(query)
+            );
+            displaySearchResults(filteredLists);
+        });
+
+        async function fetchAllWordLists() {
+            searchResults.innerHTML = '<p class="text-gray-400">Laden...</p>';
+            try {
+                const response = await fetch('/api/subjects');
+                if (!response.ok) throw new Error('Kon vakken niet laden.');
+                const subjects = await response.json();
+                allWordLists = [];
+                subjects.forEach(subject => {
+                    if (subject.wordlists && subject.wordlists.length > 0) {
+                        subject.wordlists.forEach(list => {
+                            allWordLists.push({
+                                subjectId: subject.id,
+                                subjectName: subject.name,
+                                listName: list.name
+                            });
+                        });
+                    }
+                });
+                displaySearchResults(allWordLists);
+            } catch (error) {
+                console.error('Error fetching word lists:', error);
+                searchResults.innerHTML = `<p class="text-red-400">Kon lijsten niet laden.</p>`;
+            }
+        }
+
+        function displaySearchResults(lists) {
+            if (lists.length === 0) {
+                searchResults.innerHTML = '<p class="text-gray-400">Geen lijsten gevonden.</p>';
+                return;
+            }
+            searchResults.innerHTML = lists.map(list => `
+                <a href="/woordjes-leren.html?subjectId=${list.subjectId}&listName=${encodeURIComponent(list.listName)}" class="block p-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <span class="font-medium text-white">${list.listName}</span>
+                    <span class="text-sm text-gray-400 block">${list.subjectName}</span>
+                </a>
+            `).join('');
+        }
+
+        // --- INITIALIZATION ---
+        const init = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const subjectId = urlParams.get('subjectId');
+            const listName = urlParams.get('listName');
+            if (subjectId && listName) {
+                loadListFromURL(subjectId, decodeURIComponent(listName));
+            } else {
+                showView('upload');
+            }
+        };
+
+        async function loadListFromURL(subjectId, listName) {
+            isLoadedFromURL = true;
+            try {
+                const response = await fetch('/api/subjects');
+                if (!response.ok) throw new Error('Kon vakken niet laden.');
+                const subjects = await response.json();
+                const subject = subjects.find(s => s.id === parseInt(subjectId));
+                if (!subject || !subject.wordlists) throw new Error('Vak of woordenlijst niet gevonden.');
+                const list = subject.wordlists.find(l => l.name === listName);
+                if (!list) throw new Error('Specifieke woordenlijst niet gevonden.');
+                
+                studySet = list.words.map((word, index) => ({
+                    ...word,
+                    id: index,
+                    strength: 0
+                }));
+                originalStudySet = [...studySet];
+                
                 if (studySet.length > 0) {
                     createToolUI();
+                    termLanguage = list.termLang || 'nl-NL'; 
+                    definitionLanguage = list.defLang || 'nl-NL';
+                    const termSelect = document.getElementById('term-lang-select');
+                    const defSelect = document.getElementById('def-lang-select');
+                    if (termSelect) termSelect.value = termLanguage;
+                    if (defSelect) defSelect.value = definitionLanguage;
                     showView('flashcards');
                 } else {
-                    uploadFeedback.textContent = 'Kon geen geldige termen ontleden. Controleer het formaat.';
+                    showView('empty');
                 }
-            };
-            
-            function createToolUI() {
-                const mainContent = document.querySelector('.main-content');
-                let navContainer = document.getElementById('tool-nav-container');
-                if (navContainer) navContainer.remove();
-
-                navContainer = document.createElement('div');
-                navContainer.id = 'tool-nav-container';
-                navContainer.className = 'flex justify-center gap-2 mb-4';
-                navContainer.innerHTML = `
-                    <button data-view="flashcards" class="button tool-nav-btn active"><span class="material-symbols-outlined">flip_to_front</span>Flashcards</button>
-                    <button data-view="learn" class="button tool-nav-btn"><span class="material-symbols-outlined">school</span>Leren</button>
-                    <button data-view="match" class="button tool-nav-btn"><span class="material-symbols-outlined">gamepad</span>Matchen</button>
-                    <button data-view="overhoor" class="button tool-nav-btn"><span class="material-symbols-outlined">bolt</span>Overhoor mij</button>
-                    <button data-view="edit-wordlist" class="button tool-nav-btn"><span class="material-symbols-outlined">edit</span>Bewerk Lijst</button>
-                `;
-                mainContent.prepend(navContainer);
-                
-                navContainer.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.tool-nav-btn');
-                    if (btn) {
-                        const view = btn.dataset.view;
-                        document.querySelectorAll('.tool-nav-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        showView(view);
-                    }
-                });
-
-                createStudySettingsUI(mainContent);
-
-                if (!isLoadedFromURL) {
-                    createSaveUI(mainContent);
-                }
+            } catch (error) {
+                console.error('Error loading list from URL:', error);
+                uploadFeedback.textContent = `Fout bij laden: ${error.message}`;
+                showView('upload');
             }
-
-            function createStudySettingsUI(container) {
-                let settingsContainer = document.getElementById('study-settings-container');
-                if (settingsContainer) settingsContainer.remove();
-
-                settingsContainer = document.createElement('div');
-                settingsContainer.id = 'study-settings-container';
-                settingsContainer.className = 'flex flex-wrap justify-center items-center gap-4 mb-4 p-2 rounded-lg';
-                settingsContainer.style.backgroundColor = 'var(--surface-container)';
-                settingsContainer.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <label for="term-lang-select" class="text-sm">Begrip:</label>
-                        <select id="term-lang-select" class="styled-input p-1 rounded-md text-sm"></select>
-                    </div>
-                    <div class="flex items-center gap-2">
-                         <label for="def-lang-select" class="text-sm">Definitie:</label>
-                        <select id="def-lang-select" class="styled-input p-1 rounded-md text-sm"></select>
-                    </div>
-                    <button id="swap-direction-btn" class="button" title="Wissel vraag en antwoord"><span class="material-symbols-outlined">swap_horiz</span><span id="direction-label" class="ml-1 text-sm">Definitie &rarr; Begrip</span></button>
-                `;
-                
-                const toolNav = document.getElementById('tool-nav-container');
-                toolNav.insertAdjacentElement('afterend', settingsContainer);
-                
-                populateLanguageSelectors();
-
-                document.getElementById('term-lang-select').addEventListener('change', (e) => {
-                    termLanguage = e.target.value;
-                });
-                 document.getElementById('def-lang-select').addEventListener('change', (e) => {
-                    definitionLanguage = e.target.value;
-                });
-                document.getElementById('swap-direction-btn').addEventListener('click', () => {
-                    askWith = (askWith === 'definition') ? 'term' : 'definition';
-                    updateDirectionLabel();
-                    // Re-initialize the current view to reflect the change
-                    showView(currentMode); 
-                });
-                updateDirectionLabel();
-            }
-            
-            function updateDirectionLabel() {
-                 const label = document.getElementById('direction-label');
-                 if (label) {
-                    label.textContent = askWith === 'definition' ? 'Definitie → Begrip' : 'Begrip → Definitie';
-                 }
-            }
-
-            function populateLanguageSelectors() {
-                const languages = [
-                    { code: 'nl-NL', name: 'Nederlands' },
-                    { code: 'en-US', name: 'Engels (US)' },
-                    { code: 'en-GB', name: 'Engels (UK)' },
-                    { code: 'de-DE', name: 'Duits' },
-                    { code: 'fr-FR', name: 'Frans' },
-                    { code: 'es-ES', name: 'Spaans' },
-                    { code: 'it-IT', name: 'Italiaans' },
-                    { code: 'ja-JP', name: 'Japans' },
-                    { code: 'ru-RU', name: 'Russisch' },
-                ];
-                const termSelect = document.getElementById('term-lang-select');
-                const defSelect = document.getElementById('def-lang-select');
-                
-                [termSelect, defSelect].forEach(select => {
-                    select.innerHTML = '';
-                    languages.forEach(lang => {
-                        const option = document.createElement('option');
-                        option.value = lang.code;
-                        option.textContent = lang.name;
-                        select.appendChild(option);
-                    });
-                    select.value = 'nl-NL';
-                });
-            }
-            
-            // Helper to get question/answer based on settings
-            function getQuestionAndAnswer(item) {
-                if (!item) return { question: '', answer: '' };
-                if (askWith === 'definition') {
-                    return { question: item.definition, answer: item.term };
-                } else {
-                    return { question: item.term, answer: item.definition };
-                }
-            }
-
-            function createSaveUI(container) {
-                let saveContainer = document.getElementById('save-container');
-                if (saveContainer) saveContainer.remove();
-                saveContainer = document.createElement('div');
-                saveContainer.id = 'save-container';
-                saveContainer.className = 'mt-4 p-4 rounded-lg';
-                saveContainer.style.backgroundColor = 'var(--surface-container-high)';
-                saveContainer.innerHTML = `
-                    <h3 class="text-lg font-medium mb-2">Sla deze lijst op</h3>
-                    <div class="flex items-center gap-4">
-                        <input type="text" id="wordlist-name" class="styled-input flex-grow" placeholder="Naam van de woordenlijst">
-                        <select id="subject-select" class="styled-input"></select>
-                        <button id="save-wordlist-btn" class="button button-primary">Opslaan</button>
-                    </div>
-                    <p id="save-feedback" class="text-green-400 mt-2 h-5"></p>
-                `;
-                const settingsUI = document.getElementById('study-settings-container');
-                settingsUI.insertAdjacentElement('afterend', saveContainer);
-                document.getElementById('save-wordlist-btn').addEventListener('click', saveWordList);
-                loadSubjectsForSave();
-            }
-
-            async function loadSubjectsForSave() {
-                const select = document.getElementById('subject-select');
-                select.innerHTML = '<option>Laden...</option>';
-                try {
-                    const response = await fetch('/api/subjects');
-                    if (!response.ok) throw new Error('Kon vakken niet laden.');
-                    const subjects = await response.json();
-                    select.innerHTML = '';
-                    if (subjects.length === 0) {
-                        select.innerHTML = '<option>Geen vakken gevonden</option>';
-                        return;
-                    }
-                    subjects.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.name;
-                        select.appendChild(option);
-                    });
-                } catch (error) {
-                    select.innerHTML = `<option>Error!</option>`;
-                    console.error(error);
-                }
-            }
-
-            async function saveWordList() {
-                const nameInput = document.getElementById('wordlist-name');
-                const subjectSelect = document.getElementById('subject-select');
-                const feedbackEl = document.getElementById('save-feedback');
-                const listName = nameInput.value.trim();
-                const subjectId = subjectSelect.value;
-
-                if (!listName) {
-                    feedbackEl.textContent = 'Geef de lijst een naam.';
-                    feedbackEl.style.color = '#ffb4ab';
-                    return;
-                }
-                if (!subjectId || subjectId === 'Geen vakken gevonden') {
-                    feedbackEl.textContent = 'Selecteer een vak.';
-                    feedbackEl.style.color = '#ffb4ab';
-                    return;
-                }
-                feedbackEl.textContent = 'Opslaan...';
-                feedbackEl.style.color = '#9cf890';
-                try {
-                    const subjectsResponse = await fetch('/api/subjects');
-                    if (!subjectsResponse.ok) throw new Error('Kon vakken niet ophalen.');
-                    const subjects = await subjectsResponse.json();
-                    const subjectToUpdate = subjects.find(s => s.id === parseInt(subjectId));
-                    if (!subjectToUpdate) throw new Error('Geselecteerde vak niet gevonden.');
-                    
-                    // *** NIEUWE CODE: Voeg taalinstellingen toe aan de opgeslagen data ***
-                    const newWordList = {
-                        name: listName,
-                        termLang: termLanguage, // Sla de geselecteerde termtaal op
-                        defLang: definitionLanguage, // Sla de geselecteerde definitietaal op
-                        words: studySet.map(({ term, definition }) => ({ term, definition }))
-                    };
-                    
-                    if (!subjectToUpdate.wordlists) {
-                        subjectToUpdate.wordlists = [];
-                    }
-                    subjectToUpdate.wordlists.push(newWordList);
-                    
-                    const updateResponse = await fetch(`/api/subjects/${subjectId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(subjectToUpdate)
-                    });
-                    
-                    if (!updateResponse.ok) {
-                        throw new Error('Opslaan op de server is mislukt.');
-                    }
-                    
-                    feedbackEl.textContent = `Lijst '${listName}' opgeslagen in ${subjectToUpdate.name}!`;
-                    nameInput.value = '';
-                    setTimeout(() => { feedbackEl.textContent = ''; }, 3000);
-                } catch (error) {
-                    console.error('Save error:', error);
-                    feedbackEl.textContent = error.message;
-                    feedbackEl.style.color = '#ffb4ab';
-                }
-            }
-
-            const shuffleArray = (array) => {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            };
-
-            // --- FLASHCARDS MODE ---
-            const initFlashcards = () => {
-                currentCardIndex = 0;
-                updateFlashcard();
-            };
-            const updateFlashcard = () => {
-                if (studySet.length === 0) return;
-                flashcard.classList.remove('is-flipped');
-                const card = studySet[currentCardIndex];
-                const { question, answer } = getQuestionAndAnswer(card);
-                flashcardFront.textContent = question;
-                flashcardBack.textContent = answer;
-                cardCounter.textContent = `${currentCardIndex + 1} / ${studySet.length}`;
-            };
-
-            // --- LEARN MODE ---
-            const initLearn = () => {
-                learnQueue = shuffleArray([...studySet]);
-                learnQueue.forEach(item => item.strength = 0);
-                currentStreak = 0;
-                learnInput.value = '';
-                learnInput.className = 'styled-input w-full p-4 mt-6 text-xl text-center rounded-lg';
-                learnFeedback.textContent = '';
-                updateLearnProgress();
-                nextLearnQuestion();
-            };
-            const nextLearnQuestion = () => {
-                if (learnQueue.length === 0) {
-                    learnPrompt.textContent = "Gefeliciteerd! Je hebt alle termen geleerd!";
-                    learnInput.classList.add('hidden');
-                    learnFeedback.textContent = "Je bent een ster! ✨";
-                    return;
-                }
-                learnInput.classList.remove('hidden');
-                learnInput.value = '';
-                learnInput.focus();
-                learnQueue.sort((a, b) => a.strength - b.strength);
-                const weakestWords = learnQueue.slice(0, 2);
-                currentLearnItem = weakestWords[Math.floor(Math.random() * weakestWords.length)];
-                
-                const { question } = getQuestionAndAnswer(currentLearnItem);
-                learnPrompt.textContent = question;
-                updateLearnProgress();
-            };
-
-            const checkLearnAnswer = () => {
-                const userAnswer = learnInput.value.trim().toLowerCase();
-                const { answer: correctAnswerText } = getQuestionAndAnswer(currentLearnItem);
-                const rawCorrectAnswer = correctAnswerText.toLowerCase();
-
-                const answerTerms = rawCorrectAnswer.split(',').map(term => term.trim());
-                const finalPossibleAnswers = new Set();
-                answerTerms.forEach(term => {
-                    const withParenContent = term.replace(/[()]/g, '').replace(/\s+/g, ' ').trim();
-                    finalPossibleAnswers.add(withParenContent);
-                    const withoutParenContent = term.replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
-                    finalPossibleAnswers.add(withoutParenContent);
-                });
-
-                let isCorrect = finalPossibleAnswers.has(userAnswer);
-                if (isCorrect) {
-                    currentStreak++;
-                    currentLearnItem.strength++;
-                    learnFeedback.textContent = "Correct!";
-                    learnFeedback.style.color = '#9cf890';
-                    learnInput.classList.add('correct-answer');
-                    if (currentLearnItem.strength >= 2) {
-                        learnQueue = learnQueue.filter(item => item.id !== currentLearnItem.id);
-                        learnFeedback.textContent = `Correct! "${correctAnswerText}" beheerst!`;
-                    }
-                    setTimeout(() => {
-                        learnInput.classList.remove('correct-answer');
-                        learnFeedback.textContent = '';
-                        nextLearnQuestion();
-                    }, 1200);
-                } else {
-                    currentStreak = 0;
-                    currentLearnItem.strength = 0;
-                    const feedbackAnswer = answerTerms[0].replace(/[()]/g, '').replace(/\s+/g, ' ').trim();
-                    learnFeedback.textContent = `Incorrect. Het juiste antwoord is: ${feedbackAnswer}`;
-                    learnFeedback.style.color = '#ffb4ab';
-                    learnInput.classList.add('incorrect-answer');
-                    setTimeout(() => {
-                        learnInput.classList.remove('incorrect-answer');
-                        learnFeedback.textContent = '';
-                        nextLearnQuestion();
-                    }, 2500);
-                }
-                updateLearnProgress();
-            };
-            const updateLearnProgress = () => {
-                const totalCount = studySet.length;
-                if(totalCount === 0) return;
-                const masteredCount = totalCount - learnQueue.length;
-                const progress = (masteredCount / totalCount) * 100;
-                learnProgressBar.style.width = `${progress}%`;
-                learnStreakCounter.textContent = ` Streak: ${currentStreak}`;
-                learnMasteredCount.textContent = `Beheerst: ${masteredCount} / ${totalCount}`;
-            };
-
-            // --- MATCH MODE ---
-            const initMatch = () => {
-                matchGrid.innerHTML = '';
-                matchWinScreen.classList.add('hidden');
-                stopMatchTimer();
-                matchTimer.textContent = '0.0';
-                let items = [];
-                const shuffledSet = shuffleArray([...studySet]);
-                const pairsToMatch = Math.min(shuffledSet.length, 8);
-                for (let i = 0; i < pairsToMatch; i++) {
-                    items.push({ text: shuffledSet[i].term, matchId: i });
-                    items.push({ text: shuffledSet[i].definition, matchId: i });
-                }
-                shuffleArray(items).forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'match-item flex items-center justify-center p-4 rounded-lg text-center h-24';
-                    div.textContent = item.text;
-                    div.dataset.matchId = item.matchId;
-                    div.addEventListener('click', onMatchItemClick);
-                    matchGrid.appendChild(div);
-                });
-                startMatchTimer();
-            };
-            const startMatchTimer = () => {
-                const startTime = Date.now();
-                matchTimerInterval = setInterval(() => {
-                    const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
-                    matchTimer.textContent = elapsedTime;
-                }, 100);
-            };
-            const stopMatchTimer = () => {
-                clearInterval(matchTimerInterval);
-            };
-            const onMatchItemClick = (e) => {
-                const clickedItem = e.target;
-                if (clickedItem.classList.contains('matched') || clickedItem.classList.contains('selected')) {
-                    return;
-                }
-                clickedItem.classList.add('selected');
-                if (!firstSelection) {
-                    firstSelection = clickedItem;
-                } else {
-                    if (firstSelection.dataset.matchId === clickedItem.dataset.matchId) {
-                        firstSelection.classList.add('matched');
-                        clickedItem.classList.add('matched');
-                        firstSelection.classList.remove('selected');
-                        clickedItem.classList.remove('selected');
-                        firstSelection = null;
-                        checkWinCondition();
-                    } else {
-                        const first = firstSelection;
-                        const second = clickedItem;
-                        setTimeout(() => {
-                            first.classList.remove('selected');
-                            second.classList.remove('selected');
-                        }, 500);
-                        firstSelection = null;
-                    }
-                }
-            };
-            const checkWinCondition = () => {
-                const allItems = matchGrid.querySelectorAll('.match-item');
-                const matchedItems = matchGrid.querySelectorAll('.matched');
-                if (allItems.length === matchedItems.length && allItems.length > 0) {
-                    stopMatchTimer();
-                    winTime.textContent = matchTimer.textContent;
-                    matchWinScreen.classList.remove('hidden');
-                }
-            };
-            
-            // --- EVENT LISTENERS ---
-            processBtn.addEventListener('click', processWordList);
-            flashcard.addEventListener('click', () => flashcard.classList.toggle('is-flipped'));
-            nextCardBtn.addEventListener('click', () => {
-                currentCardIndex = (currentCardIndex + 1) % studySet.length;
-                updateFlashcard();
-            });
-            prevCardBtn.addEventListener('click', () => {
-                currentCardIndex = (currentCardIndex - 1 + studySet.length) % studySet.length;
-                updateFlashcard();
-            });
-            shuffleCardsBtn.addEventListener('click', () => {
-                studySet = shuffleArray(studySet);
-                initFlashcards();
-            });
-            learnInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') checkLearnAnswer();
-            });
-            playAgainBtn.addEventListener('click', initMatch);
-
-            // --- OVERHOOR MIJ MODE (BIJGEWERKT) ---
-            let welcomeMessagePlayed = false;
-            const initOverhoor = () => {
-                if (!annyang) {
-                    overhoorPrompt.textContent = 'Sorry, spraakherkenning wordt niet ondersteund in je browser.';
-                    overhoorStartBtn.classList.add('hidden');
-                    return;
-                }
-                overhoorQueue = shuffleArray([...studySet]);
-                currentOverhoorItem = null;
-                overhoorTranscript.textContent = '';
-                overhoorFeedback.textContent = '';
-                overhoorPrompt.textContent = 'Klik op "Start" om te beginnen.';
-                overhoorStartBtn.classList.remove('hidden');
-                overhoorNextBtn.classList.add('hidden');
-                overhoorStartBtn.textContent = 'Start';
-                if (!welcomeMessagePlayed) {
-                    speak('Welkom bij de overhoor modus. Klik op start om te beginnen.', 'nl-NL', () => {});
-                    welcomeMessagePlayed = true;
-                }
-                if (!document.getElementById('overhoor-tip')) {
-                    overhoorPrompt.insertAdjacentHTML('afterend', '<p id="overhoor-tip" class="text-sm text-gray-400 mt-2">Zorg dat de betekenis eerst staat, zodat je alleen het begrip hoeft te zeggen bij lange betekenissen.</p>');
-                }
-            };
-
-            const nextOverhoorQuestion = () => {
-                isAnswerProcessed = false;
-                overhoorTranscript.textContent = '';
-                overhoorFeedback.textContent = '';
-                if (overhoorQueue.length === 0) {
-                    overhoorPrompt.textContent = "Gefeliciteerd! Je hebt alle termen gehad!";
-                    overhoorStartBtn.classList.remove('hidden');
-                    overhoorStartBtn.textContent = 'Opnieuw Starten';
-                    overhoorNextBtn.classList.add('hidden');
-                    return;
-                }
-                currentOverhoorItem = overhoorQueue.pop();
-                overhoorPrompt.textContent = 'Luister...';
-                
-                const { question, answer } = getQuestionAndAnswer(currentOverhoorItem);
-                const questionLang = askWith === 'definition' ? definitionLanguage : termLanguage;
-                const answerLang = askWith === 'definition' ? termLanguage : definitionLanguage;
-
-                speak(question, questionLang, () => {
-                    overhoorPrompt.innerHTML = '<span class="material-symbols-outlined animate-pulse">mic</span> Zeg het juiste antwoord...';
-                    startListening(answerLang);
-                });
-            };
-
-            const speak = (text, lang, onEndCallback) => {
-                speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = lang;
-
-                const qualityKeywords = ['Google', 'Microsoft', 'Premium', 'Enhanced'];
-                let selectedVoice = null;
-        
-                for (const keyword of qualityKeywords) {
-                    selectedVoice = availableVoices.find(voice => voice.lang === lang && voice.name.includes(keyword));
-                    if (selectedVoice) break;
-                }
-        
-                if (!selectedVoice) {
-                    selectedVoice = availableVoices.find(voice => voice.lang === lang && !voice.localService);
-                }
-                
-                if (!selectedVoice) {
-                    selectedVoice = availableVoices.find(voice => voice.lang === lang);
-                }
-        
-                if (selectedVoice) {
-                    utterance.voice = selectedVoice;
-                }
-        
-                utterance.rate = 1.05; 
-                utterance.pitch = 1;
-
-                utterance.onend = onEndCallback;
-                speechSynthesis.speak(utterance);
-            };
-
-            const startListening = (lang) => {
-                if (annyang) {
-                    annyang.setLanguage(lang);
-                    annyang.start({ autoRestart: false, continuous: false });
-                }
-            };
-
-            const checkOverhoorAnswer = (spokenAnswer) => {
-                 if (isAnswerProcessed) return;
-                isAnswerProcessed = true;
-            
-                const userAnswer = spokenAnswer.trim().toLowerCase();
-                const { answer: correctAnswerText } = getQuestionAndAnswer(currentOverhoorItem);
-                const rawCorrectAnswer = correctAnswerText.toLowerCase();
-                const primaryAnswerForFeedback = correctAnswerText.split(',')[0].trim();
-            
-                const finalPossibleAnswers = new Set();
-                const answerTerms = rawCorrectAnswer.split(',').map(term => term.trim());
-            
-                answerTerms.forEach(term => {
-                    const baseTerm = term.replace(/\s*\([^)]*\)/g, '').trim();
-                    finalPossibleAnswers.add(baseTerm);
-            
-                    const isFrench = termLanguage === 'fr-FR' || definitionLanguage === 'fr-FR';
-                    if (isFrench) {
-                         if (baseTerm.startsWith('le ') || baseTerm.startsWith('la ') || baseTerm.startsWith("l'")) {
-                            const noun = baseTerm.split(' ').pop();
-                            finalPossibleAnswers.add(`les ${noun}`);
-                            if (!noun.endsWith('s')) finalPossibleAnswers.add(`les ${noun}s`);
-                             if (!noun.endsWith('x')) finalPossibleAnswers.add(`les ${noun}x`);
-                        } else if (baseTerm.startsWith('les ')) {
-                            const noun = baseTerm.substring(4);
-                             if (noun !== 'temps' && noun.endsWith('s')) { 
-                                const singularNoun = noun.slice(0, -1);
-                                finalPossibleAnswers.add(`le ${singularNoun}`);
-                                finalPossibleAnswers.add(`la ${singularNoun}`);
-                                finalPossibleAnswers.add(`l'${singularNoun}`);
-                            } else {
-                                finalPossibleAnswers.add(`le ${noun}`);
-                                finalPossibleAnswers.add(`la ${noun}`);
-                                finalPossibleAnswers.add(`l'${noun}`);
-                            }
-                        }
-                    }
-                });
-            
-                if (finalPossibleAnswers.has(userAnswer)) {
-                     if (userAnswer.toLowerCase() === primaryAnswerForFeedback.toLowerCase()) {
-                        overhoorFeedback.textContent = "Correct!";
-                    } else {
-                        overhoorFeedback.textContent = `Correct! (Het antwoord was: ${primaryAnswerForFeedback})`;
-                    }
-                    overhoorFeedback.style.color = '#9cf890';
-                } else {
-                    overhoorFeedback.textContent = `Incorrect. Het juiste antwoord was: ${primaryAnswerForFeedback}`;
-                    overhoorFeedback.style.color = '#ffb4ab';
-                }
-                 overhoorNextBtn.classList.remove('hidden');
-            };
-
-            if (annyang) {
-                annyang.addCallback('result', (phrases) => {
-                    annyang.abort();
-                    const spokenText = phrases[0];
-                    if (spokenText && !isAnswerProcessed) {
-                        overhoorTranscript.textContent = spokenText;
-                        checkOverhoorAnswer(spokenText);
-                    }
-                });
-                annyang.addCallback('error', (error) => {
-                    if (isAnswerProcessed) return;
-                     if (error.error === 'no-speech' || error.error === 'audio-capture') {
-                        overhoorFeedback.textContent = 'Ik kon je niet horen. Probeer het opnieuw.';
-                    } else if (error.error !== 'aborted') {
-                         overhoorFeedback.textContent = `Er is een fout opgetreden.`;
-                    }
-                     overhoorFeedback.style.color = '#ffb4ab';
-                    overhoorNextBtn.classList.remove('hidden');
-                });
-            }
-
-
-            overhoorStartBtn.addEventListener('click', () => {
-                if (overhoorStartBtn.textContent === 'Opnieuw Starten') {
-                    initOverhoor();
-                }
-                overhoorStartBtn.classList.add('hidden');
-                nextOverhoorQuestion();
-            });
-            overhoorNextBtn.addEventListener('click', nextOverhoorQuestion);
-
-            // Search / Upload Tab listeners
-            tabUpload.addEventListener('click', () => {
-                tabUpload.classList.add('border-green-500', 'text-white');
-                tabUpload.classList.remove('border-transparent', 'text-gray-400');
-                tabSearch.classList.add('border-transparent', 'text-gray-400');
-                tabSearch.classList.remove('border-green-500', 'text-white');
-                contentUpload.classList.remove('hidden');
-                contentSearch.classList.add('hidden');
-            });
-
-            tabSearch.addEventListener('click', () => {
-                tabSearch.classList.add('border-green-500', 'text-white');
-                tabSearch.classList.remove('border-transparent', 'text-gray-400');
-                tabUpload.classList.add('border-transparent', 'text-gray-400');
-                tabUpload.classList.remove('border-green-500', 'text-white');
-                contentSearch.classList.remove('hidden');
-                contentUpload.classList.add('hidden');
-                if (allWordLists.length === 0) {
-                    fetchAllWordLists();
-                }
-            });
-
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                if (allWordLists.length === 0) {
-                    fetchAllWordLists().then(() => {
-                        const filteredLists = allWordLists.filter(list => 
-                            list.listName.toLowerCase().includes(query) || 
-                            list.subjectName.toLowerCase().includes(query)
-                        );
-                        displaySearchResults(filteredLists);
-                    });
-                } else {
-                    const filteredLists = allWordLists.filter(list => 
-                        list.listName.toLowerCase().includes(query) || 
-                        list.subjectName.toLowerCase().includes(query)
-                    );
-                    displaySearchResults(filteredLists);
-                }
-            });
-
-            async function fetchAllWordLists() {
-                searchResults.innerHTML = '<p class="text-gray-400">Laden...</p>';
-                try {
-                    const response = await fetch('/api/subjects');
-                    if (!response.ok) throw new Error('Kon vakken niet laden.');
-                    const subjects = await response.json();
-                    
-                    allWordLists = [];
-                    subjects.forEach(subject => {
-                        if (subject.wordlists && subject.wordlists.length > 0) {
-                            subject.wordlists.forEach(list => {
-                                allWordLists.push({
-                                    subjectId: subject.id,
-                                    subjectName: subject.name,
-                                    listName: list.name
-                                });
-                            });
-                        }
-                    });
-                    displaySearchResults(allWordLists);
-                } catch (error) {
-                    console.error('Error fetching word lists:', error);
-                    searchResults.innerHTML = `<p class="text-red-400">Kon lijsten niet laden.</p>`;
-                }
-            }
-
-            function displaySearchResults(lists) {
-                if (lists.length === 0) {
-                    searchResults.innerHTML = '<p class="text-gray-400">Geen lijsten gevonden.</p>';
-                    return;
-                }
-                searchResults.innerHTML = lists.map(list => `
-                    <a href="/woordjes-leren.html?subjectId=${list.subjectId}&listName=${encodeURIComponent(list.listName)}" class="block p-3 rounded-lg hover:bg-gray-800 transition-colors">
-                        <span class="font-medium text-white">${list.listName}</span>
-                        <span class="text-sm text-gray-400 block">${list.subjectName}</span>
-                    </a>
-                `).join('');
-            }
-
-
-            // --- INITIALIZATION ---
-            const init = () => {
-                const urlParams = new URLSearchParams(window.location.search);
-                const subjectId = urlParams.get('subjectId');
-                const listName = urlParams.get('listName');
-                if (subjectId && listName) {
-                    loadListFromURL(subjectId, decodeURIComponent(listName));
-                } else {
-                    showView('upload');
-                }
-            };
-
-            async function loadListFromURL(subjectId, listName) {
-                isLoadedFromURL = true;
-                try {
-                    const response = await fetch('/api/subjects');
-                    if (!response.ok) throw new Error('Kon vakken niet laden.');
-                    const subjects = await response.json();
-                    const subject = subjects.find(s => s.id === parseInt(subjectId));
-                    if (!subject || !subject.wordlists) throw new Error('Vak of woordenlijst niet gevonden.');
-                    const list = subject.wordlists.find(l => l.name === listName);
-                    if (!list) throw new Error('Specifieke woordenlijst niet gevonden.');
-                    
-                    studySet = list.words.map((word, index) => ({
-                        ...word,
-                        id: index,
-                        strength: 0
-                    }));
-                    
-                    if (studySet.length > 0) {
-                        createToolUI();
-                        
-                        // *** NIEUWE CODE: Laad de opgeslagen talen en stel ze in ***
-                        termLanguage = list.termLang || 'nl-NL'; // Gebruik opgeslagen taal of val terug op NL
-                        definitionLanguage = list.defLang || 'nl-NL'; // Gebruik opgeslagen taal of val terug op NL
-                        
-                        const termSelect = document.getElementById('term-lang-select');
-                        const defSelect = document.getElementById('def-lang-select');
-                        
-                        if (termSelect) termSelect.value = termLanguage;
-                        if (defSelect) defSelect.value = definitionLanguage;
-                        
-                        showView('flashcards');
-                    } else {
-                        showView('empty');
-                    }
-                } catch (error) {
-                    console.error('Error loading list from URL:', error);
-                    const uploadFeedback = document.getElementById('upload-feedback');
-                    uploadFeedback.textContent = `Fout bij laden: ${error.message}`;
-                    showView('upload');
-                }
-            }
-            init();
-        });
-    </script>
+        }
+        init();
+    });
+</script>
 </body>
 </html>

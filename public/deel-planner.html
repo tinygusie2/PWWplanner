@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gedeelde PWW Planner</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+        .welcome-animation {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s ease-out forwards;
+        }
+        .welcome-animation h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .welcome-animation p {
+            font-size: 1.25rem;
+            color: var(--on-surface-variant);
+            margin-bottom: 2rem;
+        }
+        #final-planner-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 1200px;
+            text-align: left;
+            margin-top: 2rem;
+        }
+        .final-day-column {
+            background-color: var(--surface);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--outline-variant);
+        }
+        .final-day-column h5 {
+            border-bottom: 1px solid var(--outline-variant);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .final-day-column ul { list-style: none; padding: 0; }
+        .final-day-column li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .final-day-column li .material-symbols-outlined {
+            font-size: 1.25rem;
+            margin-top: 2px;
+        }
+        .final-day-column li label {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            font-size: 0.875rem;
+        }
+        .final-day-column li.test-day-item {
+            font-weight: bold;
+            color: var(--error);
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome-message" class="welcome-animation">
+        <h1 id="mentor-name-heading"></h1>
+        <p>Hier is een overzicht van mijn pww planning:</p>
+    </div>
+
+    <div id="final-planner-container">
+        <p>Planner wordt geladen...</p>
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+        // Functie om de uiteindelijke planner te renderen
+        function renderFinalPlanner(plannedItems, container) {
+            container.innerHTML = '';
+            if (!plannedItems || Object.keys(plannedItems).length === 0) {
+                container.innerHTML = '<p>Er zijn geen items gepland.</p>';
+                return;
+            }
+
+            const sortedDates = Object.keys(plannedItems).sort((a, b) => new Date(a) - new Date(b));
+
+            for (const dateString of sortedDates) {
+                const date = new Date(dateString + 'T00:00:00');
+                const dayData = plannedItems[dateString];
+                const dayColumn = document.createElement('div');
+                dayColumn.className = 'final-day-column';
+
+                // FIX: Removed backslash before the backtick
+                let tasksHtml = dayData.tasks.map(item => `
+                    <li>
+                        <span class="material-symbols-outlined">${item.completed ? 'check_box' : 'check_box_outline_blank'}</span>
+                        <label><strong>${item.subject}:</strong> ${item.task}</label>
+                    </li>
+                `).join('');
+
+                if (dayData.testSubject) {
+                    // FIX: Removed backslash before the backtick
+                    tasksHtml = `<li class="test-day-item"><span class="material-symbols-outlined">assignment</span>TOETS: ${dayData.testSubject}</li>` + tasksHtml;
+                }
+                
+                // FIX: Removed backslash before the backtick
+                dayColumn.innerHTML = `
+                    <h5>${date.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' })}</h5>
+                    <ul>${tasksHtml || '<li>Geen taken voor vandaag.</li>'}</ul>
+                `;
+                container.appendChild(dayColumn);
+            }
+        }
+
+        // Hoofdscript dat wordt uitgevoerd nadat de pagina is geladen
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mentorName = urlParams.get('mentor') || 'Mentor';
+            const finalPlannerContainer = document.getElementById('final-planner-container');
+
+            // --- Welkomstanimatie ---
+            // FIX: Removed backslash before the backtick
+            document.getElementById('mentor-name-heading').textContent = `Welkom, ${mentorName}!`;
+
+            // --- Laad en toon de planner ---
+            try {
+                // Assuming fetchData is defined in /app.js
+                const plannerData = await fetchData('planner-data');
+                renderFinalPlanner(plannerData.plannedItems, finalPlannerContainer);
+            } catch (error) {
+                console.error('Kon de planner data niet laden:', error);
+                finalPlannerContainer.innerHTML = '<p>Er is een fout opgetreden bij het laden van de planning.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

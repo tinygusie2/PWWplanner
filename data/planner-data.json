@@ -1,35 +1,8 @@
 {
-  "startDate": "2025-08-29T00:00:00.000Z",
-  "endDate": "2025-09-19T00:00:00.000Z",
+  "currentDate": "2025-09-02T18:15:28.277Z",
+  "startDate": "2025-09-02T18:26:51.685Z",
+  "endDate": "2025-09-12T00:00:00.000Z",
   "plannedItems": {
-    "2025-08-26": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-08-27": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-08-28": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-08-29": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-08-30": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-08-31": {
-      "tasks": [],
-      "testSubject": null
-    },
-    "2025-09-01": {
-      "tasks": [],
-      "testSubject": null
-    },
     "2025-09-02": {
       "tasks": [],
       "testSubject": null
@@ -41,13 +14,32 @@
     "2025-09-04": {
       "tasks": [],
       "testSubject": null
-    }
-  }
-}   "2025-09-03": {
+    },
+    "2025-09-05": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-04": {
+    "2025-09-06": {
+      "tasks": [],
+      "testSubject": null
+    },
+    "2025-09-07": {
+      "tasks": [],
+      "testSubject": null
+    },
+    "2025-09-08": {
+      "tasks": [],
+      "testSubject": null
+    },
+    "2025-09-09": {
+      "tasks": [],
+      "testSubject": null
+    },
+    "2025-09-10": {
+      "tasks": [],
+      "testSubject": null
+    },
+    "2025-09-11": {
       "tasks": [],
       "testSubject": null
     }

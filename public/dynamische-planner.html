@@ -39,8 +39,8 @@
         @media (max-width: 1024px) { .planning-workspace { grid-template-columns: 1fr; } }
 
         /* Resource List & Textbox Styling */
-        #resource-list-container { 
-             top: 2rem; 
+        #resource-list-container {
+             top: 2rem;
              position: sticky;
              max-height: calc(100vh - 4rem); /* Berekent de maximale hoogte op basis van het scherm */
             overflow-y: auto; /* Voegt een scrollbalk toe als de inhoud hoger is */
@@ -84,9 +84,9 @@
         .final-day-column li.test-day-item { font-weight: bold; color: var(--error); }
 
         /* Custom Date Picker Modal */
-        .datepicker-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; }
-        .datepicker-modal-overlay.visible { display: flex; }
-        .datepicker-content { font-family: 'Google Sans', Arial, sans-serif; background: var(--surface); padding: 1.5rem; border-radius: 16px; width: 90%; max-width: 320px; }
+        .datepicker-modal-overlay, .share-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .datepicker-modal-overlay.visible, .share-modal-overlay.visible { display: flex; }
+        .datepicker-content, .share-content { font-family: 'Google Sans', Arial, sans-serif; background: var(--surface); padding: 1.5rem; border-radius: 16px; width: 90%; max-width: 400px; }
         .datepicker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .datepicker-header button { background: none; border: none; cursor: pointer; color: var(--on-surface); }
         .datepicker-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center; }
@@ -96,7 +96,9 @@
         .day:hover { background-color: var(--surface-variant); }
         .day.other-month { color: var(--on-surface-variant); }
         .day.selected { background-color: var(--primary); color: var(--on-primary); }
-        .datepicker-footer { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+        .datepicker-footer, .share-footer { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+        #share-link-input { width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--outline); background-color: var(--surface-variant); }
+
 
         @media print {
             body {
@@ -160,6 +162,7 @@
                         <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
                         <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
                         <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                        <li><a href="/deel-planner.html" class="m3-nav-item"><span class="material-symbols-outlined">share</span><span>Deel Planner</span></a></li>
                     </ul>
                 </nav>
             </div>
@@ -191,10 +194,13 @@
                     </div>
                     <div class="section-header">
                         <h2>Planning Werkruimte</h2>
-                        <button id="toggle-view-btn" class="button">
-                            <span class="material-symbols-outlined">check_circle</span>
-                            Klaar met plannen
-                        </button>
+                        <div style="display: flex; gap: 1rem;">
+                            <button id="share-planner-btn" class="button"><span class="material-symbols-outlined">share</span>Delen</button>
+                            <button id="toggle-view-btn" class="button">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                Klaar met plannen
+                            </button>
+                        </div>
                     </div>
                     <div class="planning-workspace">
                         <div id="resource-list-container"></div>
@@ -213,7 +219,6 @@
         </main>
     </div>
 
-    <!-- Custom Date Picker Modal -->
     <div id="datepicker-modal" class="datepicker-modal-overlay">
         <div class="datepicker-content">
             <div class="datepicker-header">
@@ -231,6 +236,22 @@
             </div>
         </div>
     </div>
+    
+    <div id="share-modal" class="share-modal-overlay">
+        <div class="share-content">
+            <h3>Deel je Planner</h3>
+            <p style="margin: 1rem 0;">Voer de naam van je mentor in om een gepersonaliseerde link te maken.</p>
+            <label for="mentor-name-input">Naam Mentor:</label>
+            <input type="text" id="mentor-name-input" class="add-resource-form input" placeholder="bv. Dhr. Jansen" style="width: 100%; margin-top: 0.5rem; margin-bottom: 1rem;">
+            <label for="share-link-input">Deelbare Link:</label>
+            <input type="text" id="share-link-input" readonly style="width: 100%; margin-top: 0.5rem;">
+            <div class="share-footer">
+                <button id="cancel-share-btn" class="button">Sluiten</button>
+                <button id="copy-link-btn" class="button">Kopieer Link</button>
+            </div>
+        </div>
+    </div>
+
 
     <script src="/app.js"></script>
     <script>
@@ -255,6 +276,7 @@
             const finalPlannerContainer = document.getElementById('final-planner-container');
             const toggleViewBtn = document.getElementById('toggle-view-btn');
             const mainLayout = document.getElementById('main-planner-layout');
+            const sharePlannerBtn = document.getElementById('share-planner-btn');
 
             // Date Picker Elements
             const datePickerModal = document.getElementById('datepicker-modal');
@@ -264,6 +286,13 @@
             const nextMonthBtn = document.getElementById('next-month-btn');
             const cancelDateBtn = document.getElementById('cancel-date-btn');
             const okDateBtn = document.getElementById('ok-date-btn');
+            
+            // Share Modal Elements
+            const shareModal = document.getElementById('share-modal');
+            const mentorNameInput = document.getElementById('mentor-name-input');
+            const shareLinkInput = document.getElementById('share-link-input');
+            const cancelShareBtn = document.getElementById('cancel-share-btn');
+            const copyLinkBtn = document.getElementById('copy-link-btn');
 
             // App State
             let startDate = new Date();
@@ -280,7 +309,7 @@
                 };
                 await postData('planner-data', state);
             }
-            
+
             // Date Picker State
             let datePickerCurrentDate = new Date();
             let datePickerSelectedDate = new Date();
@@ -333,7 +362,7 @@
                     calendarDaysContainer.appendChild(dayEl);
                 }
             }
-            
+
             startDateTrigger.addEventListener('click', () => openDatePicker('start'));
             endDateTrigger.addEventListener('click', () => openDatePicker('end'));
             prevMonthBtn.addEventListener('click', () => { datePickerCurrentDate.setMonth(datePickerCurrentDate.getMonth() - 1); renderCalendar(); });
@@ -356,6 +385,34 @@
             document.getElementById('print-planner-btn').addEventListener('click', () => {
                 window.print();
             });
+            
+             // --- SHARE MODAL LOGIC ---
+            function openShareModal() {
+                updateShareLink();
+                shareModal.classList.add('visible');
+            }
+
+            function closeShareModal() {
+                shareModal.classList.remove('visible');
+            }
+
+            function updateShareLink() {
+                const mentorName = mentorNameInput.value.trim();
+                const baseUrl = window.location.origin + '/deel-planner.html';
+                const shareUrl = mentorName ? `${baseUrl}?mentor=${encodeURIComponent(mentorName)}` : baseUrl;
+                shareLinkInput.value = shareUrl;
+            }
+
+            sharePlannerBtn.addEventListener('click', openShareModal);
+            cancelShareBtn.addEventListener('click', closeShareModal);
+            mentorNameInput.addEventListener('input', updateShareLink);
+            copyLinkBtn.addEventListener('click', () => {
+                shareLinkInput.select();
+                document.execCommand('copy');
+                copyLinkBtn.textContent = 'Gekopieerd!';
+                setTimeout(() => { copyLinkBtn.textContent = 'Kopieer Link'; }, 2000);
+            });
+
 
             // --- MAIN PLANNER LOGIC ---
 
@@ -363,7 +420,7 @@
                 // AANPASSING: De mock 'fetchData' is verwijderd. Deze code gebruikt nu
                 // de 'fetchData' functie die je waarschijnlijk in /app.js hebt gedefinieerd.
                 const subjects = await fetchData('subjects');
-                
+
                 resourceContainer.innerHTML = '<h3>Bronnenlijst</h3><p><small>Sleep een taak naar een dag, of sleep de vaktitel om een toetsdag te markeren.</small></p>';
                 if (!subjects || subjects.length === 0) {
                     resourceContainer.innerHTML += '<p>Voeg eerst vakken toe via de "Mijn Vakken" pagina.</p>';
@@ -373,7 +430,7 @@
                 subjects.forEach(subject => {
                     const subjectCard = document.createElement('div');
                     subjectCard.className = 'm3-card';
-                    
+
                     // AANPASSING: De voorbeeldtekst "Hoofdstuk 1..." is verwijderd.
                     // Het script leest nu alleen de data die daadwerkelijk in localStorage is opgeslagen.
                     const savedStof = localStorage.getItem('stof-' + subject.id) || '';
@@ -381,13 +438,13 @@
 
                     let itemsHtml = '<p>Geen stof ingevoerd.</p>';
                     if (stofItems.length > 0) {
-                        itemsHtml = stofItems.map((itemText) => 
+                        itemsHtml = stofItems.map((itemText) =>
                             `<div class="resource-item" draggable="true" data-drag-type="task" data-subject-name="${subject.name}" data-resource-text="${itemText}">
                                 ${itemText}
                             </div>`
                         ).join('');
                     }
-                    
+
                     subjectCard.innerHTML = `
                         <h4 draggable="true" data-drag-type="subject" data-subject-name="${subject.name}" style="cursor: grab; border-bottom: 2px dotted var(--outline-variant); padding-bottom: 0.5rem;">
                             ${subject.name}
@@ -429,10 +486,10 @@
                 const dayData = plannedItems[dateString] || {};
                 const headerH4 = dayCard.querySelector('.day-header h4');
                 const testBtn = dayCard.querySelector('.mark-test-btn');
-                
+
                 const existingTag = headerH4.querySelector('.test-tag');
                 if (existingTag) existingTag.remove();
-                
+
                 if (dayData.testSubject) {
                     dayCard.classList.add('test-day');
                     testBtn.style.display = 'inline-flex';
@@ -469,7 +526,7 @@
                     finalPlannerContainer.appendChild(dayColumn);
                 }
             }
-            
+
             function toggleViewMode() {
                 mainLayout.classList.toggle('view-mode');
                 const isInViewMode = mainLayout.classList.contains('view-mode');
@@ -489,14 +546,14 @@
                 const dayCard = e.target.closest('.day-card');
                 if (!dayCard) return;
                 const dateString = dayCard.dataset.date;
-                
+
                 if (e.target.classList.contains('mark-test-btn')) {
                     plannedItems[dateString].testSubject = null;
                     updateDayCardUI(dateString);
                     renderFinalPlanner();
                     savePlannerState();
                 }
-                
+
                 if (e.target.classList.contains('delete-planned-item')) {
                     const itemEl = e.target.closest('.planned-item');
                     const taskId = parseInt(itemEl.dataset.taskId);
@@ -535,14 +592,14 @@
             resourceContainer.addEventListener('dragend', () => { if (draggedItem) { draggedItem.classList.remove('dragging'); draggedItem = null; } });
             plannerContainer.addEventListener('dragover', (e) => { e.preventDefault(); const dayCard = e.target.closest('.day-card'); if (dayCard) dayCard.classList.add('drag-over'); });
             plannerContainer.addEventListener('dragleave', (e) => { const dayCard = e.target.closest('.day-card'); if (dayCard) dayCard.classList.remove('drag-over'); });
-            
+
             plannerContainer.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const dayCard = e.target.closest('.day-card');
                 if (dayCard) {
                     dayCard.classList.remove('drag-over');
                     const dateString = dayCard.dataset.date;
-                    
+
                     const type = e.dataTransfer.getData('type');
                     const subjectText = e.dataTransfer.getData('subject');
 
@@ -555,10 +612,10 @@
                         const dayContent = dayCard.querySelector('.day-content');
                         const resourceText = e.dataTransfer.getData('text/plain');
                         const taskId = Date.now();
-                        
+
                         plannedItems[dateString].tasks.push({ id: taskId, subject: subjectText, task: resourceText, completed: false });
                         renderFinalPlanner();
-                        
+
                         const plannedItemEl = document.createElement('div');
                         plannedItemEl.className = 'planned-item';
                         plannedItemEl.dataset.taskId = taskId;
