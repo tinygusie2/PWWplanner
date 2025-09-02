@@ -220,32 +220,25 @@ app.post('/api/files', upload.single('file'), async (req, res) => {
 app.delete('/api/files/:id', async (req, res) => {
   try {
     const files = await readJSON(filesPath);
-    const fileId = parseInt(req.params.id);
-    const fileToDelete = files.find(f => f.id === fileId);
+    const index = files.findIndex(f => f.id === parseInt(req.params.id));
+    if (index === -1) return res.status(404).json({ error: 'File not found' });
 
-    if (!fileToDelete) {
-      return res.status(404).json({ error: 'File not found' });
-    }
+    const fileToDelete = files[index];
+    const fullPath = path.join(__dirname, 'uploads', fileToDelete.path.split(/[\\/]/).pop());
 
-    const filePath = path.join(__dirname, 'uploads', fileToDelete.path);
-    
-    // Use fs.access to check if file exists before attempting to delete
+    // Delete the file from the filesystem
     try {
-      await fs.access(filePath);
-      await fs.unlink(filePath);
-    } catch (error) {
-      // If the file doesn't exist, we can ignore the error and proceed to remove it from the JSON.
-      if (error.code !== 'ENOENT') {
-        throw error; // re-throw other errors
-      }
+      await fs.unlink(fullPath);
+      console.log(`Deleted file: ${fullPath}`);
+    } catch (unlinkErr) {
+      console.error(`Error deleting physical file ${fullPath}:`, unlinkErr);
+      // Continue to delete from JSON even if physical file deletion fails
     }
 
-    const updatedFiles = files.filter(f => f.id !== fileId);
-    await writeJSON(filesPath, updatedFiles);
-
-    res.json({ message: 'File deleted successfully' });
+    const deleted = files.splice(index, 1);
+    await writeJSON(filesPath, files);
+    res.json(deleted[0]);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'Error deleting file' });
   }
 });
