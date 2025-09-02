@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Mijn Vakken</title>
+    <link rel="stylesheet" href="/style.css">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <!-- Google Fonts Import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-surface: #1a1c18;
+            --bg-primary-container: #1a1c18;
+            --color-on-surface: #e2e3dc;
+            --color-primary: #6750a4;
+            --color-on-primary-container: #21005d;
+            --color-secondary-container: #e8def8;
+            --color-outline: #79747e;
+            --color-surface-variant: #e7e0ec;
+        }
+
+        body { 
+            font-family: 'Google Sans Text', Arial, sans-serif; 
+            background-color: var(--bg-primary-container);
+            color: var(--color-on-surface);
+        }
+
+        h2 { font-family: 'Google Sans', Arial, sans-serif; font-weight: 700; font-size: 2.25rem; }
+        p { font-size: 1.125rem; color: #5f5f5f; }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .button {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            background-color: var(--color-secondary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .vakken-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vak-card {
+            background-color: var(--bg-primary-container);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--color-surface-variant);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .vak-card h3 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .vak-card p {
+            font-size: 0.875rem;
+            color: #5f5f5f;
+        }
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .search-bar {
+            flex-grow: 1;
+            position: relative;
+        }
+        .search-bar .material-symbols-outlined {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+        }
+        .search-input {
+            font-family: 'Google Sans Text', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid var(--outline);
+            border-radius: 9999px;
+            background-color: var(--surface-variant);
+            color: var(--on-surface);
+            box-sizing: border-box;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-container);
+        }
+        .filter-select {
+            font-family: 'Google Sans Text', sans-serif;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--outline);
+            border-radius: 8px;
+            background-color: var(--surface-variant);
+            color: var(--on-surface);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item active"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Nieuw Item</span>
+                </a>
+                <button id="collapse-btn" class="button">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <h2>Mijn Vakken</h2>
+                <p>Overzicht van al je vakken.</p>
+                <a href="/nieuw-vak.html" class="button">
+                    <i data-lucide="plus"></i>
+                    Nieuw Vak
+                </a>
+            </header>
+
+            <div class="controls-container">
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Zoek vakken...">
+                </div>
+                <select id="filter-select" class="filter-select" aria-label="Filter op type">
+                    <option>Alle types</option>
+                    <!-- Types can be added dynamically if needed -->
+                </select>
+            </div>
+
+            <div class="vakken-list" id="vakken-container">
+                <!-- Vakken zullen dynamisch worden ingevoegd -->
+            </div>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+        
+
+        async function loadVakken() {
+            const subjects = await fetchData('subjects');
+            const container = document.getElementById('vakken-container');
+            const searchInput = document.getElementById('search-input');
+            const filterSelect = document.getElementById('filter-select');
+
+            function renderSubjects(filteredSubjects) {
+                container.innerHTML = filteredSubjects.map(subject => `
+                    <div class="vak-card">
+                        <h3>${subject.name}</h3>
+                        <p>${subject.description}</p>
+                        <a href="/vakdetails.html?id=${subject.id}" class="button">Details</a>
+                        <button class="button delete-vak-btn" data-subject-id="${subject.id}">Verwijderen</button>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.delete-vak-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const subjectId = e.target.dataset.subjectId;
+                        if (confirm('Weet je zeker dat je dit vak wilt verwijderen? Alle gekoppelde items en bestanden worden niet verwijderd.')) {
+                            try {
+                                const response = await fetch(`/api/subjects/${subjectId}`, { method: 'DELETE' });
+                                if (response.ok) {
+                                    loadVakken();
+                                } else {
+                                    alert('Verwijderen mislukt.');
+                                }
+                            } catch (error) {
+                                console.error('Error deleting subject:', error);
+                                alert('Er is een fout opgetreden bij het verwijderen.');
+                            }
+                        }
+                    });
+                });
+            }
+
+            renderSubjects(subjects);
+
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filtered = subjects.filter(subject => 
+                    subject.name.toLowerCase().includes(searchTerm) || 
+                    subject.description.toLowerCase().includes(searchTerm)
+                );
+                renderSubjects(filtered);
+            });
+
+            // For filters, if types are added in future
+            filterSelect.addEventListener('change', () => {
+                // Implement filter logic here if needed
+            });
+        }
+
+        loadVakken();
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+[
+  {
+    "id": 1,
+    "name": "Wiskunde",
+    "description": "Details over Wiskunde"
+  },
+  {
+    "id": 2,
+    "name": "Nederlands",
+    "description": "Details over Nederlands"
+  },
+  {
+    "id": 3,
+    "name": "Natuurkunde",
+    "description": "Details over Natuurkunde"
+  },
+  {
+    "id": 4,
+    "name": "Economie",
+    "description": "Details over Economie"
+  },
+  {
+    "id": 5,
+    "name": "Geschiedenis",
+    "description": "details over Geschiedenis"
+  },
+  {
+    "id": 6,
+    "name": "Aardrijkskunde",
+    "description": "Details over Aardrijkskunde.",
+    "stof": ""
+  },
+  {
+    "id": 7,
+    "name": "Engels",
+    "description": "Details over Engels",
+    "stof": ""
+  },
+  {
+    "id": 8,
+    "name": "Duits",
+    "description": "Details over Duits",
+    "stof": ""
+  },
+  {
+    "id": 9,
+    "name": "Frans",
+    "description": "Details over Frans",
+    "stof": "",
+    "wordlists": [
+       {
+        "name": "CH.1 Voc A",
+        "termLang": "fr-FR",
+        "defLang": "nl-NL",
+        "words": [
+          {
+            "term": "la photo",
+            "definition": "de foto"
+          },
+          {
+            "term": "le message",
+            "definition": "het bericht"
+          },
+          {
+            "term": "la réaction",
+            "definition": "de reactie"
+          },
+          {
+            "term": "le commentaire",
+            "definition": "het commentaar"
+          },
+          {
+            "term": "le site (web)",
+            "definition": "de (web)site"
+          },
+          {
+            "term": "l'appli v",
+            "definition": "de app"
+          },
+          {
+            "term": "les réseaux sociaux m mv",
+            "definition": "de sociale media"
+          },
+          {
+            "term": "le portable",
+            "definition": "de mobiele telefoon"
+          },
+          {
+            "term": "l'addition v",
+            "definition": "de rekening"
+          },
+          {
+            "term": "dire",
+            "definition": "zeggen"
+          },
+          {
+            "term": "penser",
+            "definition": "denken"
+          },
+          {
+            "term": "attendre",
+            "definition": "wachten"
+          },
+          {
+            "term": "utiliser",
+            "definition": "gebruiken"
+          },
+          {
+            "term": "travailler",
+            "definition": "werken"
+          },
+          {
+            "term": "payer",
+            "definition": "betalen"
+          },
+          {
+            "term": "j'y vais",
+            "definition": "ik ga weg"
+          },
+          {
+            "term": "il voit",
+            "definition": "hij ziet"
+          },
+          {
+            "term": "donne-moi",
+            "definition": "geef mij!"
+          },
+          {
+            "term": "j'ai vu",
+            "definition": "ik heb gezien"
+          },
+          {
+            "term": "amuse-toi bien!",
+            "definition": "veel plezier!"
+          },
+          {
+            "term": "on était",
+            "definition": "wij waren"
+          },
+          {
+            "term": "tu vas bien?",
+            "definition": "gaat het goed?"
+          },
+          {
+            "term": "bienvenue",
+            "definition": "welkom"
+          },
+          {
+            "term": "à plus",
+            "definition": "tot later"
+          },
+          {
+            "term": "grâce à",
+            "definition": "dankzij"
+          },
+          {
+            "term": "devant",
+            "definition": "voor (plaats)"
+          },
+          {
+            "term": "derrière",
+            "definition": "achter"
+          },
+          {
+            "term": "près de",
+            "definition": "dichtbij"
+          },
+          {
+            "term": "heureux, heureuse",
+            "definition": "gelukkig"
+          },
+          {
+            "term": "drôle",
+            "definition": "grappig"
+          }
+        ]
+      },
+      {
+        "name": "CH.1 Voc B",
+        "termLang": "fr-FR",
+        "defLang": "nl-NL",
+        "words": [
+          {
+            "term": "les gens m mv",
+            "definition": "de mensen"
+          },
+          {
+            "term": "la tête",
+            "definition": "het hoofd"
+          },
+          {
+            "term": "le temps",
+            "definition": "de tijd"
+          },
+          {
+            "term": "le truc",
+            "definition": "het ding"
+          },
+          {
+            "term": "presque",
+            "definition": "bijna"
+          },
+          {
+            "term": "pourtant",
+            "definition": "toch"
+          },
+          {
+            "term": "maintenant",
+            "definition": "nu"
+          },
+          {
+            "term": "avoir besoin (de)",
+            "definition": "nodig hebben"
+          },
+          {
+            "term": "oublier",
+            "definition": "vergeten"
+          },
+          {
+            "term": "arrêter",
+            "definition": "stoppen"
+          },
+          {
+            "term": "né(e)",
+            "definition": "geboren"
+          },
+          {
+            "term": "facile",
+            "definition": "makkelijk"
+          },
+          {
+            "term": "nouveau, nouvelle",
+            "definition": "nieuwe"
+          },
+          {
+            "term": "premier, première",
+            "definition": "eerste"
+          },
+          {
+            "term": "vieux, vieille",
+            "definition": "oud"
+          },
+          {
+            "term": "bon, bonne",
+            "definition": "goed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Scheikunde",
+    "description": "Details over Scheikunde",
+    "stof": ""
+  }
+]

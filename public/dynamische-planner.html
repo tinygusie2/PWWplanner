@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Studieplanner</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        .m3-card { background-color: var(--surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--outline-variant); margin-bottom: 1.5rem; }
+        .section-divider { border: 0; height: 1px; background-color: var(--outline-variant); margin: 3rem 0; }
+        .section-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+
+        /* Main layout for reordering */
+        #main-planner-layout { display: flex; flex-direction: column; }
+        #main-planner-layout.view-mode { flex-direction: column-reverse; }
+
+        /* Custom Date Picker Setup */
+        .planner-setup { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding: 1rem; background-color: var(--surface-variant); border-radius: 12px; margin-bottom: 2rem; }
+        .date-picker-trigger {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--outline);
+            background-color: var(--surface);
+            color: var(--on-surface);
+            cursor: pointer;
+        }
+
+        /* Planning Workspace */
+        .planning-workspace { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start; }
+        @media (max-width: 1024px) { .planning-workspace { grid-template-columns: 1fr; } }
+
+        /* Resource List & Textbox Styling */
+        #resource-list-container { 
+             top: 2rem; 
+             position: sticky;
+             max-height: calc(100vh - 4rem); /* Berekent de maximale hoogte op basis van het scherm */
+            overflow-y: auto; /* Voegt een scrollbalk toe als de inhoud hoger is */
+            }
+        .resource-item { padding: 0.75rem; background-color: var(--secondary-container); color: var(--on-secondary-container); border-radius: 8px; margin-bottom: 0.5rem; cursor: grab; user-select: none; }
+        .resource-item.dragging { opacity: 0.5; }
+        .add-resource-form { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .add-resource-form input {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            flex-grow: 1;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--outline);
+            background-color: var(--surface);
+            color: var(--on-surface);
+            font-size: 1rem;
+        }
+        .add-resource-form input:focus { outline: 2px solid var(--primary); border-color: var(--primary); }
+
+        /* Vertical Planner */
+        #planner-container { display: flex; flex-direction: column; gap: 1rem; }
+        .day-card { background-color: var(--surface); border-radius: 12px; border: 2px solid var(--outline-variant); padding: 1rem; }
+        .day-card.drag-over { border-color: var(--primary); }
+        .day-card.test-day { border-color: var(--error); background-color: color-mix(in srgb, var(--error-container), transparent 50%); }
+        .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .day-header h4 { margin: 0; font-size: 1.25rem; }
+        .day-header h4 small { font-weight: 400; color: var(--on-surface-variant); }
+        .day-content { min-height: 50px; }
+        .planned-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: var(--tertiary-container); color: var(--on-tertiary-container); border-radius: 8px; margin-top: 0.5rem; }
+        .planned-item .delete-planned-item { background: none; border: none; color: var(--on-tertiary-container); cursor: pointer; opacity: 0.6; }
+
+        /* Final Planner Checklist */
+        #final-planner-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .final-day-column { background-color: var(--surface); padding: 1rem; border-radius: 12px; border: 1px solid var(--outline-variant); }
+        .final-day-column h5 { border-bottom: 1px solid var(--outline-variant); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .final-day-column ul { list-style: none; padding: 0; }
+        .final-day-column li { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .final-day-column li input[type="checkbox"] { flex-shrink: 0; }
+        .final-day-column li label { font-family: 'Google Sans Text', Arial, sans-serif; font-size: 0.875rem; transition: color 0.2s; }
+        .final-day-column li input[type="checkbox"]:checked + label { text-decoration: line-through; color: var(--on-surface-variant); }
+        .final-day-column li.test-day-item { font-weight: bold; color: var(--error); }
+
+        /* Custom Date Picker Modal */
+        .datepicker-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .datepicker-modal-overlay.visible { display: flex; }
+        .datepicker-content { font-family: 'Google Sans', Arial, sans-serif; background: var(--surface); padding: 1.5rem; border-radius: 16px; width: 90%; max-width: 320px; }
+        .datepicker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .datepicker-header button { background: none; border: none; cursor: pointer; color: var(--on-surface); }
+        .datepicker-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center; }
+        .datepicker-grid > div { padding: 0.5rem 0; }
+        .weekday { font-size: 0.75rem; color: var(--on-surface-variant); }
+        .day { cursor: pointer; border-radius: 50%; }
+        .day:hover { background-color: var(--surface-variant); }
+        .day.other-month { color: var(--on-surface-variant); }
+        .day.selected { background-color: var(--primary); color: var(--on-primary); }
+        .datepicker-footer { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+
+        @media print {
+            body {
+                background-color: white !important;
+            }
+
+            .sidebar, .header, #build-section, .section-divider, .sidebar-footer, .planner-setup, #toggle-view-btn, #print-planner-btn {
+                display: none !important;
+            }
+
+            #main-planner-layout, #final-planner-section, .main-content {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            #final-planner-section .section-header h2 {
+                padding-bottom: 1rem;
+            }
+
+            #final-planner-section {
+                position: static;
+            }
+
+            #final-planner-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .final-day-column {
+                border: 1px solid #ddd !important;
+                background-color: white !important;
+                page-break-inside: avoid;
+            }
+
+            * {
+                color: black !important;
+                background-color: transparent !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+             <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg"><span class="material-symbols-outlined">menu_book</span></div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner.html" class="m3-nav-item active"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary"><span class="material-symbols-outlined">add</span><span>Nieuw Item</span></a>
+                <button id="collapse-btn" class="button"><span class="material-symbols-outlined">chevron_left</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>Studieplanner</h2>
+            </header>
+
+            <div id="main-planner-layout">
+                <section id="build-section">
+                    <div class="planner-setup">
+                        <label>Startdatum:</label>
+                        <button class="date-picker-trigger" id="start-date-trigger">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            <span id="start-date-display"></span>
+                        </button>
+                        <label>Einddatum:</label>
+                        <button class="date-picker-trigger" id="end-date-trigger">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            <span id="end-date-display"></span>
+                        </button>
+                        <button id="generate-planner-btn" class="button">Genereer Planner</button>
+                    </div>
+                    <div class="section-header">
+                        <h2>Planning Werkruimte</h2>
+                        <button id="toggle-view-btn" class="button">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Klaar met plannen
+                        </button>
+                    </div>
+                    <div class="planning-workspace">
+                        <div id="resource-list-container"></div>
+                        <div id="planner-container"></div>
+                    </div>
+                </section>
+                <hr class="section-divider">
+                <section id="final-planner-section">
+                    <div class="section-header">
+                        <h2>PWW Planner: Taken en Toetsen</h2>
+                        <button id="print-planner-btn" class="button"><span class="material-symbols-outlined">print</span> Printen</button>
+                    </div>
+                    <div id="final-planner-container"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom Date Picker Modal -->
+    <div id="datepicker-modal" class="datepicker-modal-overlay">
+        <div class="datepicker-content">
+            <div class="datepicker-header">
+                <button id="prev-month-btn"><span class="material-symbols-outlined">chevron_left</span></button>
+                <h4 id="month-year-header"></h4>
+                <button id="next-month-btn"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+            <div class="datepicker-grid">
+                <div class="weekday">Ma</div><div class="weekday">Di</div><div class="weekday">Wo</div><div class="weekday">Do</div><div class="weekday">Vr</div><div class="weekday">Za</div><div class="weekday">Zo</div>
+            </div>
+            <div class="datepicker-grid" id="calendar-days"></div>
+            <div class="datepicker-footer">
+                <button id="cancel-date-btn" class="button">Annuleren</button>
+                <button id="ok-date-btn" class="button">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'system';
+        const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const startDateDisplay = document.getElementById('start-date-display');
+            const endDateDisplay = document.getElementById('end-date-display');
+            const startDateTrigger = document.getElementById('start-date-trigger');
+            const endDateTrigger = document.getElementById('end-date-trigger');
+            const generateBtn = document.getElementById('generate-planner-btn');
+            const resourceContainer = document.getElementById('resource-list-container');
+            const plannerContainer = document.getElementById('planner-container');
+            const finalPlannerContainer = document.getElementById('final-planner-container');
+            const toggleViewBtn = document.getElementById('toggle-view-btn');
+            const mainLayout = document.getElementById('main-planner-layout');
+
+            // Date Picker Elements
+            const datePickerModal = document.getElementById('datepicker-modal');
+            const monthYearHeader = document.getElementById('month-year-header');
+            const calendarDaysContainer = document.getElementById('calendar-days');
+            const prevMonthBtn = document.getElementById('prev-month-btn');
+            const nextMonthBtn = document.getElementById('next-month-btn');
+            const cancelDateBtn = document.getElementById('cancel-date-btn');
+            const okDateBtn = document.getElementById('ok-date-btn');
+
+            // App State
+            let startDate = new Date();
+            let endDate = new Date();
+            endDate.setDate(startDate.getDate() + 7);
+            let resources = {};
+            let plannedItems = {};
+
+            async function savePlannerState() {
+                const state = {
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                    plannedItems
+                };
+                await postData('planner-data', state);
+            }
+            
+            // Date Picker State
+            let datePickerCurrentDate = new Date();
+            let datePickerSelectedDate = new Date();
+            let activeDatePicker = null; // 'start' or 'end'
+
+            // --- DATE PICKER LOGIC ---
+            function formatDate(date) {
+                return date.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+
+            function updateDateDisplays() {
+                startDateDisplay.textContent = formatDate(startDate);
+                endDateDisplay.textContent = formatDate(endDate);
+            }
+
+            function openDatePicker(target) {
+                activeDatePicker = target;
+                datePickerSelectedDate = (target === 'start') ? new Date(startDate) : new Date(endDate);
+                datePickerCurrentDate = new Date(datePickerSelectedDate);
+                renderCalendar();
+                datePickerModal.classList.add('visible');
+            }
+
+            function closeDatePicker() {
+                datePickerModal.classList.remove('visible');
+            }
+
+            function renderCalendar() {
+                calendarDaysContainer.innerHTML = '';
+                const year = datePickerCurrentDate.getFullYear();
+                const month = datePickerCurrentDate.getMonth();
+                monthYearHeader.textContent = datePickerCurrentDate.toLocaleDateString('nl-NL', { month: 'long', year: 'numeric' });
+
+                const firstDayOfMonth = new Date(year, month, 1);
+                const lastDayOfMonth = new Date(year, month + 1, 0);
+                const startDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7; // 0 = Maandag
+
+                for (let i = 0; i < startDayOfWeek; i++) {
+                    calendarDaysContainer.innerHTML += `<div></div>`;
+                }
+
+                for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'day';
+                    dayEl.textContent = day;
+                    dayEl.dataset.date = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                    if (day === datePickerSelectedDate.getDate() && month === datePickerSelectedDate.getMonth() && year === datePickerSelectedDate.getFullYear()) {
+                        dayEl.classList.add('selected');
+                    }
+                    calendarDaysContainer.appendChild(dayEl);
+                }
+            }
+            
+            startDateTrigger.addEventListener('click', () => openDatePicker('start'));
+            endDateTrigger.addEventListener('click', () => openDatePicker('end'));
+            prevMonthBtn.addEventListener('click', () => { datePickerCurrentDate.setMonth(datePickerCurrentDate.getMonth() - 1); renderCalendar(); });
+            nextMonthBtn.addEventListener('click', () => { datePickerCurrentDate.setMonth(datePickerCurrentDate.getMonth() + 1); renderCalendar(); });
+            cancelDateBtn.addEventListener('click', closeDatePicker);
+            okDateBtn.addEventListener('click', () => {
+                if (activeDatePicker === 'start') startDate = new Date(datePickerSelectedDate);
+                else endDate = new Date(datePickerSelectedDate);
+                updateDateDisplays();
+                closeDatePicker();
+                savePlannerState();
+            });
+            calendarDaysContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('day')) {
+                    datePickerSelectedDate = new Date(e.target.dataset.date);
+                    renderCalendar();
+                }
+            });
+
+            document.getElementById('print-planner-btn').addEventListener('click', () => {
+                window.print();
+            });
+
+            // --- MAIN PLANNER LOGIC ---
+
+            async function loadResources() {
+                // AANPASSING: De mock 'fetchData' is verwijderd. Deze code gebruikt nu
+                // de 'fetchData' functie die je waarschijnlijk in /app.js hebt gedefinieerd.
+                const subjects = await fetchData('subjects');
+                
+                resourceContainer.innerHTML = '<h3>Bronnenlijst</h3><p><small>Sleep een taak naar een dag, of sleep de vaktitel om een toetsdag te markeren.</small></p>';
+                if (!subjects || subjects.length === 0) {
+                    resourceContainer.innerHTML += '<p>Voeg eerst vakken toe via de "Mijn Vakken" pagina.</p>';
+                    return;
+                }
+
+                subjects.forEach(subject => {
+                    const subjectCard = document.createElement('div');
+                    subjectCard.className = 'm3-card';
+                    
+                    // AANPASSING: De voorbeeldtekst "Hoofdstuk 1..." is verwijderd.
+                    // Het script leest nu alleen de data die daadwerkelijk in localStorage is opgeslagen.
+                    const savedStof = localStorage.getItem('stof-' + subject.id) || '';
+                    const stofItems = savedStof.split('\n').filter(line => line.trim() !== '');
+
+                    let itemsHtml = '<p>Geen stof ingevoerd.</p>';
+                    if (stofItems.length > 0) {
+                        itemsHtml = stofItems.map((itemText) => 
+                            `<div class="resource-item" draggable="true" data-drag-type="task" data-subject-name="${subject.name}" data-resource-text="${itemText}">
+                                ${itemText}
+                            </div>`
+                        ).join('');
+                    }
+                    
+                    subjectCard.innerHTML = `
+                        <h4 draggable="true" data-drag-type="subject" data-subject-name="${subject.name}" style="cursor: grab; border-bottom: 2px dotted var(--outline-variant); padding-bottom: 0.5rem;">
+                            ${subject.name}
+                        </h4>
+                        <div class="resource-items-list" id="resources-${subject.id}">
+                            ${itemsHtml}
+                        </div>
+                    `;
+                    resourceContainer.appendChild(subjectCard);
+                });
+            }
+
+            function generatePlanner() {
+                if (startDate > endDate) {
+                    plannerContainer.innerHTML = '<p style="color: var(--error);">Ongeldige datums.</p>';
+                    return;
+                }
+                plannerContainer.innerHTML = '';
+                plannedItems = {};
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDate) {
+                    const dateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+                    plannedItems[dateString] = { tasks: [], testSubject: null };
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'day-card';
+                    dayCard.dataset.date = dateString;
+                    dayCard.innerHTML = `<div class="day-header"><h4>${currentDate.toLocaleDateString('nl-NL', { weekday: 'long' })} <small>${currentDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })}</small></h4><button class="button mark-test-btn">Wis Toets</button></div><div class="day-content"></div>`;
+                    plannerContainer.appendChild(dayCard);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                renderFinalPlanner();
+                savePlannerState();
+            }
+
+            function updateDayCardUI(dateString) {
+                const dayCard = plannerContainer.querySelector(`.day-card[data-date="${dateString}"]`);
+                if (!dayCard) return;
+
+                const dayData = plannedItems[dateString] || {};
+                const headerH4 = dayCard.querySelector('.day-header h4');
+                const testBtn = dayCard.querySelector('.mark-test-btn');
+                
+                const existingTag = headerH4.querySelector('.test-tag');
+                if (existingTag) existingTag.remove();
+                
+                if (dayData.testSubject) {
+                    dayCard.classList.add('test-day');
+                    testBtn.style.display = 'inline-flex';
+                    headerH4.innerHTML += ` <span class="test-tag" style="color:var(--error); font-size: 0.9em; font-weight: bold;">(TOETS: ${dayData.testSubject})</span>`;
+                } else {
+                    dayCard.classList.remove('test-day');
+                    testBtn.style.display = 'none';
+                }
+            }
+
+            function renderFinalPlanner() {
+                finalPlannerContainer.innerHTML = '';
+                if (Object.keys(plannedItems).length === 0) {
+                    finalPlannerContainer.innerHTML = '<p>Je weekoverzicht verschijnt hier zodra je items plant.</p>';
+                    return;
+                }
+                for (const dateString in plannedItems) {
+                    const date = new Date(dateString + 'T00:00:00');
+                    const dayData = plannedItems[dateString];
+                    const dayColumn = document.createElement('div');
+                    dayColumn.className = 'final-day-column';
+                    let tasksHtml = dayData.tasks.map(item => `
+                        <li>
+                            <input type="checkbox" id="task-${item.id}" data-task-id="${item.id}" data-date="${dateString}" ${item.completed ? 'checked' : ''}>
+                            <label for="task-${item.id}"><strong>${item.subject}:</strong> ${item.task}</label>
+                        </li>
+                    `).join('');
+
+                    if (dayData.testSubject) {
+                        tasksHtml = `<li class="test-day-item"><span class="material-symbols-outlined">assignment</span>TOETS: ${dayData.testSubject}</li>` + tasksHtml;
+                    }
+
+                    dayColumn.innerHTML = `<h5>${date.toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' })}</h5><ul>${tasksHtml || '<li>-</li>'}</ul>`;
+                    finalPlannerContainer.appendChild(dayColumn);
+                }
+            }
+            
+            function toggleViewMode() {
+                mainLayout.classList.toggle('view-mode');
+                const isInViewMode = mainLayout.classList.contains('view-mode');
+                if (isInViewMode) {
+                    toggleViewBtn.innerHTML = `<span class="material-symbols-outlined">edit</span> Bewerk Planning`;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    toggleViewBtn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Klaar met plannen`;
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            generateBtn.addEventListener('click', generatePlanner);
+            toggleViewBtn.addEventListener('click', toggleViewMode);
+
+            plannerContainer.addEventListener('click', (e) => {
+                const dayCard = e.target.closest('.day-card');
+                if (!dayCard) return;
+                const dateString = dayCard.dataset.date;
+                
+                if (e.target.classList.contains('mark-test-btn')) {
+                    plannedItems[dateString].testSubject = null;
+                    updateDayCardUI(dateString);
+                    renderFinalPlanner();
+                    savePlannerState();
+                }
+                
+                if (e.target.classList.contains('delete-planned-item')) {
+                    const itemEl = e.target.closest('.planned-item');
+                    const taskId = parseInt(itemEl.dataset.taskId);
+                    plannedItems[dateString].tasks = plannedItems[dateString].tasks.filter(t => t.id !== taskId);
+                    itemEl.remove();
+                    renderFinalPlanner();
+                    savePlannerState();
+                }
+            });
+            finalPlannerContainer.addEventListener('change', (e) => {
+                if(e.target.type === 'checkbox') {
+                    const taskId = parseInt(e.target.dataset.taskId);
+                    const dateString = e.target.dataset.date;
+                    const task = plannedItems[dateString].tasks.find(t => t.id === taskId);
+                    if(task) task.completed = e.target.checked;
+                    savePlannerState();
+                }
+            });
+
+            // --- DRAG AND DROP LOGIC ---
+            let draggedItem = null;
+            resourceContainer.addEventListener('dragstart', (e) => {
+                const dragType = e.target.dataset.dragType;
+                if (!dragType) return;
+
+                draggedItem = e.target;
+                e.target.classList.add('dragging');
+
+                e.dataTransfer.setData('type', dragType);
+                e.dataTransfer.setData('subject', e.target.dataset.subjectName);
+                if (dragType === 'task') {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.resourceText);
+                }
+            });
+
+            resourceContainer.addEventListener('dragend', () => { if (draggedItem) { draggedItem.classList.remove('dragging'); draggedItem = null; } });
+            plannerContainer.addEventListener('dragover', (e) => { e.preventDefault(); const dayCard = e.target.closest('.day-card'); if (dayCard) dayCard.classList.add('drag-over'); });
+            plannerContainer.addEventListener('dragleave', (e) => { const dayCard = e.target.closest('.day-card'); if (dayCard) dayCard.classList.remove('drag-over'); });
+            
+            plannerContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const dayCard = e.target.closest('.day-card');
+                if (dayCard) {
+                    dayCard.classList.remove('drag-over');
+                    const dateString = dayCard.dataset.date;
+                    
+                    const type = e.dataTransfer.getData('type');
+                    const subjectText = e.dataTransfer.getData('subject');
+
+                    if (type === 'subject') {
+                        plannedItems[dateString].testSubject = subjectText;
+                        updateDayCardUI(dateString);
+                        renderFinalPlanner();
+                        savePlannerState();
+                    } else if (type === 'task') {
+                        const dayContent = dayCard.querySelector('.day-content');
+                        const resourceText = e.dataTransfer.getData('text/plain');
+                        const taskId = Date.now();
+                        
+                        plannedItems[dateString].tasks.push({ id: taskId, subject: subjectText, task: resourceText, completed: false });
+                        renderFinalPlanner();
+                        
+                        const plannedItemEl = document.createElement('div');
+                        plannedItemEl.className = 'planned-item';
+                        plannedItemEl.dataset.taskId = taskId;
+                        plannedItemEl.innerHTML = `<span>${resourceText}</span><div><small>${subjectText}</small><button class="delete-planned-item">×</button></div>`;
+                        dayContent.appendChild(plannedItemEl);
+                        savePlannerState();
+                    }
+                }
+            });
+
+            // --- INITIALIZATION ---
+            async function loadPlannerState() {
+                const state = await fetchData('planner-data');
+                if (state && state.startDate && state.endDate && state.plannedItems) {
+                    startDate = new Date(state.startDate);
+                    endDate = new Date(state.endDate);
+                    plannedItems = state.plannedItems;
+                    updateDateDisplays();
+                    // Re-render the planner based on loaded data
+                    plannerContainer.innerHTML = '';
+                    let currentDate = new Date(startDate);
+                    while (currentDate <= endDate) {
+                        const dateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+                        const dayData = plannedItems[dateString] || { tasks: [], testSubject: null };
+                        const dayCard = document.createElement('div');
+                        dayCard.className = 'day-card';
+                        dayCard.dataset.date = dateString;
+                        let tasksHtml = dayData.tasks.map(item => {
+                            return `<div class="planned-item" data-task-id="${item.id}"><span>${item.task}</span><div><small>${item.subject}</small><button class="delete-planned-item">×</button></div></div>`;
+                        }).join('');
+                        dayCard.innerHTML = `<div class="day-header"><h4>${currentDate.toLocaleDateString('nl-NL', { weekday: 'long' })} <small>${currentDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })}</small></h4><button class="button mark-test-btn">Wis Toets</button></div><div class="day-content">${tasksHtml}</div>`;
+                        plannerContainer.appendChild(dayCard);
+                        updateDayCardUI(dateString);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    renderFinalPlanner();
+                } else {
+                    // Default initialization if no saved state
+                    updateDateDisplays();
+                    generatePlanner();
+                }
+                loadResources();
+            }
+
+            loadPlannerState();
+        });
+    </script>
+    <script src="/app.js"></script>
+</body>
+</html>

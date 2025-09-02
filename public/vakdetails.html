@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Vak Detail Pagina</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .page-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        .main-column, .side-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .m3-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--outline-variant);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .card-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        /* Stijlen voor de nieuwe stof-textarea */
+        #subject-stof {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--outline);
+            background-color: var(--surface-variant);
+            color: var(--on-surface);
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box; /* Fix voor clipping */
+        }
+        #subject-stof:focus {
+            outline: 2px solid var(--primary);
+            border-color: var(--primary);
+        }
+        .toast {
+            position: fixed; bottom: -100px; left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--inverse-surface);
+            color: var(--inverse-on-surface);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 200;
+            transition: bottom 0.5s ease;
+        }
+        .toast.show { bottom: 30px; }
+        @media (max-width: 900px) {
+            .page-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg"><span class="material-symbols-outlined">menu_book</span></div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item active"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/dynamische-planner.html" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary"><span class="material-symbols-outlined">add</span><span>Nieuw Item</span></a>
+                <button id="collapse-btn" class="button"><span class="material-symbols-outlined">chevron_left</span></button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div id="subject-details-content">
+                <!-- Details worden hier geladen -->
+            </div>
+        </main>
+    </div>
+    <div id="toast-notification" class="toast"></div>
+
+    <script src="/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const subjectId = urlParams.get('id');
+            const container = document.getElementById('subject-details-content');
+
+            if (!subjectId) {
+                container.innerHTML = '<h2>Selecteer een vak om de details te zien.</h2>';
+                return;
+            }
+
+            // Gebruik de fetchData functie uit app.js, die nu voorbeelddata bevat
+            const allSubjects = await fetchData('subjects');
+            const subject = allSubjects.find(s => s.id == subjectId);
+            
+            if (!subject) {
+                 container.innerHTML = '<h2>Vak niet gevonden.</h2>';
+                return;
+            }
+
+            // Haal gerelateerde items en bestanden op
+            const allItems = await fetchData('items') || [];
+            const subjectItems = allItems.filter(item => item.vak === subject.name);
+
+            const allFiles = await fetchData('files') || [];
+            const subjectFiles = allFiles.filter(file => file.subject === subject.name);
+
+            // Genereer HTML voor de lijsten
+            const itemsHtml = subjectItems.length > 0
+                ? subjectItems.map(item => `<p>${item.title} - ${new Date(item.date).toLocaleDateString('nl-NL')}</p>`).join('')
+                : '<p>Geen aankomende items voor dit vak.</p>';
+
+            const filesHtml = subjectFiles.length > 0
+                ? subjectFiles.map(file => `<p>${file.name}</p>`).join('')
+                : '<p>Geen bestanden voor dit vak.</p>';
+
+            const wordlistsHtml = subject.wordlists && subject.wordlists.length > 0
+                ? subject.wordlists.map(list => `<a href="/woordjes-leren.html?subjectId=${subject.id}&listName=${encodeURIComponent(list.name)}" class="m3-nav-item" style="display: block; margin-bottom: 8px;">${list.name}</a>`).join('')
+                : '<p>Geen woordenlijsten voor dit vak.</p>';
+
+            container.innerHTML = `
+                <header class="header">
+                    <h2>${subject.name}</h2>
+                </header>
+                <div class="page-layout">
+                    <div class="main-column">
+                        <div class="m3-card">
+                            <div class="card-header">
+                                <h4><span class="material-symbols-outlined">edit_note</span>Stof voor dit vak</h4>
+                            </div>
+                            <p>Voer hier de leerstof in. Elke regel wordt een apart item in de studieplanner.</p>
+                            <textarea id="subject-stof" placeholder="bv. Hoofdstuk 1: Atomen\nParagraaf 2.3 lezen\nSamenvatting maken..."></textarea>
+                        </div>
+                        <div class="m3-card">
+                            <div class="card-header">
+                                <h4><span class="material-symbols-outlined">calendar_today</span>Aankomende Items</h4>
+                            </div>
+                            ${itemsHtml}
+                        </div>
+                        <div class="m3-card">
+                            <div class="card-header">
+                                <h4><span class="material-symbols-outlined">description</span>Bestanden</h4>
+                            </div>
+                            ${filesHtml}
+                        </div>
+                        <div class="m3-card">
+                            <div class="card-header">
+                                <h4><span class="material-symbols-outlined">school</span>Woordenlijsten</h4>
+                            </div>
+                            ${wordlistsHtml}
+                        </div>
+                    </div>
+                    <div class="side-column">
+                        <div class="m3-card">
+                            <h4><span class="material-symbols-outlined">info</span>Vak Informatie</h4>
+                            <p>${subject.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const stofTextarea = document.getElementById('subject-stof');
+            
+            const savedStof = localStorage.getItem('stof-' + subjectId);
+            if (savedStof) {
+                stofTextarea.value = savedStof;
+            }
+
+            let saveTimeout;
+            stofTextarea.addEventListener('input', () => {
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    localStorage.setItem('stof-' + subjectId, stofTextarea.value);
+                    showToast('Stof opgeslagen!');
+                }, 500);
+            });
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+    </script>
+</body>
+</html>

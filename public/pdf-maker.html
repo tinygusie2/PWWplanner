@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="nl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Woordjesleren - PDF Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .canvas-container-wrapper {
+            border: 2px solid var(--outline-variant);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 100%;
+            background-color: #fff;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--surface-container-high);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-group label {
+            font-size: 0.875rem;
+            color: var(--on-surface-variant);
+        }
+        .tool-group input[type="color"] {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: none;
+            padding: 0;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .tool-group input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .tool-group input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+        .sep {
+            width: 1px;
+            height: 24px;
+            background-color: var(--outline);
+        }
+        .hidden {
+            display: none;
+        }
+        .toolbar .button.active {
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item active"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Nieuw Item</span>
+                </a>
+                <button id="collapse-btn" class="button">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="header mb-4">
+                <h2 class="text-2xl font-bold">PDF Notitie Maker</h2>
+                <p class="text-gray-400">Teken, typ en voeg afbeeldingen toe. Sla je creatie op als PDF.</p>
+            </header>
+
+            <div class="toolbar">
+                <button id="select-mode-btn" class="button"><span class="material-symbols-outlined">pan_tool</span> Selecteren</button>
+                <button id="drawing-mode-btn" class="button active"><span class="material-symbols-outlined">edit</span> Tekenen</button>
+                <button id="erase-drawing-btn" class="button"><span class="material-symbols-outlined">layers_clear</span> Gum (Tekening)</button>
+                <div class="tool-group">
+                    <label for="color-picker">Kleur:</label>
+                    <input type="color" id="color-picker" value="#000000">
+                </div>
+                <div class="tool-group">
+                    <label for="pen-width">Dikte:</label>
+                    <input type="range" id="pen-width" min="1" max="30" value="5" class="w-24">
+                </div>
+                <div class="sep"></div>
+                <button id="add-text-btn" class="button"><span class="material-symbols-outlined">title</span> Tekst</button>
+                <button id="add-image-btn" class="button"><span class="material-symbols-outlined">image</span> Afbeelding</button>
+                <input type="file" id="image-input" accept="image/*" class="hidden">
+                <div class="sep"></div>
+                <button id="delete-selected-btn" class="button"><span class="material-symbols-outlined">delete</span> Verwijder Selectie</button>
+            </div>
+
+            <div id="text-toolbar" class="toolbar hidden" style="background-color: var(--surface-container-low);">
+                <div class="tool-group">
+                    <label for="font-family">Lettertype:</label>
+                    <select id="font-family" class="styled-input">
+                        <option>Google Sans</option>
+                        <option>Google Sans Text</option>
+                        <option>Arial</option>
+                        <option>Courier New</option>
+                        <option>Georgia</option>
+                        <option>Times New Roman</option>
+                        <option>Verdana</option>
+                    </select>
+                </div>
+                <div class="tool-group">
+                    <label for="font-size">Grootte:</label>
+                    <input type="number" id="font-size" min="1" max="200" value="40" class="styled-input w-20">
+                </div>
+                <div class="tool-group">
+                    <button id="text-bold-btn" class="button"><span class="material-symbols-outlined">format_bold</span></button>
+                    <button id="text-italic-btn" class="button"><span class="material-symbols-outlined">format_italic</span></button>
+                    <button id="text-underline-btn" class="button"><span class="material-symbols-outlined">format_underlined</span></button>
+                </div>
+                <div class="tool-group">
+                    <button id="text-align-left-btn" class="button"><span class="material-symbols-outlined">format_align_left</span></button>
+                    <button id="text-align-center-btn" class="button"><span class="material-symbols-outlined">format_align_center</span></button>
+                    <button id="text-align-right-btn" class="button"><span class="material-symbols-outlined">format_align_right</span></button>
+                </div>
+            </div>
+
+            <div class="canvas-container-wrapper">
+                <canvas id="drawing-canvas" width="1000" height="700"></canvas>
+            </div>
+
+            <div id="save-section" class="mt-4 p-4 rounded-lg" style="background-color: var(--surface-container-high);">
+                <h3 class="text-lg font-medium mb-2">Opslaan als PDF</h3>
+                <div class="flex items-center gap-4 flex-wrap">
+                    <input type="text" id="pdf-name" class="styled-input flex-grow" placeholder="Naam van de PDF">
+                    <select id="subject-select" class="styled-input"></select>
+                    <button id="save-pdf-btn" class="button button-primary">Opslaan in Vak</button>
+                </div>
+                <p id="save-feedback" class="text-green-400 mt-2 h-5"></p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = new fabric.Canvas('drawing-canvas', {
+                backgroundColor: '#ffffff',
+                isDrawingMode: true
+            });
+
+            // --- DOM Elements ---
+            const colorPicker = document.getElementById('color-picker');
+            const penWidthSlider = document.getElementById('pen-width');
+            const drawingModeBtn = document.getElementById('drawing-mode-btn');
+            const eraseDrawingBtn = document.getElementById('erase-drawing-btn');
+            const selectModeBtn = document.getElementById('select-mode-btn');
+            const addTextBtn = document.getElementById('add-text-btn');
+            const addImageBtn = document.getElementById('add-image-btn');
+            const imageInput = document.getElementById('image-input');
+            const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+            
+            const textToolbar = document.getElementById('text-toolbar');
+            const fontFamilySelect = document.getElementById('font-family');
+            const fontSizeInput = document.getElementById('font-size');
+            const textBoldBtn = document.getElementById('text-bold-btn');
+            const textItalicBtn = document.getElementById('text-italic-btn');
+            const textUnderlineBtn = document.getElementById('text-underline-btn');
+            const textAlignLeftBtn = document.getElementById('text-align-left-btn');
+            const textAlignCenterBtn = document.getElementById('text-align-center-btn');
+            const textAlignRightBtn = document.getElementById('text-align-right-btn');
+
+            const savePdfBtn = document.getElementById('save-pdf-btn');
+            const pdfNameInput = document.getElementById('pdf-name');
+            const subjectSelect = document.getElementById('subject-select');
+            const saveFeedback = document.getElementById('save-feedback');
+
+            // --- Canvas Setup ---
+            canvas.freeDrawingBrush.color = colorPicker.value;
+            canvas.freeDrawingBrush.width = parseInt(penWidthSlider.value, 10);
+
+            // --- Main Toolbar Listeners ---
+            colorPicker.addEventListener('input', (e) => {
+                const color = e.target.value;
+                canvas.freeDrawingBrush.color = color;
+                const activeObject = canvas.getActiveObject();
+                if (activeObject && activeObject.set) {
+                    if (activeObject.type === 'i-text') {
+                        activeObject.set('fill', color);
+                    } else if (activeObject.type === 'path') {
+                        activeObject.set('stroke', color);
+                    }
+                    canvas.renderAll();
+                }
+            });
+
+            penWidthSlider.addEventListener('input', (e) => {
+                canvas.freeDrawingBrush.width = parseInt(e.target.value, 10) || 1;
+            });
+
+            drawingModeBtn.addEventListener('click', () => {
+                canvas.isDrawingMode = true;
+                drawingModeBtn.classList.add('active');
+                selectModeBtn.classList.remove('active');
+            });
+
+            selectModeBtn.addEventListener('click', () => {
+                canvas.isDrawingMode = false;
+                selectModeBtn.classList.add('active');
+                drawingModeBtn.classList.remove('active');
+            });
+
+            eraseDrawingBtn.addEventListener('click', () => {
+                const objects = canvas.getObjects('path');
+                for (let i = 0; i < objects.length; i++) {
+                    canvas.remove(objects[i]);
+                }
+                canvas.renderAll();
+            });
+
+            addTextBtn.addEventListener('click', () => {
+                canvas.discardActiveObject();
+                const text = new fabric.IText('Typ hier...', {
+                    left: 100,
+                    top: 100,
+                    fontFamily: 'Google Sans',
+                    fill: colorPicker.value,
+                    fontSize: 40
+                });
+                canvas.add(text);
+                canvas.setActiveObject(text);
+                selectModeBtn.click();
+            });
+
+            addImageBtn.addEventListener('click', () => imageInput.click());
+
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (f) => {
+                    fabric.Image.fromURL(f.target.result, (img) => {
+                        img.scaleToWidth(300);
+                        canvas.add(img);
+                    });
+                };
+                reader.readAsDataURL(file);
+                e.target.value = '';
+            });
+
+            deleteSelectedBtn.addEventListener('click', () => {
+                canvas.getActiveObjects().forEach((obj) => canvas.remove(obj));
+                canvas.discardActiveObject().renderAll();
+            });
+
+            // --- Text Toolbar Logic ---
+            function updateTextToolbar() {
+                const activeObject = canvas.getActiveObject();
+                if (activeObject && activeObject.type === 'i-text') {
+                    textToolbar.classList.remove('hidden');
+                    fontSizeInput.value = activeObject.get('fontSize');
+                    fontFamilySelect.value = activeObject.get('fontFamily');
+                    textBoldBtn.classList.toggle('active', activeObject.get('fontWeight') === 'bold');
+                    textItalicBtn.classList.toggle('active', activeObject.get('fontStyle') === 'italic');
+                    textUnderlineBtn.classList.toggle('active', activeObject.get('underline'));
+                } else {
+                    textToolbar.classList.add('hidden');
+                }
+            }
+
+            canvas.on({
+                'selection:created': updateTextToolbar,
+                'selection:updated': updateTextToolbar,
+                'selection:cleared': updateTextToolbar
+            });
+
+            const setTextProperty = (prop, value) => {
+                const activeObject = canvas.getActiveObject();
+                if (activeObject && activeObject.type === 'i-text') {
+                    activeObject.set(prop, value);
+                    canvas.renderAll();
+                }
+            };
+            
+            const toggleTextProperty = (prop, valueOn, valueOff) => {
+                const activeObject = canvas.getActiveObject();
+                if (activeObject && activeObject.type === 'i-text') {
+                    const isSet = activeObject.get(prop) === valueOn;
+                    activeObject.set(prop, isSet ? valueOff : valueOn);
+                    canvas.renderAll();
+                    updateTextToolbar();
+                }
+            };
+
+            fontFamilySelect.addEventListener('change', (e) => setTextProperty('fontFamily', e.target.value));
+            fontSizeInput.addEventListener('input', (e) => setTextProperty('fontSize', parseInt(e.target.value, 10) || 20));
+            textBoldBtn.addEventListener('click', () => toggleTextProperty('fontWeight', 'bold', 'normal'));
+            textItalicBtn.addEventListener('click', () => toggleTextProperty('fontStyle', 'italic', 'normal'));
+            textUnderlineBtn.addEventListener('click', () => toggleTextProperty('underline', true, false));
+            textAlignLeftBtn.addEventListener('click', () => setTextProperty('textAlign', 'left'));
+            textAlignCenterBtn.addEventListener('click', () => setTextProperty('textAlign', 'center'));
+            textAlignRightBtn.addEventListener('click', () => setTextProperty('textAlign', 'right'));
+
+            // --- Save Logic ---
+            async function loadSubjectsForSave() {
+                subjectSelect.innerHTML = '<option>Laden...</option>';
+                try {
+                    const subjects = await fetchData('subjects') || [];
+                    subjectSelect.innerHTML = '';
+                    if (subjects.length === 0) {
+                        subjectSelect.innerHTML = '<option value="">Geen vakken</option>';
+                        return;
+                    }
+                    subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.name;
+                        option.textContent = subject.name;
+                        subjectSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    subjectSelect.innerHTML = '<option>Error!</option>';
+                    console.error(error);
+                }
+            }
+
+            savePdfBtn.addEventListener('click', async () => {
+                const pdfName = pdfNameInput.value.trim();
+                const subjectName = subjectSelect.value;
+
+                if (!pdfName) {
+                    saveFeedback.textContent = 'Geef de PDF een naam.';
+                    saveFeedback.style.color = '#ffb4ab';
+                    return;
+                }
+                if (!subjectName) {
+                    saveFeedback.textContent = 'Selecteer een vak.';
+                    saveFeedback.style.color = '#ffb4ab';
+                    return;
+                }
+
+                saveFeedback.textContent = 'Bezig met opslaan...';
+                saveFeedback.style.color = '#9cf890';
+
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+
+                    const dataUrl = canvas.toDataURL({ format: 'png', quality: 1.0 });
+                    
+                    const a4Width = 210;
+                    const a4Height = 297;
+                    const canvasWidth = canvas.getWidth();
+                    const canvasHeight = canvas.getHeight();
+                    const canvasRatio = canvasWidth / canvasHeight;
+                    const a4Ratio = a4Width / a4Height;
+
+                    let imgWidth, imgHeight;
+                    if (canvasRatio > a4Ratio) {
+                        imgWidth = a4Width - 20; // 10mm margin on each side
+                        imgHeight = imgWidth / canvasRatio;
+                    } else {
+                        imgHeight = a4Height - 20; // 10mm margin on each side
+                        imgWidth = imgHeight * canvasRatio;
+                    }
+
+                    const x = (a4Width - imgWidth) / 2;
+                    const y = (a4Height - imgHeight) / 2;
+
+                    doc.addImage(dataUrl, 'PNG', x, y, imgWidth, imgHeight);
+                    
+                    const pdfBlob = doc.output('blob');
+                    const pdfFile = new File([pdfBlob], `${pdfName}.pdf`, { type: 'application/pdf' });
+
+                    const formData = new FormData();
+                    formData.append('file', pdfFile);
+                    formData.append('subject', subjectName);
+
+                    const response = await fetch('/api/files', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Serverfout bij het uploaden van de PDF.');
+                    }
+
+                    saveFeedback.textContent = `'${pdfName}.pdf' succesvol opgeslagen in ${subjectName}!`;
+                    pdfNameInput.value = '';
+                    setTimeout(() => { saveFeedback.textContent = ''; }, 4000);
+
+                } catch (error) {
+                    console.error('Save PDF error:', error);
+                    saveFeedback.textContent = `Fout: ${error.message}`;
+                    saveFeedback.style.color = '#ffb4ab';
+                }
+            });
+
+            // Initial load
+            loadSubjectsForSave();
+        });
+    </script>
+</body>
+</html>

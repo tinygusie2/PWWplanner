@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styles */
+        .m3-card { background-color: var(--surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--outline-variant); }
+
+        /* Dashboard Specific Styles */
+        .header {
+            margin-bottom: 2rem;
+        }
+        .header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 1.125rem;
+            color: var(--on-surface-variant);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            gap: 1.5rem;
+            /* Responsive grid: maakt zoveel kolommen als passen met een min. breedte van 350px */
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .card-header .material-symbols-outlined {
+            color: var(--primary);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+        .list-item:hover {
+            background-color: var(--surface-variant);
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+        }
+        .task-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 4px;
+            border: 2px solid var(--outline);
+            accent-color: var(--primary);
+        }
+        .task-item label {
+            flex-grow: 1;
+        }
+        .task-item input:checked + label {
+            text-decoration: line-through;
+            color: var(--on-surface-variant);
+        }
+        
+        /* --- Progress Circle --- */
+        .progress-circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .progress-circle {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 1rem;
+        }
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+        .progress-circle-bg {
+            stroke: var(--surface-variant);
+        }
+        .progress-circle-fg {
+            stroke: var(--primary);
+            transition: stroke-dasharray 0.5s ease;
+        }
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-grid > .m3-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Staggered animation delay for cards */
+        .dashboard-grid > .m3-card:nth-child(1) { animation-delay: 0.1s; }
+        .dashboard-grid > .m3-card:nth-child(2) { animation-delay: 0.2s; }
+        .dashboard-grid > .m3-card:nth-child(3) { animation-delay: 0.3s; }
+        .dashboard-grid > .m3-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .list-item, .task-item {
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* --- Polishing --- */
+        .list-item {
+            align-items: center;
+            padding: 1rem; /* Increased padding */
+        }
+        .list-item .item-info .title {
+            font-weight: 500;
+        }
+        .list-item .item-info .subject {
+            color: var(--on-surface-variant);
+            font-size: 0.875rem;
+        }
+        .list-item .item-date {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            flex-shrink: 0; /* Prevent date from wrapping */
+            margin-left: 1rem;
+        }
+        .empty-state {
+            color: var(--on-surface-variant);
+            text-align: center;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'system';
+        const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h1>PWW Planner</h1>
+                    <button id="suiteMenu" class="tool tooltip" data-tooltip="Suite apps" style="background: none; border: none; cursor: pointer;">
+                    <span class="material-symbols-outlined">apps</span>
+                  </button>
+                </div>
+                <div id="suiteDropdown" style="display: none; position: absolute; top: 60px; left: 1rem; background: var(--surface); border: 1px solid var(--outline); border-radius: 12px; padding: 1rem; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,.12);">
+                  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 1rem;">
+                    <a href="mindmap-maker.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--on-surface);">
+                      <span class="material-symbols-outlined" style="font-size: 32px;">hub</span>
+                      <span>Mindmap Maker</span>
+                    </a>
+                  </div>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item active"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Nieuw Item</span>
+                </a>
+                <button id="collapse-btn" class="button">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="content-wrapper">
+                
+                <header class="header">
+                    <h2>Dashboard</h2>
+                    <p>Welkom terug! Hier is je overzicht voor de komende periode.</p>
+                </header>
+
+                <div class="dashboard-grid">
+                    
+                    <div class="m3-card">
+                        <h3 class="card-header"><span class="material-symbols-outlined">event_available</span>Aankomende Toetsen</h3>
+                        <div id="upcoming-tests-container" class="card-content">
+                            </div>
+                    </div>
+
+                    <div class="m3-card">
+                        <h3 class="card-header"><span class="material-symbols-outlined">task_alt</span>Vandaag te doen</h3>
+                        <div id="todo-today-container" class="card-content">
+                            </div>
+                    </div>
+
+                    <div class="m3-card progress-circle-container">
+                        <h3>Voortgang PWW</h3>
+                        <div class="progress-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3" />
+                                <path id="progress-circle-fg" class="progress-circle-fg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3" stroke-linecap="round" />
+                            </svg>
+                            <div id="progress-circle-text" class="progress-circle-text">0%</div>
+                        </div>
+                        <p id="progress-text">Nog geen taken voltooid.</p>
+                    </div>
+
+                    <div class="m3-card">
+                        <h3>Snelle Acties</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                            <a href="/nieuw-item" class="button button-primary"><span class="material-symbols-outlined">note_add</span>Nieuw Item</a>
+                            <a href="/nieuw-vak.html" class="button button-secondary"><span class="material-symbols-outlined">library_books</span>Nieuw Vak</a>
+                        </div>
+                    </div>
+
+                    <!-- <div class="m3-card">
+                        <h3 class="card-header"><span class="material-symbols-outlined">collections_bookmark</span>Mijn Vakken</h3>
+                        <div id="subjects-container" class="card-content">
+                            </div>
+                    </div> -->
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+      const suiteBtn = document.getElementById('suiteMenu');
+      const suiteDropdown = document.getElementById('suiteDropdown');
+
+      suiteBtn.addEventListener('click', () => {
+        suiteDropdown.style.display = suiteDropdown.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!suiteBtn.contains(e.target) && !suiteDropdown.contains(e.target)) {
+          suiteDropdown.style.display = 'none';
+        }
+      });
+
+      // Any specific dashboard scripts can go here
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const items = await fetchData('items') || [];
+            
+
+            // --- Populate Cards ---
+            populateUpcomingTests(items);
+            populateTodoToday(items); // This can stay for the "Vandaag te doen" card
+            
+            // Update PWW progress based on planner dates
+            updatePWWProgress();
+        });
+
+        function populateUpcomingTests(items) {
+            const testsContainer = document.getElementById('upcoming-tests-container');
+            if (!testsContainer) return;
+
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            const upcomingTests = items
+                .filter(item => item.type === 'Toets' && new Date(item.date) >= now)
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+
+            if (upcomingTests.length > 0) {
+                testsContainer.innerHTML = upcomingTests.map(item => {
+                    const itemDate = new Date(item.date);
+                    const formattedDate = itemDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+                    return `
+                        <div class="list-item">
+                            <div class="item-info">
+                                <p class="title">${item.title}</p>
+                                <p class="subject">${item.vak}</p>
+                            </div>
+                            <div class="item-date">${formattedDate}</div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                testsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">celebration</span>
+                        <p>Geen aankomende toetsen!</p>
+                    </div>
+                `;
+            }
+            staggerAnimation(testsContainer.children);
+        }
+
+        function populateTodoToday(items) {
+            const todoContainer = document.getElementById('todo-today-container');
+            if (!todoContainer) return;
+
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            const todayItems = items.filter(item => item.date === todayString);
+
+            if (todayItems.length > 0) {
+                todoContainer.innerHTML = todayItems.map(item => `
+                    <div class="task-item">
+                        <input type="checkbox" id="task-${item.id}" data-task-id="${item.id}" />
+                        <label for="task-${item.id}">${item.title} <span class="subject">(${item.vak})</span></label>
+                    </div>
+                `).join('');
+            } else {
+                todoContainer.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        <p>Niets te doen vandaag!</p>
+                    </div>
+                `;
+            }
+            staggerAnimation(todoContainer.children);
+        }
+
+        async function updatePWWProgress() {
+            const progressCircleFg = document.getElementById('progress-circle-fg');
+            const progressText = document.getElementById('progress-circle-text');
+            const progressSubText = document.getElementById('progress-text');
+
+            try {
+                const plannerData = await fetchData('planner-data');
+
+                if (!plannerData || !plannerData.startDate || !plannerData.endDate) {
+                    throw new Error('Geen planningsdata gevonden.');
+                }
+
+                const startDate = new Date(plannerData.startDate);
+                const endDate = new Date(plannerData.endDate);
+                const today = new Date();
+
+                const totalDuration = endDate.getTime() - startDate.getTime();
+                
+                // Handle case where start and end date are the same
+                if (totalDuration <= 0) {
+                    progressSubText.textContent = 'Planning voltooid.';
+                    progressText.textContent = '100%';
+                    progressCircleFg.style.strokeDasharray = '100, 100';
+                    return;
+                }
+
+                const elapsedDuration = today.getTime() - startDate.getTime();
+                let percentage = Math.round((elapsedDuration / totalDuration) * 100);
+
+                if (percentage < 0) percentage = 0;
+                if (percentage > 100) percentage = 100;
+
+                const circumference = 2 * Math.PI * 15.9155;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                progressCircleFg.style.strokeDasharray = `${circumference - offset}, ${offset}`;
+                progressText.textContent = `${percentage}%`;
+                
+                const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+                if (percentage >= 100) {
+                    progressSubText.textContent = 'Planning voltooid!';
+                } else if (daysLeft > 1) {
+                    progressSubText.textContent = `Nog ${daysLeft} dagen te gaan.`;
+                } else if (daysLeft === 1) {
+                    progressSubText.textContent = 'Nog 1 dag te gaan.';
+                } else if (daysLeft === 0) {
+                    progressSubText.textContent = 'Laatste dag!';
+                } else {
+                     progressSubText.textContent = 'Planning is voorbij.';
+                }
+
+            } catch (error) {
+                progressCircleFg.style.strokeDasharray = '0, 100';
+                progressText.textContent = 'N/A';
+                progressSubText.textContent = 'Stel een studieplan op.';
+                console.warn('Kon PWW voortgang niet laden:', error.message);
+            }
+        }
+
+        function staggerAnimation(elements) {
+            Array.from(elements).forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.07}s`;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Nieuw Item Toevoegen</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        :root {
+            --primary: #80db73;
+            --on-primary: #003908;
+            --primary-container: #005312;
+            --on-primary-container: #9cf890;
+            --background: #1a1c18;
+            --on-background: #e2e3dc;
+            --surface: #1a1c18;
+            --on-surface: #e2e3dc;
+            --surface-variant: #43483f;
+            --on-surface-variant: #c3c8bb;
+            --outline: #8d9387;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--on-surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h2 {
+            font-family: 'Google Sans', Arial, sans-serif;
+            font-size: 2.25rem;
+            font-weight: 500;
+            color: var(--on-surface);
+        }
+
+        #new-item-form {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .m3-card {
+            background-color: var(--surface-variant);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            border: 1px solid var(--outline);
+            transition: border-color 0.3s ease;
+        }
+
+        .m3-card:focus-within {
+            border-color: var(--primary);
+        }
+
+        label {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            border: none;
+            background-color: transparent;
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            font-size: 1.1rem;
+            color: var(--on-surface);
+            outline: none;
+            padding-top: 4px;
+        }
+        
+        select option {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+        }
+
+        input::placeholder {
+            color: var(--on-surface-variant);
+            opacity: 0.7;
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e2e3dc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1.2em;
+            padding-right: 2rem;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(1);
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+            border: none;
+            border-radius: 100px;
+            padding: 1rem 1.5rem;
+            font-family: 'Google Sans', Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            align-self: flex-end;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            .header h2 {
+                font-size: 1.75rem;
+            }
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Nieuw Item Toevoegen</h2>
+    </div>
+
+    <form id="new-item-form">
+        <div class="m3-card">
+            <label for="item-title">Titel</label>
+            <input type="text" id="item-title" name="title" placeholder="bv. Wiskunde Toets" required>
+        </div>
+        <div class="m3-card">
+            <label for="item-date">Datum</label>
+            <input type="date" id="item-date" name="date" required>
+        </div>
+        <div class="m3-card">
+            <label for="item-type">Type</label>
+            <select id="item-type" name="type" required>
+                <option value="toets">Toets</option>
+                <option value="taak">Taak</option>
+                <option value="project">Project</option>
+                <option value="huiswerk">Huiswerk</option>
+            </select>
+        </div>
+        <div class="m3-card">
+            <label for="item-subject">Vak</label>
+            <select id="item-subject" name="subject" required></select>
+        </div>
+        <div class="m3-card">
+            <label for="item-reminder">Herinnering</label>
+            <select id="item-reminder" name="reminder">
+                <option value="none">Geen</option>
+                <option value="10m">10 minuten voor</option>
+                <option value="1h">1 uur voor</option>
+                <option value="1d">1 dag voor</option>
+                <option value="2d">2 dagen voor</option>
+            </select>
+        </div>
+        <button type="submit" class="button">
+            <span class="material-symbols-outlined">add_circle</span>
+            Toevoegen
+        </button>
+    </form>
+
+    <script src="/app.js"></script>
+    <script>
+        async function populateSubjects() {
+            const subjects = await fetchData('subjects');
+            const select = document.getElementById('item-subject');
+            if (subjects && select) {
+                select.innerHTML = subjects.map(subject => `<option value="${subject.name}">${subject.name}</option>`).join('');
+            }
+        }
+
+        document.getElementById('new-item-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newItem = {
+                title: document.getElementById('item-title').value,
+                date: document.getElementById('item-date').value,
+                type: document.getElementById('item-type').value,
+                vak: document.getElementById('item-subject').value,
+                reminder: document.getElementById('item-reminder').value
+            };
+            if (await postData('items', newItem)) {
+                alert('Item succesvol toegevoegd!');
+                window.location.href = '/planner.html';
+            }
+        });
+
+        populateSubjects();
+    </script>
+</body>
+</html>

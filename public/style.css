@@ -1,0 +1,216 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap');
+
+/* --- Kleurvariabelen (Light & Dark Theme) --- */
+:root {
+  --primary: #006e18;
+  --on-primary: #ffffff;
+  --primary-container: #9cf890;
+  --on-primary-container: #002203;
+  --secondary: #55624c;
+  --on-secondary: #ffffff;
+  --secondary-container: #d9e7cb;
+  --on-secondary-container: #131f0d;
+  --tertiary: #3a656f;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #beeaf6;
+  --on-tertiary-container: #001f26;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #410002;
+  --background: #fdfdf6;
+  --on-background: #1a1c18;
+  --surface: #fdfdf6;
+  --on-surface: #1a1c18;
+  --surface-variant: #dfe4d7;
+  --on-surface-variant: #43483f;
+  --outline: #73796e;
+  --outline-variant: #c3c8bb;
+  --shadow: #000000;
+  --scrim: #000000;
+  --inverse-surface: #2f312c;
+  --inverse-on-surface: #f1f1ea;
+  --inverse-primary: #80db73;
+}
+
+:root.dark {
+  --primary: #80db73;
+  --on-primary: #003908;
+  --primary-container: #005312;
+  --on-primary-container: #9cf890;
+  --secondary: #bdcbb0;
+  --on-secondary: #273421;
+  --secondary-container: #3c4a36;
+  --on-secondary-container: #d9e7cb;
+  --tertiary: #a2ced9;
+  --on-tertiary: #003641;
+  --tertiary-container: #204d57;
+  --on-tertiary-container: #beeaf6;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --background: #1a1c18;
+  --on-background: #e2e3dc;
+  --surface: #1a1c18;
+  --on-surface: #e2e3dc;
+  --surface-variant: #43483f;
+  --on-surface-variant: #c3c8bb;
+  --outline: #8d9387;
+  --outline-variant: #43483f;
+  --shadow: #000000;
+  --scrim: #000000;
+  --inverse-surface: #e2e3dc;
+  --inverse-on-surface: #1a1c18;
+  --inverse-primary: #006e18;
+}
+
+/* --- Basis Stijlen --- */
+body {
+    font-family: 'Google Sans Text', Arial, sans-serif !important;
+    margin: 0;
+    background-color: var(--background);
+    color: var(--on-background);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    font-family: 'Google Sans', sans-serif !important;
+}
+
+button, .button {
+    font-family: 'Google Sans', sans-serif !important;
+    font-weight: 500 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 9999px !important; /* Volledig ronde vorm */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    border: 1px solid var(--outline) !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease-in-out !important;
+    background-color: var(--primary-container) !important;
+    color: var(--on-primary-container) !important;
+}
+
+button:hover, .button:hover {
+    /* Toepassen van een standaard M3 hover state laag */
+    background-color: color-mix(in srgb, var(--primary-container), var(--on-surface) 8%) !important;
+}
+
+/* --- Layout --- */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 256px;
+    background-color: var(--surface);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-right: 1px solid var(--outline-variant);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+/* --- Navigatie --- */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+.sidebar-header .icon-bg {
+    background-color: var(--primary-container);
+    padding: 0.5rem;
+    border-radius: 12px;
+}
+.sidebar-header .icon-bg i {
+    color: var(--on-primary-container);
+    display: block;
+}
+.sidebar-header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    white-space: nowrap;
+}
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+.m3-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 9999px; /* pilvorm */
+    text-decoration: none;
+    color: var(--on-surface-variant);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    white-space: nowrap;
+}
+.m3-nav-item.active, .m3-nav-item:hover {
+    background-color: var(--secondary-container);
+    color: var(--on-secondary-container);
+}
+.m3-nav-item.active {
+    font-weight: 500;
+}
+.m3-nav-item i {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#collapse-btn {
+    background: none;
+    border: none;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    padding: 0.5rem;
+    align-self: flex-end;
+}
+
+/* --- Inklapbare Staat --- */
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar.collapsed .sidebar-header h1,
+.sidebar.collapsed .nav-list span,
+.sidebar.collapsed .sidebar-footer .button span {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    align-items: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        padding: 1rem;
+    }
+}

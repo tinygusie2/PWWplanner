@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mindmap Maker</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* --- Kleurvariabelen (Light & Dark Theme) --- */
+    :root {
+      --primary: #006e18; --on-primary: #ffffff; --primary-container: #9cf890; --on-primary-container: #002203;
+      --secondary: #55624c; --on-secondary: #ffffff; --secondary-container: #d9e7cb; --on-secondary-container: #131f0d;
+      --tertiary: #3a656f; --on-tertiary: #ffffff; --tertiary-container: #beeaf6; --on-tertiary-container: #001f26;
+      --error: #ba1a1a; --on-error: #ffffff; --error-container: #ffdad6; --on-error-container: #410002;
+      --background: #fdfdf6; --on-background: #1a1c18; --surface: #fdfdf6; --on-surface: #1a1c18;
+      --surface-variant: #dfe4d7; --on-surface-variant: #43483f; --outline: #73796e; --outline-variant: #c3c8bb;
+      --shadow: #000000; --scrim: #000000; --inverse-surface: #2f312c; --inverse-on-surface: #f1f1ea; --inverse-primary: #80db73;
+    }
+    :root.dark {
+      --primary: #80db73; --on-primary: #003908; --primary-container: #005312; --on-primary-container: #9cf890;
+      --secondary: #bdcbb0; --on-secondary: #273421; --secondary-container: #3c4a36; --on-secondary-container: #d9e7cb;
+      --tertiary: #a2ced9; --on-tertiary: #003641; --tertiary-container: #204d57; --on-tertiary-container: #beeaf6;
+      --error: #ffb4ab; --on-error: #690005; --error-container: #93000a; --on-error-container: #ffdad6;
+      --background: #1a1c18; --on-background: #e2e3dc; --surface: #1a1c18; --on-surface: #e2e3dc;
+      --surface-variant: #43483f; --on-surface-variant: #c3c8bb; --outline: #8d9387; --outline-variant: #43483f;
+      --shadow: #000000; --scrim: #000000; --inverse-surface: #e2e3dc; --inverse-on-surface: #1a1c18; --inverse-primary: #006e18;
+    }
+
+    /* Basis */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Google Sans Text', Arial, sans-serif !important;
+      background: var(--background);
+      color: var(--on-background);
+      display: flex;
+      flex-direction: column;
+    }
+    h1,h2,h3,h4,h5,h6,p { font-family: 'Google Sans', sans-serif !important; }
+
+    /* Buttons */
+    .button, button {
+      font-family: 'Google Sans', sans-serif !important; font-weight: 500 !important; padding: 0.6rem 1rem !important;
+      border-radius: 9999px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;
+      gap: 0.5rem !important; border: 1px solid var(--outline) !important; cursor: pointer !important;
+      transition: background-color .15s ease-in-out !important; background: var(--secondary-container) !important;
+      color: var(--on-secondary-container) !important; user-select: none;
+    }
+    .button:hover { background: color-mix(in srgb, var(--secondary-container), var(--on-surface) 8%); }
+    .chip {
+      background: var(--secondary-container) !important; color: var(--on-secondary-container) !important;
+      border-radius: 9999px; padding: .4rem .75rem; border: 1px solid var(--outline);
+    }
+    .tooltip { position: relative; }
+    .tooltip::after {
+        content: attr(data-tooltip); position: absolute; top: calc(100% + 5px); left: 50%;
+        transform: translateX(-50%); background-color: var(--inverse-surface); color: var(--inverse-on-surface);
+        padding: .4rem .6rem; border-radius: 6px; font-size: 12px; white-space: nowrap;
+        opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10;
+    }
+    .tooltip:hover::after { opacity: 1; visibility: visible; }
+
+    /* Layout */
+    .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+    header {
+      background: var(--surface); color: var(--on-surface); padding: 0.8rem 1rem; border-bottom: 1px solid var(--outline-variant);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .header-left { display: flex; align-items: center; gap: .75rem; }
+    .toolbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .tool { background: var(--secondary-container); color: var(--on-secondary-container); border: 1px solid var(--outline); border-radius: 10px; padding: .4rem; }
+    .tool.active { background: var(--primary-container); color: var(--on-primary-container); border-color: var(--primary); }
+    .tool.danger { background: var(--error-container); color: var(--on-error-container); }
+    .sep { width:1px; height:24px; background: var(--outline-variant); margin: 0 .25rem; }
+
+    .stage-wrap { position: relative; overflow: hidden; }
+    canvas {
+      width: 100%; height: calc(100vh - 74px); display: block; background: var(--surface);
+      background-image: radial-gradient(var(--outline-variant) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      cursor: grab; touch-action: none;
+    }
+    canvas.grabbing { cursor: grabbing; }
+    canvas.connecting { cursor: crosshair; }
+
+    /* Inline editor */
+    #editor {
+      position: absolute; min-width: 80px; max-width: 320px; padding: .4rem .6rem;
+      font: 500 16px 'Google Sans Text', system-ui, sans-serif; color: var(--on-surface); background: var(--surface);
+      border: 1px solid var(--primary); border-radius: 8px; outline: none; display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12); z-index: 5;
+    }
+    
+    /* Context Menu */
+    #context-menu {
+        display: none; position: absolute; z-index: 10; background: var(--surface);
+        border-radius: 12px; border: 1px solid var(--outline); padding: .5rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,.15); min-width: 180px;
+    }
+    #context-menu .section { padding: .5rem; display: flex; flex-direction: column; gap: .5rem; }
+    #context-menu .section:not(:last-child) { border-bottom: 1px solid var(--outline-variant); }
+    #context-menu .colors { display: flex; gap: .5rem; justify-content: space-around; }
+    .color-swatch { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid var(--outline-variant); }
+    .color-swatch:hover { border-color: var(--outline); }
+    #icon-input-wrap { display: flex; align-items: center; gap: .5rem; }
+    #icon-input { flex-grow: 1; background: var(--surface-variant); color: var(--on-surface-variant); border: none; padding: .4rem .6rem; border-radius: 6px; outline: none;}
+
+    /* Viewer Mode */
+    body.viewer-mode header { display: none; }
+    body.viewer-mode canvas { height: 100vh; }
+    #viewer-info {
+        position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+        padding: .5rem 1rem; background: var(--inverse-surface); color: var(--inverse-on-surface);
+        border-radius: 99px; font-size: 14px; z-index: 10;
+        display: none;
+    }
+    body.viewer-mode #viewer-info { display: block; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-left">
+        <span class="material-symbols-outlined">hub</span>
+        <h2 style="margin:0">Mindmap Maker</h2>
+        <span id="status" class="chip" title="Opslagstatus"></span>
+      </div>
+      <div class="toolbar">
+        <button id="addRoot" class="tool tooltip" data-tooltip="Nieuwe hoofdnode (A)"><span class="material-symbols-outlined">add_circle</span></button>
+        <button id="addChild" class="tool tooltip" data-tooltip="Nieuwe kindnode (Tab)"><span class="material-symbols-outlined">account_tree</span></button>
+        <button id="connectMode" class="tool tooltip" data-tooltip="Verbinden"><span class="material-symbols-outlined">call_merge</span></button>
+        <div class="sep"></div>
+        <button id="theme" class="tool tooltip" data-tooltip="Thema wisselen"><span class="material-symbols-outlined">dark_mode</span></button>
+        <button id="exportPng" class="tool tooltip" data-tooltip="Exporteer als PNG"><span class="material-symbols-outlined">image</span></button>
+        <button id="share" class="tool tooltip" data-tooltip="Deel mindmap"><span class="material-symbols-outlined">share</span></button> <button id="save" class="tool tooltip" data-tooltip="Opslaan (Ctrl+S)"><span class="material-symbols-outlined">save</span></button>
+        <button id="clear" class="tool danger tooltip" data-tooltip="Alles wissen"><span class="material-symbols-outlined">delete</span></button>
+      </div>
+    </header>
+    
+    <div class="stage-wrap" id="stageWrap">
+      <canvas id="stage"></canvas>
+      <input id="editor" type="text" />
+      <div id="context-menu">
+        <div class="section">
+            <div class="colors">
+                <div class="color-swatch" data-color="default" style="background: var(--secondary-container);" title="Standaard"></div>
+                <div class="color-swatch" data-color="primary" style="background: var(--primary-container);" title="Primair"></div>
+                <div class="color-swatch" data-color="tertiary" style="background: var(--tertiary-container);" title="Tertiair"></div>
+                <div class="color-swatch" data-color="error" style="background: var(--error-container);" title="Fout"></div>
+            </div>
+        </div>
+        <div class="section">
+            <label for="icon-input" style="font-size:14px; font-weight: 500;">Icoon</label>
+            <div id="icon-input-wrap">
+                <input id="icon-input" type="text" placeholder="e.g. star, lightbulb" />
+                <button id="icon-clear" style="padding: 0.25rem !important; border-radius: 50% !important; min-width: 0; width: 28px; height: 28px;"><span class="material-symbols-outlined">close</span></button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div id="viewer-info">Alleen-lezen modus</div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+
+
+<script>
+(() => {
+  // --- PASTE PAKO.JS MINIFIED CODE HERE ---
+  // The small script tag above is a placeholder. For a truly single file,
+  // you would paste the full content of pako.min.js here. For this example,
+  // we will load it from a CDN for brevity.
+  const pako_script = document.createElement('script');
+  pako_script.src = 'https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js';
+  document.head.appendChild(pako_script);
+  pako_script.onload = () => {
+    // Check for hash to determine mode on page load
+    const hashData = window.location.hash.substring(1);
+    if (hashData) {
+      document.body.classList.add('viewer-mode');
+      try {
+        const nodes = decodeNodesFromHash(hashData);
+        initViewer(nodes);
+      } catch (e) {
+        console.error("Failed to load mindmap from URL:", e);
+        alert("Kon mindmap niet laden. Start een leeg canvas.");
+        initEditor();
+      }
+    } else {
+      initEditor();
+    }
+  };
+  
+  // App constants and variables
+  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  const stage = document.getElementById('stage');
+  const wrap = document.getElementById('stageWrap');
+  const ctx = stage.getContext('2d');
+  
+  let nodes = [];
+  let hoverNode = null;
+  let cameraOffset = { x: 0, y: 0 };
+  let cameraZoom = 1;
+  const MAX_ZOOM = 3;
+  const MIN_ZOOM = 0.2;
+  const SCROLL_SENSITIVITY = 0.0005;
+  let isDraggingCanvas = false;
+  let dragStart = { x: 0, y: 0 };
+  let mousePos = { x: 0, y: 0 };
+
+  // Theme Logic (needed in both modes)
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('theme');
+  const THEME_KEY = 'mindmap-theme';
+  function applyTheme(t){
+    root.classList.toggle('dark', t==='dark');
+    if (themeBtn) {
+        themeBtn.querySelector('.material-symbols-outlined').textContent = t === 'dark' ? 'light_mode' : 'dark_mode';
+    }
+  }
+  const currentTheme = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(currentTheme);
+
+  // --- Core Drawing & Utility Functions (used by both modes) ---
+  function updateNodeWidth(n) {
+    const padding = n.isRoot ? 24 : 16;
+    const minWidth = n.isRoot ? 100 : 80;
+    const iconSpace = n.icon ? (n.isRoot ? 22 : 20) : 0; // icon width + gap
+    n.w = Math.max(minWidth, measure(n.text, n.isRoot) + padding * 2 + iconSpace);
+  }
+
+  function roundRectPath(x,y,w,h,r){
+    const rr = Math.min(r / cameraZoom, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y); ctx.arcTo(x+w, y, x+w, y+h, rr); ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr); ctx.arcTo(x, y, x+w, y, rr); ctx.closePath();
+  }
+
+  function measure(text, isRoot = false){
+    const fontSize = isRoot ? 20 : 16;
+    ctx.save();
+    ctx.font = `500 ${fontSize}px 'Google Sans Text', sans-serif`;
+    const width = ctx.measureText(text).width;
+    ctx.restore();
+    return width;
+  }
+
+  function deviceResize(){
+    const cssW = wrap.clientWidth; const cssH = wrap.clientHeight;
+    stage.width = Math.floor(cssW * dpr); stage.height = Math.floor(cssH * dpr);
+    stage.style.width = cssW + 'px'; stage.style.height = cssH + 'px';
+    draw();
+  }
+
+  function drawBezierConnection(ctx, startX, startY, endX, endY, strokeStyle, lineWidth, dash = []){
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    if (dash.length) ctx.setLineDash(dash); else ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    const cp1x = startX + (endX - startX) / 2;
+    const cp1y = startY;
+    const cp2x = startX + (endX - startX) / 2;
+    const cp2y = endY;
+    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+    ctx.stroke();
+  }
+
+  function draw(){
+    const cssW = wrap.clientWidth; const cssH = wrap.clientHeight;
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0, stage.width, stage.height);
+
+    ctx.save();
+    ctx.scale(dpr,dpr);
+    // Grid background
+    const bgPatternSize = 20;
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface');
+    ctx.fillRect(0,0,cssW,cssH);
+    ctx.beginPath();
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--outline-variant');
+    ctx.lineWidth = 1;
+    for(let x = (cameraOffset.x * cameraZoom) % (bgPatternSize * cameraZoom); x < cssW; x+= bgPatternSize * cameraZoom){ ctx.moveTo(x, 0); ctx.lineTo(x, cssH); }
+    for(let y = (cameraOffset.y * cameraZoom) % (bgPatternSize * cameraZoom); y < cssH; y+= bgPatternSize * cameraZoom){ ctx.moveTo(0, y); ctx.lineTo(cssW, y); }
+    ctx.globalAlpha = 0.2; ctx.stroke(); ctx.globalAlpha = 1;
+
+    // Apply camera
+    ctx.translate(cssW/2, cssH/2);
+    ctx.scale(cameraZoom, cameraZoom);
+    ctx.translate(-cssW/2 + cameraOffset.x, -cssH/2 + cameraOffset.y);
+
+    // Connections
+    for(const n of nodes){
+      for(const id of n.children){
+        const child = nodes.find(x=>x.id===id);
+        if(child) {
+            drawBezierConnection(ctx, n.x + n.w/2, n.y + n.h/2, child.x + child.w/2, child.y + child.h/2, 
+              getComputedStyle(document.documentElement).getPropertyValue('--outline'), 2 / cameraZoom);
+        }
+      }
+    }
+
+    // Nodes
+    for(const n of nodes){
+      const styles = getComputedStyle(document.documentElement);
+      let fill, textColor;
+      if (n.color && n.color !== 'default') {
+          fill = styles.getPropertyValue(`--${n.color}-container`);
+          textColor = styles.getPropertyValue(`--on-${n.color}-container`);
+      } else {
+          fill = n.isRoot ? styles.getPropertyValue('--primary-container') : styles.getPropertyValue('--secondary-container');
+          textColor = n.isRoot ? styles.getPropertyValue('--on-primary-container') : styles.getPropertyValue('--on-secondary-container');
+      }
+      const stroke = (n.sel||n===hoverNode) ? styles.getPropertyValue('--primary') : styles.getPropertyValue('--outline');
+      
+      roundRectPath(n.x, n.y, n.w, n.h, 12);
+      ctx.fillStyle = fill.trim();
+      ctx.fill();
+      ctx.lineWidth = ((n.sel||n===hoverNode) ? 2.5 : 1.25) / cameraZoom;
+      ctx.strokeStyle = stroke.trim();
+      ctx.stroke();
+
+      ctx.fillStyle = textColor.trim();
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+
+      const textFontSize = n.isRoot ? 20 : 16;
+      if (n.icon) {
+        const iconFontSize = n.isRoot ? 20 : 18;
+        ctx.font = `500 ${textFontSize / cameraZoom}px 'Google Sans Text', sans-serif`;
+        const textWidth = ctx.measureText(n.text).width;
+        const totalContentWidth = textWidth + iconFontSize + 4; // text + icon + gap
+        const startX = n.x + n.w / 2 - totalContentWidth / 2;
+
+        ctx.font = `${iconFontSize / cameraZoom}px 'Material Symbols Outlined'`;
+        ctx.fillText(n.icon, startX + iconFontSize / 2, n.y + n.h / 2);
+
+        ctx.font = `500 ${textFontSize / cameraZoom}px 'Google Sans Text', sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.fillText(n.text, startX + iconFontSize + 4, n.y + n.h / 2);
+      } else {
+        ctx.font = `500 ${textFontSize / cameraZoom}px 'Google Sans Text', sans-serif`;
+        ctx.fillText(n.text, n.x + n.w/2, n.y + n.h/2);
+      }
+    }
+
+    // Temp connection preview (Editor only)
+    if(window.isConnecting && window.connectFrom){
+        drawBezierConnection(ctx, window.connectFrom.x + window.connectFrom.w/2, window.connectFrom.y + window.connectFrom.h/2, mousePos.x, mousePos.y, 
+          getComputedStyle(document.documentElement).getPropertyValue('--primary'), 2 / cameraZoom, [6 / cameraZoom, 6 / cameraZoom]);
+    }
+    ctx.restore();
+  }
+
+  function getEventLocation(e){
+    const cssW = wrap.clientWidth; const cssH = wrap.clientHeight;
+    const rect = stage.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return {
+        x: (x - cssW/2)/cameraZoom + cssW/2 - cameraOffset.x,
+        y: (y - cssH/2)/cameraZoom + cssH/2 - cameraOffset.y
+    };
+  }
+
+  function nodeAt(x,y){
+    for(let i=nodes.length-1;i>=0;i--){
+      const n = nodes[i];
+      if(x>=n.x && x<=n.x+n.w && y>=n.y && y<=n.y+n.h) return n;
+    }
+    return null;
+  }
+  
+  // --- Sharing & Data Functions ---
+  function encodeNodesForHash(nodes) {
+    const jsonString = JSON.stringify(nodes);
+    const compressed = pako.deflate(jsonString);
+    let binary = '';
+    const len = compressed.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(compressed[i]);
+    }
+    const base64 = window.btoa(binary);
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  }
+
+  function decodeNodesFromHash(hash) {
+      let base64 = hash.replace(/-/g, '+').replace(/_/g, '/');
+      while (base64.length % 4) {
+          base64 += '=';
+      }
+      const binaryString = window.atob(base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+      }
+      const jsonString = pako.inflate(bytes, { to: 'string' });
+      const parsedNodes = JSON.parse(jsonString);
+      // Data validation and cleanup
+      for (const n of parsedNodes) {
+          if (!n.id) n.id = crypto.randomUUID();
+          if (!Array.isArray(n.children)) n.children = [];
+          if (!n.hasOwnProperty('color')) n.color = null;
+          if (!n.hasOwnProperty('icon')) n.icon = null;
+          n.h = n.isRoot ? 56 : 44;
+          updateNodeWidth(n);
+          n.sel = false;
+      }
+      return parsedNodes;
+  }
+
+  // --- VIEWER MODE INITIALIZATION ---
+  function initViewer(initialNodes) {
+    nodes = initialNodes;
+    new ResizeObserver(deviceResize).observe(wrap);
+
+    stage.addEventListener('pointerdown', (e) => {
+      isDraggingCanvas = true;
+      stage.classList.add('grabbing');
+      dragStart = { x: e.clientX, y: e.clientY };
+    });
+
+    window.addEventListener('pointermove', (e) => {
+        if (isDraggingCanvas) {
+            cameraOffset.x += (e.clientX - dragStart.x) / cameraZoom;
+            cameraOffset.y += (e.clientY - dragStart.y) / cameraZoom;
+            dragStart = { x: e.clientX, y: e.clientY };
+            draw();
+        }
+    });
+
+    window.addEventListener('pointerup', () => {
+        isDraggingCanvas = false;
+        stage.classList.remove('grabbing');
+    });
+
+    stage.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomAmount = e.deltaY * SCROLL_SENSITIVITY;
+        cameraZoom = Math.max(MIN_ZOOM, Math.min(cameraZoom - zoomAmount, MAX_ZOOM));
+        draw();
+    });
+    
+    // Initial draw
+    deviceResize();
+  }
+
+  // --- EDITOR MODE INITIALIZATION ---
+  function initEditor() {
+    // Editor-specific variables
+    const editor = document.getElementById('editor');
+    const addRootBtn = document.getElementById('addRoot');
+    const addChildBtn = document.getElementById('addChild');
+    const connectModeBtn = document.getElementById('connectMode');
+    const saveBtn = document.getElementById('save');
+    const clearBtn = document.getElementById('clear');
+    const exportBtn = document.getElementById('exportPng');
+    const shareBtn = document.getElementById('share');
+    const statusChip = document.getElementById('status');
+    const contextMenu = document.getElementById('context-menu');
+    const iconInput = document.getElementById('icon-input');
+    const iconClearBtn = document.getElementById('icon-clear');
+
+    let selected = null;
+    let isDirty = false;
+    let isDraggingNode = false;
+    let dragOff = { x: 0, y: 0 };
+    let isConnectMode = false;
+    let isConnecting = false;
+    let connectFrom = null;
+    let contextNode = null;
+    
+    // Make variables global for draw function access
+    window.isConnecting = isConnecting;
+    window.connectFrom = connectFrom;
+    
+    function makeNode(text, x, y, isRoot = false){
+        const h = isRoot ? 56 : 44;
+        const node = { id: crypto.randomUUID(), text, x, y, w: 0, h, isRoot, children: [], sel: false, color: null, icon: null };
+        updateNodeWidth(node);
+        return node;
+    }
+    
+    function select(n){
+        if (selected && selected !== n) hideEditor();
+        nodes.forEach(m=>m.sel=false);
+        selected = n||null;
+        if(n) n.sel=true;
+        draw();
+    }
+
+    function setDirty(state){ isDirty = state; statusChip.textContent = state? 'Wijzigingen niet opgeslagen' : 'Opgeslagen'; }
+    function save(){ localStorage.setItem('mindmap-data', JSON.stringify(nodes)); setDirty(false); }
+
+    function load(){
+        const raw = localStorage.getItem('mindmap-data');
+        if(!raw) { setDirty(false); return; }
+        try{
+            nodes = JSON.parse(raw);
+            for(const n of nodes){
+                if(!n.id) n.id = crypto.randomUUID();
+                if(!Array.isArray(n.children)) n.children = [];
+                if(!n.hasOwnProperty('color')) n.color = null;
+                if(!n.hasOwnProperty('icon')) n.icon = null;
+                n.h = n.isRoot ? 56 : 44;
+                updateNodeWidth(n);
+                n.sel = false;
+            }
+            setDirty(false);
+            draw();
+        }catch(e){ console.warn('Kon mindmap niet laden', e); }
+    }
+
+    function showEditor(n){
+        const cssW = wrap.clientWidth; const cssH = wrap.clientHeight;
+        const screenX = (n.x + cameraOffset.x - cssW/2)*cameraZoom + cssW/2;
+        const screenY = (n.y + cameraOffset.y - cssH/2)*cameraZoom + cssH/2;
+        editor.value = n.text;
+        editor.style.left = `${screenX + 8 * cameraZoom}px`;
+        editor.style.top = `${screenY + 6 * cameraZoom}px`;
+        editor.style.width = `${(n.w - 16) * cameraZoom}px`;
+        editor.style.height = `${(n.h - 12) * cameraZoom}px`;
+        const fontSize = n.isRoot ? 20 : 16;
+        editor.style.fontSize = `${fontSize * cameraZoom}px`;
+        editor.style.display = 'block';
+        editor.focus(); editor.select();
+    }
+    function hideEditor(){ editor.style.display = 'none'; }
+    function hideContextMenu() { contextMenu.style.display = 'none'; contextNode = null; }
+
+    function addRoot(){
+        const pos = getEventLocation({clientX: wrap.clientWidth/2, clientY: wrap.clientHeight/2});
+        const n = makeNode('Hoofdgedachte', pos.x - 80, pos.y - 22, true);
+        nodes.push(n); select(n); setDirty(true); draw(); showEditor(n);
+    }
+    function addChildTo(parent){
+        const n = makeNode('Idee', parent.x + parent.w + 60, parent.y, false);
+        nodes.push(n); parent.children.push(n.id); select(n); setDirty(true); draw(); showEditor(n);
+    }
+    
+    // --- Event Listeners ---
+    new ResizeObserver(deviceResize).observe(wrap);
+
+    stage.addEventListener('pointerdown', (e)=>{
+        hideContextMenu();
+        const pos = getEventLocation(e);
+        const n = nodeAt(pos.x, pos.y);
+        if (isConnectMode && n) {
+            isConnecting = true; window.isConnecting = true;
+            connectFrom = n; window.connectFrom = n;
+            return;
+        }
+        if(n){
+            select(n);
+            isDraggingNode = true;
+            dragOff = { x: pos.x - n.x, y: pos.y - n.y };
+        }else{
+            select(null);
+            isDraggingCanvas = true;
+            stage.classList.add('grabbing');
+            dragStart = { x: e.clientX, y: e.clientY };
+        }
+    });
+
+    window.addEventListener('pointermove', (e)=>{
+        const pos = getEventLocation(e);
+        mousePos = pos;
+        hoverNode = nodeAt(pos.x,pos.y);
+        if (isConnecting) {
+            draw();
+            return;
+        }
+        if(isDraggingNode && selected){
+            selected.x = pos.x - dragOff.x; selected.y = pos.y - dragOff.y; setDirty(true);
+        } else if (isDraggingCanvas) {
+            cameraOffset.x += (e.clientX - dragStart.x) / cameraZoom;
+            cameraOffset.y += (e.clientY - dragStart.y) / cameraZoom;
+            dragStart = { x: e.clientX, y: e.clientY };
+        }
+        draw();
+    });
+
+    window.addEventListener('pointerup', (e)=>{
+        if(isConnecting && connectFrom){
+            const pos = getEventLocation(e);
+            const targetNode = nodeAt(pos.x, pos.y);
+            if(targetNode && targetNode !== connectFrom && !connectFrom.children.includes(targetNode.id)){
+                connectFrom.children.push(targetNode.id);
+                setDirty(true);
+                save();
+            }
+            isConnecting = false; window.isConnecting = false;
+            connectFrom = null; window.connectFrom = null;
+            if (isConnectMode) {
+                isConnectMode = false;
+                connectModeBtn.classList.remove('active');
+                stage.classList.remove('connecting');
+            }
+            draw();
+        }
+        if (isDraggingNode && isDirty) save();
+        isDraggingNode = false;
+        isDraggingCanvas = false;
+        stage.classList.remove('grabbing');
+    });
+    
+    stage.addEventListener('wheel', (e) => { e.preventDefault(); const zoomAmount = e.deltaY * SCROLL_SENSITIVITY; cameraZoom = Math.max(MIN_ZOOM, Math.min(cameraZoom - zoomAmount, MAX_ZOOM)); draw(); });
+    stage.addEventListener('dblclick', (e)=>{ const pos = getEventLocation(e); const n = nodeAt(pos.x, pos.y); if(n){ select(n); showEditor(n); } });
+    stage.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const n = nodeAt(getEventLocation(e).x, getEventLocation(e).y);
+        if (n) {
+            contextNode = n;
+            contextMenu.style.left = `${e.clientX}px`;
+            contextMenu.style.top = `${e.clientY}px`;
+            contextMenu.style.display = 'block';
+            iconInput.value = n.icon || '';
+        } else {
+            hideContextMenu();
+        }
+    });
+
+    editor.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); editor.blur(); } if(e.key==='Escape'){ hideEditor(); select(null); } });
+    editor.addEventListener('blur', ()=>{
+        if(!selected) return hideEditor();
+        const v = editor.value.trim();
+        if(v){ 
+            selected.text = v;
+            updateNodeWidth(selected);
+            setDirty(true); draw(); save(); 
+        } else {
+            nodes.forEach(n=> n.children = n.children.filter(id=>id!==selected.id));
+            nodes = nodes.filter(n=> n!==selected);
+            select(null); setDirty(true); draw(); save();
+        }
+        hideEditor();
+    });
+    
+    window.addEventListener('keydown', (e)=>{
+        if (document.activeElement === editor || contextNode) return;
+        if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); save(); }
+        if((e.key==='Delete' || e.key === 'Backspace') && selected){
+            nodes.forEach(n=> n.children = n.children.filter(id=>id!==selected.id));
+            nodes = nodes.filter(n=> n!==selected);
+            select(null); setDirty(true); draw(); save();
+        }
+        if(e.key.toLowerCase()==='a' && !e.ctrlKey && !e.metaKey){ addRoot(); }
+        if(e.key==='Tab' && selected){ e.preventDefault(); addChildTo(selected); }
+    });
+
+    addRootBtn.addEventListener('click', addRoot);
+    addChildBtn.addEventListener('click', ()=>{ if(!selected) return; addChildTo(selected); });
+    clearBtn.addEventListener('click', ()=>{ if(confirm('Weet je zeker dat je alles wilt wissen?')){ nodes = []; select(null); setDirty(true); draw(); save(); } });
+    saveBtn.addEventListener('click', save);
+
+    connectModeBtn.addEventListener('click', () => {
+        isConnectMode = !isConnectMode;
+        connectModeBtn.classList.toggle('active', isConnectMode);
+        stage.classList.toggle('connecting', isConnectMode);
+        if (!isConnectMode) {
+            isConnecting = false; window.isConnecting = false;
+            connectFrom = null; window.connectFrom = null;
+        }
+    });
+
+    contextMenu.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('click', hideContextMenu);
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            if(contextNode) {
+                contextNode.color = swatch.dataset.color;
+                setDirty(true); save(); draw();
+            }
+            hideContextMenu();
+        });
+    });
+    iconInput.addEventListener('change', () => {
+        if(contextNode) {
+            contextNode.icon = iconInput.value.trim() || null;
+            updateNodeWidth(contextNode);
+            setDirty(true); save(); draw();
+        }
+    });
+    iconClearBtn.addEventListener('click', () => {
+        iconInput.value = '';
+        iconInput.dispatchEvent(new Event('change'));
+        hideContextMenu();
+    });
+
+    themeBtn.addEventListener('click', ()=>{
+        const newTheme = root.classList.contains('dark') ? 'light' : 'dark';
+        applyTheme(newTheme);
+        localStorage.setItem(THEME_KEY, newTheme);
+        draw();
+    });
+
+    shareBtn.addEventListener('click', () => {
+        if (nodes.length === 0) {
+            alert('Kan geen lege mindmap delen.');
+            return;
+        }
+        const hash = encodeNodesForHash(nodes);
+        const url = `${window.location.origin}${window.location.pathname}#${hash}`;
+        navigator.clipboard.writeText(url).then(() => {
+            const originalTooltip = shareBtn.dataset.tooltip;
+            shareBtn.dataset.tooltip = 'Link gekopieerd!';
+            setTimeout(() => {
+                shareBtn.dataset.tooltip = originalTooltip;
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy URL: ', err);
+            alert('Kon de link niet naar het klembord kopiëren.');
+        });
+    });
+    
+    exportBtn.addEventListener('click', ()=>{
+        if(nodes.length===0) return;
+        const temp = document.createElement('canvas'); const pad = 40;
+        const minX = Math.min(...nodes.map(n=>n.x)); const minY = Math.min(...nodes.map(n=>n.y));
+        const maxX = Math.max(...nodes.map(n=>n.x+n.w)); const maxY = Math.max(...nodes.map(n=>n.y+n.h));
+        const w = Math.ceil(maxX - minX + pad*2); const h = Math.ceil(maxY - minY + pad*2);
+        temp.width = w * dpr; temp.height = h * dpr;
+        const tctx = temp.getContext('2d');
+        tctx.scale(dpr,dpr);
+
+        const styles = getComputedStyle(document.documentElement);
+        tctx.fillStyle = styles.getPropertyValue('--surface');
+        tctx.fillRect(0,0,w,h);
+
+        for(const n of nodes){ for(const id of n.children){ const c=nodes.find(x=>x.id===id); if(c) { drawBezierConnection(tctx, n.x-minX+pad+n.w/2, n.y-minY+pad+n.h/2, c.x-minX+pad+c.w/2, c.y-minY+pad+c.h/2, styles.getPropertyValue('--outline'), 2);}}}
+
+        function rr(ctx2,x,y,w,h,r){ ctx2.beginPath(); const rr2=Math.min(r,w/2,h/2); ctx2.moveTo(x+rr2,y); ctx2.arcTo(x+w,y,x+w,y+h,rr2); ctx2.arcTo(x+w,y+h,x,y+h,rr2); ctx2.arcTo(x,y+h,x,y,rr2); ctx2.arcTo(x,y,x+w,y,rr2); ctx2.closePath(); }
+        for(const n of nodes){
+            const x=n.x-minX+pad, y=n.y-minY+pad;
+            let fill, textColor;
+            if (n.color && n.color !== 'default') {
+                fill = styles.getPropertyValue(`--${n.color}-container`);
+                textColor = styles.getPropertyValue(`--on-${n.color}-container`);
+            } else {
+                fill = n.isRoot ? styles.getPropertyValue('--primary-container') : styles.getPropertyValue('--secondary-container');
+                textColor = n.isRoot ? styles.getPropertyValue('--on-primary-container') : styles.getPropertyValue('--on-secondary-container');
+            }
+            
+            rr(tctx,x,y,n.w,n.h,12);
+            tctx.fillStyle = fill.trim(); tctx.fill(); tctx.lineWidth = 1.25; tctx.strokeStyle = styles.getPropertyValue('--outline').trim(); tctx.stroke();
+            
+            tctx.fillStyle = textColor.trim();
+            tctx.textBaseline='middle';
+            tctx.textAlign='center';
+            
+            const textFontSize = n.isRoot ? 20 : 16;
+            tctx.font = `500 ${textFontSize}px 'Google Sans Text', sans-serif`;
+            if (n.icon) {
+                const iconFontSize = n.isRoot ? 20 : 18;
+                const textWidth = tctx.measureText(n.text).width;
+                const totalContentWidth = textWidth + iconFontSize + 4;
+                const startX = x + n.w / 2 - totalContentWidth / 2;
+                
+                tctx.font = `${iconFontSize}px 'Material Symbols Outlined'`;
+                tctx.fillText(n.icon, startX + iconFontSize / 2, y + n.h / 2);
+                
+                tctx.font = `500 ${textFontSize}px 'Google Sans Text', sans-serif`;
+                tctx.textAlign = 'left';
+                tctx.fillText(n.text, startX + iconFontSize + 4, y + n.h / 2);
+            } else {
+                tctx.fillText(n.text, x+n.w/2, y+n.h/2);
+            }
+        }
+        const a = document.createElement('a');
+        a.href = temp.toDataURL('image/png'); a.download = 'mindmap.png'; a.click();
+    });
+
+    // Initial load for editor
+    deviceResize();
+    load();
+  }
+})();
+</script>
+</body>
+</html>

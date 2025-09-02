@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Planner Pagina</title>
+    <link rel="stylesheet" href="/style.css">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <!-- Google Fonts Import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header p { color: var(--on-surface-variant); }
+
+        .calendar-container {
+            border: 1px solid var(--outline-variant);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--surface);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--outline-variant);
+        }
+        .calendar-header h3 { font-size: 1.5rem; text-align: center; flex-grow: 1; }
+        .nav-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+        .nav-button:hover { background-color: var(--surface-variant); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .weekday-header { text-align: center; padding: 0.75rem 0; font-weight: 500; color: var(--on-surface-variant); }
+        .calendar-day {
+            border-top: 1px solid var(--outline-variant);
+            border-left: 1px solid var(--outline-variant);
+            padding: 0.5rem;
+            min-height: 120px;
+        }
+        .calendar-day:nth-child(7n+1) { border-left: none; }
+        .calendar-day.other-month .day-number { color: var(--on-surface-variant); }
+        .day-number { font-weight: 500; }
+        .calendar-day.today .day-number {
+            background-color: var(--primary);
+            color: var(--on-primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .events-container { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 4px; }
+        .event-item { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; overflow: hidden; }
+        .event-toets { background-color: var(--error-container); color: var(--on-error-container); }
+        .event-taak { background-color: var(--tertiary-container); color: var(--on-tertiary-container); }
+        .event-project { background-color: var(--secondary-container); color: var(--on-secondary-container); }
+        .event-huiswerk { background-color: var(--primary-container); color: var(--on-primary-container); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item active"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Nieuw Item</span>
+                </a>
+                <button id="collapse-btn" class="button">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div id="planner-page">
+                <header class="header">
+                    <div>
+                        <h2>Planner</h2>
+                        <p>Plan hier je toetsen en taken in een overzichtelijke kalender.</p>
+                    </div>
+                    <a href="/nieuw-item" class="button">
+                        <i data-lucide="plus"></i>
+                        Nieuw Item
+                    </a>
+                </header>
+
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month-btn" class="nav-button" aria-label="Vorige maand">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <h3 id="month-year-header"></h3>
+                        <button id="next-month-btn" class="nav-button" aria-label="Volgende maand">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                    <div class="calendar-grid" id="weekday-headers">
+                        <div class="weekday-header">Ma</div>
+                        <div class="weekday-header">Di</div>
+                        <div class="weekday-header">Wo</div>
+                        <div class="weekday-header">Do</div>
+                        <div class="weekday-header">Vr</div>
+                        <div class="weekday-header">Za</div>
+                        <div class="weekday-header">Zo</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-body">
+                        <!-- Calendar days will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        
+    </script>
+</body>
+</html>

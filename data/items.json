@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "AK SO",
+    "date": "2025-09-25",
+    "type": "toets",
+    "vak": "Aarderijkskunde"
+  },
+  {
+    "id": 2,
+    "title": "taak test",
+    "date": "2025-08-28",
+    "type": "taak",
+    "vak": "Nederlands"
+  },
+  {
+    "id": 3,
+    "title": "Wiskunde Proefwerk",
+    "date": "2025-09-19",
+    "type": "toets",
+    "vak": "Wiskunde"
+  },
+  {
+    "id": 4,
+    "title": "Boek regelen nederlands",
+    "date": "2025-09-02",
+    "type": "taak",
+    "vak": "Nederlands"
+  }
+]
