@@ -1,45 +1,45 @@
 {
   "currentDate": "2025-09-02T18:15:28.277Z",
-  "startDate": "2025-09-02T18:26:51.685Z",
-  "endDate": "2025-09-12T00:00:00.000Z",
+  "startDate": "2025-11-11T00:00:00.000Z",
+  "endDate": "2025-11-20T00:00:00.000Z",
   "plannedItems": {
-    "2025-09-02": {
+    "2025-11-11": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-03": {
+    "2025-11-12": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-04": {
+    "2025-11-13": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-05": {
+    "2025-11-14": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-06": {
+    "2025-11-15": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-07": {
+    "2025-11-16": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-08": {
+    "2025-11-17": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-09": {
+    "2025-11-18": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-10": {
+    "2025-11-19": {
       "tasks": [],
       "testSubject": null
     },
-    "2025-09-11": {
+    "2025-11-20": {
       "tasks": [],
       "testSubject": null
     }

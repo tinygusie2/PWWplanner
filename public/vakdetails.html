@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/ico.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         .page-layout {
@@ -142,7 +143,12 @@
                 : '<p>Geen bestanden voor dit vak.</p>';
 
             const wordlistsHtml = subject.wordlists && subject.wordlists.length > 0
-                ? subject.wordlists.map(list => `<a href="/woordjes-leren.html?subjectId=${subject.id}&listName=${encodeURIComponent(list.name)}" class="m3-nav-item" style="display: block; margin-bottom: 8px;">${list.name}</a>`).join('')
+                ? subject.wordlists.map(list => `
+                    <div class="wordlist-item flex justify-between items-center">
+                        <a href="/woordjes-leren.html?subjectId=${subject.id}&listName=${encodeURIComponent(list.name)}" class="m3-nav-item flex-grow">${list.name}</a>
+                        <button class="delete-wordlist-btn button button-danger" data-list-name="${list.name}"><span class="material-symbols-outlined">delete</span></button>
+                    </div>
+                `).join('')
                 : '<p>Geen woordenlijsten voor dit vak.</p>';
 
             container.innerHTML = `
@@ -188,17 +194,22 @@
 
             const stofTextarea = document.getElementById('subject-stof');
             
-            const savedStof = localStorage.getItem('stof-' + subjectId);
-            if (savedStof) {
-                stofTextarea.value = savedStof;
+            // Load existing stof from the subject data
+            if (subject.stof) {
+                stofTextarea.value = subject.stof;
             }
 
             let saveTimeout;
             stofTextarea.addEventListener('input', () => {
                 clearTimeout(saveTimeout);
-                saveTimeout = setTimeout(() => {
-                    localStorage.setItem('stof-' + subjectId, stofTextarea.value);
-                    showToast('Stof opgeslagen!');
+                saveTimeout = setTimeout(async () => {
+                    try {
+                        await saveStofForSubject(subjectId, stofTextarea.value);
+                        showToast('Stof opgeslagen.');
+                    } catch (error) {
+                        console.error('Fout bij opslaan van stof:', error);
+                        showToast('Fout bij opslaan.');
+                    }
                 }, 500);
             });
         });
@@ -208,6 +219,29 @@
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+        // Add event listener for delete buttons
+        eventListeners();
+        
+        function eventListeners() {
+            document.querySelectorAll('.delete-wordlist-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const listName = e.target.dataset.listName;
+                    if (confirm(`Weet je zeker dat je de woordenlijst "${listName}" wilt verwijderen?`)) {
+                        try {
+                            const response = await fetch(`/api/subjects/${subjectId}/wordlists/${encodeURIComponent(listName)}`, {
+                                method: 'DELETE'
+                            });
+                            if (!response.ok) throw new Error('Verwijderen mislukt');
+                            showToast('Woordenlijst verwijderd.');
+                            // Reload the page to update the list
+                            location.reload();
+                        } catch (error) {
+                            showToast('Fout bij verwijderen: ' + error.message);
+                        }
+                    }
+                });
+            });
         }
     </script>
 </body>

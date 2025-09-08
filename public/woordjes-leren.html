@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Woordjesleren - Woordjes Leren</title>
-    
+    <link rel="icon" href="/ico.svg" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -347,6 +347,8 @@
         let currentMode = 'upload';
         let isLoadedFromURL = false;
         let allWordLists = []; // Cache for search
+        let currentSubjectId = null;
+        let currentListName = null;
 
         // Flashcards state
         let knownWords = [];
@@ -494,6 +496,10 @@
             originalStudySet = [...studySet]; // Update original set as well
             alert('Woordenlijst opgeslagen!');
             showView('flashcards'); // Go back to flashcards after saving
+
+            if (currentSubjectId && currentListName) {
+                saveEditedWordList();
+            }
         });
 
         const processWordList = () => {
@@ -1328,6 +1334,38 @@
             `).join('');
         }
 
+        async function saveEditedWordList() {
+            try {
+                const subjectsResponse = await fetch('/api/subjects');
+                if (!subjectsResponse.ok) throw new Error('Kon vakken niet ophalen.');
+                const subjects = await subjectsResponse.json();
+                const subjectToUpdate = subjects.find(s => s.id === parseInt(currentSubjectId));
+                if (!subjectToUpdate) throw new Error('Geselecteerde vak niet gevonden.');
+                
+                const listIndex = subjectToUpdate.wordlists.findIndex(l => l.name === currentListName);
+                if (listIndex === -1) throw new Error('Woordenlijst niet gevonden.');
+                
+                subjectToUpdate.wordlists[listIndex].words = studySet.map(({ term, definition }) => ({ term, definition }));
+                subjectToUpdate.wordlists[listIndex].termLang = termLanguage;
+                subjectToUpdate.wordlists[listIndex].defLang = definitionLanguage;
+                
+                const updateResponse = await fetch(`/api/subjects/${currentSubjectId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subjectToUpdate)
+                });
+                
+                if (!updateResponse.ok) {
+                    throw new Error('Opslaan op de server is mislukt.');
+                }
+                
+                console.log('Woordenlijst succesvol bijgewerkt op de server!');
+            } catch (error) {
+                console.error('Fout bij opslaan van bewerkte lijst:', error);
+                alert('Fout bij opslaan op de server: ' + error.message);
+            }
+        }
+
         // --- INITIALIZATION ---
         const init = () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1357,6 +1395,8 @@
                     strength: 0
                 }));
                 originalStudySet = [...studySet];
+                currentSubjectId = subjectId;
+                currentListName = listName;
                 
                 if (studySet.length > 0) {
                     createToolUI();

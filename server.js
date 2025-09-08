@@ -25,15 +25,24 @@ async function readJSON(filePath) {
     const data = await fs.readFile(filePath, 'utf8');
     return JSON.parse(data);
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      return []; // Return empty array if file doesn't exist
-    }
-    throw error;
-  }
+     if (error.code === 'ENOENT') {
+       console.warn(`File not found: ${filePath}. Initializing with empty array.`);
+       return []; // Return empty array if file doesn't exist
+     }
+     console.error(`Error reading JSON from ${filePath}:`, error);
+     throw error;
+   }
+
 }
 
 // Write JSON function
 async function writeJSON(filePath, data) {
+  try {
+     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+   } catch (error) {
+    console.error(`Error writing JSON to ${filePath}:`, error);
+    throw error;
+  }
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
@@ -43,6 +52,7 @@ app.get('/api/preferences', async (req, res) => {
     const preferences = await readJSON(preferencesPath);
     res.json(preferences);
   } catch (err) {
+    console.error('Error adding item:', err);
     res.status(500).json({ error: 'Error reading preferences' });
   }
 });
@@ -143,7 +153,14 @@ app.post('/api/items', async (req, res) => {
   try {
     const items = await readJSON(itemsPath);
     const maxId = items.reduce((max, item) => (item.id > max ? item.id : max), 0);
-    const newItem = { id: maxId + 1, ...req.body };
+    const newItem = {
+      id: maxId + 1,
+      title: req.body.title,
+      date: req.body.date,
+      type: req.body.type,
+      vak: req.body.vak,
+      reminder: req.body.reminder || 'none'
+    };
     items.push(newItem);
     await writeJSON(itemsPath, items);
     res.status(201).json(newItem);
@@ -301,6 +318,8 @@ app.get('/nieuw-item', (req, res) => {
 app.get('/study-planner', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dynamische-planner.html'));
 });
+
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

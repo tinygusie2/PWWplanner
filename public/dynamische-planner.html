@@ -196,6 +196,7 @@
                         <h2>Planning Werkruimte</h2>
                         <div style="display: flex; gap: 1rem;">
                             <button id="share-planner-btn" class="button"><span class="material-symbols-outlined">share</span>Delen</button>
+                            <button id="undo-btn" class="button" style="display: none;"><span class="material-symbols-outlined">undo</span>Ongedaan maken</button>
                             <button id="toggle-view-btn" class="button">
                                 <span class="material-symbols-outlined">check_circle</span>
                                 Klaar met plannen
@@ -433,7 +434,7 @@
 
                     // AANPASSING: De voorbeeldtekst "Hoofdstuk 1..." is verwijderd.
                     // Het script leest nu alleen de data die daadwerkelijk in localStorage is opgeslagen.
-                    const savedStof = localStorage.getItem('stof-' + subject.id) || '';
+                    const savedStof = subject.stof || '';
                     const stofItems = savedStof.split('\n').filter(line => line.trim() !== '');
 
                     let itemsHtml = '<p>Geen stof ingevoerd.</p>';

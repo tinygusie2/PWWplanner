@@ -2,7 +2,8 @@
   {
     "id": 1,
     "name": "Wiskunde",
-    "description": "Details over Wiskunde"
+    "description": "Details over Wiskunde",
+    "stof": ""
   },
   {
     "id": 2,
@@ -23,99 +24,132 @@
     "id": 5,
     "name": "Geschiedenis",
     "description": "details over Geschiedenis",
+    "stof": "",
     "wordlists": [
       {
-        "name": "PPK Klas 1",
+        "name": "PPK volledig",
         "termLang": "nl-NL",
         "defLang": "nl-NL",
         "words": [
           {
             "term": "Bron",
-            "definition": "Alles dat ons informatie geeft over het verleden."
+            "definition": "Alles dat ons informatie geeft over het verleden"
           },
           {
             "term": "Geschiedenis",
-            "definition": "De studie van het verleden."
+            "definition": "De studie van het verleden"
           },
           {
             "term": "Historie",
-            "definition": "De periode in het verleden waarin men het schrift had."
+            "definition": "De periode in het verleden waarin men het schrift had"
+          },
+          {
+            "term": "Kennis",
+            "definition": "Wat je weet of wat je geleerd hebt"
           },
           {
             "term": "Prehistorie",
-            "definition": "De periode waarin de mensen nog niet konden lezen en schrijven."
+            "definition": "De periode waarin de mensen nog niet konden lezen en schrijven"
+          },
+          {
+            "term": "Sleutelbegrip",
+            "definition": "Een belangrijk begrip"
+          },
+          {
+            "term": "Tijd van jagers en boeren",
+            "definition": "De periode tot 3000 v. Chr."
           },
           {
             "term": "Verleden",
-            "definition": "Dat wat geweest is."
+            "definition": "Dat wat geweest is"
           },
           {
             "term": "Chronologisch",
-            "definition": "Op volgorde van tijd. Een ordening van eerder naar later."
+            "definition": "Op volgorde van tijd. Een ordening van eerder naar later"
           },
           {
             "term": "Geschreven bron",
-            "definition": "Een bron die tekst bevat."
+            "definition": "Een bron die tekst bevat"
           },
           {
             "term": "Ongeschreven bron",
-            "definition": "Een bron zonder tekst."
+            "definition": "Een bron zonder tekst"
           },
           {
             "term": "Primaire bron",
-            "definition": "Een bron uit de tijd waarover je iets wilt weten."
+            "definition": "Een bron uit de tijd waarover je iets wilt weten"
+          },
+          {
+            "term": "Secundaire bron",
+            "definition": "Een bron over een bepaalde periode die later is gemaakt"
           },
           {
             "term": "Archeoloog",
-            "definition": "Mensen die het verleden bestuderen door niet-geschreven overblijfselen uit het verleden te onderzoeken en op te graven."
+            "definition": "Mensen die het verleden bestuderen door niet-geschreven overblijfselen te onderzoeken en op te graven"
           },
           {
             "term": "Grafgiften",
-            "definition": "Voorwerpen die met een dode worden begraven."
+            "definition": "Voorwerpen die met een dode worden begraven"
           },
           {
             "term": "Jager-verzamelaar",
-            "definition": "Mensen die leven van jagen en verzamelen."
+            "definition": "Mensen die leven van jagen en verzamelen"
           },
           {
             "term": "Middel van bestaan",
-            "definition": "Manier waarop mensen aan hun voedsel komen."
+            "definition": "Manier waarop mensen aan hun voedsel komen"
           },
           {
             "term": "Natuurgodsdienst",
-            "definition": "Godsdienst waarbij mensen geloven dat er speciale krachten zijn in de natuur die kunnen zorgen voor zaken als geluk en ongeluk."
+            "definition": "Godsdienst waarbij mensen geloven dat er speciale krachten zijn in de natuur die kunnen zorgen voor zaken als geluk en ongeluk"
           },
           {
             "term": "Nomaden",
-            "definition": "Mensen die geen vaste woonplaats hebben, maar rondtrekken."
+            "definition": "Mensen die geen vaste woonplaats hebben, maar rondtrekken"
           },
           {
             "term": "Akkerbouw",
-            "definition": "Het verbouwen van planten."
+            "definition": "Het verbouwen van planten"
+          },
+          {
+            "term": "Argument",
+            "definition": "Een reden of onderbouwing van je mening"
+          },
+          {
+            "term": "Feit",
+            "definition": "Iets waarvan je kan bewijzen of controleren dat het klopt"
           },
           {
             "term": "Landbouw",
-            "definition": "Het verbouwen van planten en het houden van tamme dieren."
+            "definition": "Het verbouwen van planten en het houden van tamme dieren"
+          },
+          {
+            "term": "Mening",
+            "definition": "Iets waarvan je zelf vindt dat het zo is"
           },
           {
             "term": "Veeteelt",
-            "definition": "Het houden van tamme dieren."
+            "definition": "Het houden van tamme dieren"
+          },
+          {
+            "term": "Aanzien",
+            "definition": "De wijze waarop mensen naar je kijken en je plaatsen op de sociale ladder"
           },
           {
             "term": "Sociale status",
-            "definition": "De plaats/positie die je inneemt in de samenleving."
+            "definition": "De plaats/positie die je inneemt in de samenleving"
           },
           {
             "term": "Sociale verschillen",
-            "definition": "Verschillen tussen rijk en arm in een samenleving."
+            "definition": "Verschillen tussen rijk en arm in een samenleving"
           },
           {
             "term": "Landbouwrevolutie",
-            "definition": "De overgang van jagers en verzamelaars naar een landbouwsamenleving."
+            "definition": "De overgang van jagers en verzamelaars naar een landbouwsamenleving"
           },
           {
             "term": "Landbouwsamenleving",
-            "definition": "Een groep mensen of gemeenschap voor wie landbouw het belangrijkste middel van bestaan is."
+            "definition": "Een gemeenschap waarin landbouw het belangrijkste middel van bestaan is"
           },
           {
             "term": "Vruchtbare Halve Maan",
@@ -123,810 +157,959 @@
           },
           {
             "term": "Ambacht",
-            "definition": "Beroep waarbij je producten maakt."
+            "definition": "Beroep waarbij je producten maakt"
           },
           {
             "term": "Ambtenaar",
-            "definition": "Iemand die voor de overheid of het bestuur werkt."
+            "definition": "Iemand die voor de overheid of het bestuur werkt"
           },
           {
             "term": "Bestuur",
-            "definition": "De groep mensen die de organisatie van een stad op zich neemt."
+            "definition": "De groep mensen die de organisatie van een stad op zich neemt"
           },
           {
             "term": "Farao",
-            "definition": "De hoogste en goddelijke leider van het Oude Egypte."
+            "definition": "De hoogste en goddelijke leider van het Oude Egypte"
           },
           {
             "term": "Handel",
-            "definition": "Beroep waarbij je reeds gemaakte producten verhandelt tegen andere producten of geld."
+            "definition": "Beroep waarbij je reeds gemaakte producten verhandelt tegen andere producten of geld"
           },
           {
             "term": "Irrigatielandbouw",
-            "definition": "Een vorm van landbouw waarbij je de gewassen water geeft door middel van een systeem van kanaaltjes."
+            "definition": "Een vorm van landbouw waarbij je de gewassen water geeft via kanaaltjes"
           },
           {
             "term": "Landbouwstedelijke samenleving",
-            "definition": "Een samenleving waarin landbouw het hoofdmiddel van bestaan is, maar waar ook andere beroepen aanwezig zijn (met name in de steden)."
+            "definition": "Samenleving waarin landbouw het hoofdmiddel van bestaan is, maar waar ook andere beroepen aanwezig zijn (met name in steden)"
           },
           {
             "term": "Specialisatie",
-            "definition": "Als de mensen niet meer bezig zijn met landbouw, maar zich richten op een ander beroep."
+            "definition": "Als mensen niet meer bezig zijn met landbouw, maar zich richten op een ander beroep"
+          },
+          {
+            "term": "Identiteit",
+            "definition": "Wie jij bent"
           },
           {
             "term": "Oudheid",
             "definition": "De tijd van Grieken en Romeinen, van 3000 v.Chr. tot 500 n.Chr."
           },
           {
+            "term": "Stadstaat",
+            "definition": "Een stad met een stuk landbouwgrond eromheen met een eigen bestuur, wetten en cultuur"
+          },
+          {
+            "term": "Tijd van Grieken en Romeinen",
+            "definition": "De periode van 3000 v.Chr. tot 500 n.Chr. in de geschiedenis van West-Europa"
+          },
+          {
             "term": "Bondgenoot",
-            "definition": "Bevriende (stad)staat die je steunt in tijden van oorlog."
+            "definition": "Bevriende (stad)staat die je steunt in tijden van oorlog"
+          },
+          {
+            "term": "Hellas",
+            "definition": "De Griekse naam voor de Griekse wereld"
           },
           {
             "term": "Kolonie",
-            "definition": "Een deel van een (stad)staat op een andere plek, vaak later gesticht of veroverd."
+            "definition": "Een deel van een (stad)staat op een andere plek, vaak later gesticht of veroverd"
           },
           {
             "term": "Olympische Spelen",
-            "definition": "Een Grieks sportfestijn ter ere van de oppergod Zeus."
+            "definition": "Grieks sportfestijn ter ere van de oppergod Zeus"
           },
           {
             "term": "Polis",
-            "definition": "Het Griekse woord voor stadstaat. Een stad met een stuk landbouwgrond eromheen met een eigen bestuur, eigen wetten en een eigen cultuur."
+            "definition": "Het Griekse woord voor stadstaat"
           },
           {
             "term": "Griekse mythologie",
-            "definition": "Alle Griekse godenverhalen bij elkaar."
+            "definition": "Alle Griekse godenverhalen bij elkaar"
           },
           {
-            "term": "Monotheïstisch",
-            "definition": "Geloof in één god."
+            "term": "Monotheïsme",
+            "definition": "Geloof in één god"
           },
           {
             "term": "Mythe",
-            "definition": "Een verhaal waar Griekse goden in voorkomen."
+            "definition": "Een verhaal waar Griekse goden in voorkomen"
           },
           {
             "term": "Orakel",
-            "definition": "Een priester(es) die contact had met de goden en namens hen antwoorden kon geven op vragen."
+            "definition": "Priester(es) die namens de goden antwoorden gaf op vragen"
           },
           {
-            "term": "Polytheïstisch",
-            "definition": "Geloof in meerdere goden."
+            "term": "Polytheïsme",
+            "definition": "Geloof in meerdere goden"
           },
           {
             "term": "Filosofie",
-            "definition": "Letterlijk: ‘liefde voor de wijsheid’. Wetenschap in de tijd van de Grieken."
+            "definition": "Letterlijk: ‘liefde voor wijsheid’. Wetenschap in de tijd van de Grieken"
           },
           {
             "term": "Alleenheerser",
-            "definition": "Iemand die alleen de macht heeft in een (stad)staat."
+            "definition": "Iemand die alleen de macht heeft in een (stad)staat"
           },
           {
             "term": "Aristocratie",
-            "definition": "Bestuursvorm waarbij een kleine groep van rijke en goed opgeleide mensen de macht heeft."
+            "definition": "Bestuursvorm waarbij een kleine groep rijke en goed opgeleide mensen de macht heeft"
           },
           {
             "term": "Bestuursvorm",
-            "definition": "Manier om een land te besturen."
+            "definition": "Manier om een land te besturen"
           },
           {
             "term": "Democratie",
-            "definition": "Letterlijk: ‘volksmacht’. Een bestuursvorm waarbij de burgers van een (stad)staat mogen stemmen."
+            "definition": "Letterlijk: ‘volksmacht’. Een bestuursvorm waarbij burgers mogen stemmen"
           },
           {
             "term": "Monarchie",
-            "definition": "Bestuursvorm waarbij één persoon de macht heeft. Deze persoon is de koning."
+            "definition": "Bestuursvorm waarbij één persoon de macht heeft: de koning"
+          },
+          {
+            "term": "Tiran",
+            "definition": "Alleenheerser die vaak met geweld de macht greep"
           },
           {
             "term": "Tirannie",
-            "definition": "Bestuursvorm waarbij een tiran de macht heeft."
+            "definition": "Bestuursvorm waarbij een tiran de macht heeft"
+          },
+          {
+            "term": "Burger",
+            "definition": "Inwoner van een (stad)staat met burgerrechten"
           },
           {
             "term": "Burgerrechten",
-            "definition": "Rechten die burgers in een polis of land hebben."
+            "definition": "Rechten die burgers van een (stad)staat hebben"
           },
           {
             "term": "Directe democratie",
-            "definition": "Een vorm van democratie waarbij alle burgers zelf stemmen over het aannemen van wetten en het benoemen van bestuurders."
+            "definition": "Een democratie waarbij alle burgers zelf stemmen"
           },
           {
             "term": "Indirecte democratie",
-            "definition": "Een vorm van democratie waarbij de burgers door te stemmen volksvertegenwoordigers kiezen."
+            "definition": "Een democratie waarbij burgers volksvertegenwoordigers kiezen"
           },
           {
             "term": "Schervengericht",
-            "definition": "Een stemming in de Atheense volksvergadering waarin burgers de naam van een leider die ze te machtig vonden op een scherf konden krassen. De persoon die het meeste voorkwam op de scherven werd dan voor 10 jaar uit de stad gestuurd."
+            "definition": "Stemming in Athene waarbij een te machtige leider 10 jaar werd verbannen"
           },
           {
             "term": "Volksvergadering",
-            "definition": "Bijeenkomst van burgers die meebeslissen in het bestuur van een (stad)staat."
+            "definition": "Bijeenkomst van burgers die meebeslissen in het bestuur"
           },
           {
             "term": "Volksvertegenwoordigers",
-            "definition": "Mensen die namens het volk spreken in de politiek en voor of tegen wetten stemmen."
+            "definition": "Mensen die namens het volk spreken in de politiek"
           },
           {
             "term": "Gladiatoren",
-            "definition": "Romeinen die vochten om publiek te vermaken. Gladiatoren waren slaven."
+            "definition": "Romeinen die vochten om publiek te vermaken. Gladiatoren waren slaven"
           },
           {
             "term": "Grieks-Romeinse cultuur",
-            "definition": "Een mengeling van de Griekse en Romeinse kunst, wetenschap en godsdienst."
+            "definition": "Een mengeling van de Griekse en Romeinse kunst, wetenschap en godsdienst"
           },
           {
             "term": "Imperium Romanum",
-            "definition": "De Latijnse naam voor het Romeinse Rijk."
+            "definition": "De Latijnse naam voor het Romeinse Rijk"
+          },
+          {
+            "term": "Mare Nostrum",
+            "definition": "De naam die de Romeinen gaven aan de Middellandse Zee nadat ze (bijna) alle gebieden hadden veroverd. Letterlijk: ‘onze zee’"
+          },
+          {
+            "term": "Ondernemen",
+            "definition": "Een eigen bedrijf beginnen"
+          },
+          {
+            "term": "Succes",
+            "definition": "Bereiken wat je wilt bereiken"
           },
           {
             "term": "Germanen",
-            "definition": "De naam die de Romeinen hebben gegeven aan de verschillende stammen die in hun tijd leefden in het moderne Nederland en Duitsland."
+            "definition": "De naam die de Romeinen hebben gegeven aan de verschillende stammen in het huidige Nederland en Duitsland"
           },
           {
             "term": "Limes",
-            "definition": "De versterkte grens van het Romeinse Rijk."
+            "definition": "De versterkte grens van het Romeinse Rijk"
           },
           {
             "term": "Romanisering",
-            "definition": "Het verspreiden van de Grieks- Romeinse cultuur door het hele Romeinse Rijk."
+            "definition": "Het verspreiden van de Grieks-Romeinse cultuur door het hele rijk"
           },
           {
             "term": "Tijd- en plaatsgebondenheid",
-            "definition": "Dat de tijd en plaats waarin jij leeft, invloed heeft op hoe jij denkt."
+            "definition": "Dat de tijd en plaats waarin jij leeft, invloed heeft op hoe jij denkt"
           },
           {
             "term": "Amfitheater",
-            "definition": "Een rond theater met tribunes."
+            "definition": "Een rond theater met tribunes"
+          },
+          {
+            "term": "Aquaduct",
+            "definition": "Een waterleiding waarmee Romeinen water naar lager gelegen steden brachten"
           },
           {
             "term": "Burgeroorlog",
-            "definition": "Een oorlog tussen de inwoners van een land of rijk."
+            "definition": "Een oorlog tussen de inwoners van een land of rijk"
           },
           {
             "term": "Consul",
-            "definition": "De hoogste baan in de Romeinse republiek."
+            "definition": "De hoogste baan in de Romeinse republiek"
           },
           {
             "term": "Dictator",
-            "definition": "Iemand die als enige de macht heeft in een land of rijk."
+            "definition": "Iemand die als enige de macht heeft in een land of rijk"
           },
           {
             "term": "Forum Romanum",
-            "definition": "Centraal plein in het oude Rome waar de gebouwen stonden die gebruikt werden om het rijk te besturen."
+            "definition": "Centraal plein in Rome waar de belangrijkste bestuursgebouwen stonden"
           },
           {
             "term": "Republiek",
-            "definition": "Een staat zonder koning of koningin."
+            "definition": "Een staat zonder koning of koningin"
           },
           {
             "term": "Senaat",
-            "definition": "Groep van rijke en belangrijke Romeinen die meepraatten in het bestuur van de Romeinse Republiek."
+            "definition": "Groep van rijke en belangrijke Romeinen die meepraatten in het bestuur"
+          },
+          {
+            "term": "Senator",
+            "definition": "Iemand die lid is van de senaat"
+          },
+          {
+            "term": "Thermen",
+            "definition": "Romeinse badhuizen"
+          },
+          {
+            "term": "Volksvergadering",
+            "definition": "Groep gewone Romeinen die meepraatten in het bestuur"
           },
           {
             "term": "Adel",
-            "definition": "Een groep rijke en machtige families die vroeger speciale voorrechten hadden."
+            "definition": "Groep rijke en machtige families die vroeger speciale voorrechten hadden"
+          },
+          {
+            "term": "Kruisigen",
+            "definition": "Iemand ter dood brengen door hem of haar op te hangen aan een kruis"
           },
           {
             "term": "Patriciërs",
-            "definition": "Een groep rijke en machtige families in het Romeinse Rijk."
+            "definition": "Rijke en machtige families in het Romeinse Rijk"
           },
           {
             "term": "Plebejer",
-            "definition": "Inwoners van het Romeinse Rijk die geen patriciërs waren en geen slaven."
+            "definition": "Inwoner van het Romeinse Rijk die geen patriciër of slaaf was"
           },
           {
             "term": "Proletariërs",
-            "definition": "Verarmde boeren uit het Romeinse Rijk die naar de stad zijn getrokken om daar werk te vinden. Zij hadden geen bezit, alleen kinderen (proles = kinderen)."
+            "definition": "Verarmde boeren die naar de stad trokken en geen bezit hadden, alleen kinderen"
           },
           {
             "term": "Keizer",
-            "definition": "De hoogst mogelijke titel voor een vorst. Het woord komt van ‘Caesar’."
+            "definition": "De hoogst mogelijke titel voor een vorst. Komt van ‘Caesar’"
           },
           {
             "term": "Pax Romana",
-            "definition": "Letterlijk: ‘Romeinse Vrede’. Een periode van vrede en welvaart in het Romeinse Rijk."
+            "definition": "Letterlijk: ‘Romeinse Vrede’. Een periode van vrede en welvaart in het Romeinse Rijk"
           },
           {
             "term": "Apostelen",
-            "definition": "Leerlingen van Jezus van Nazareth die zijn ideeën verspreidden."
+            "definition": "Leerlingen van Jezus van Nazareth die zijn ideeën verspreidden"
           },
           {
             "term": "Christendom",
-            "definition": "Monotheïstisch geloof, ontstaan rond 30 n.Chr. in het Midden-Oosten, waarin Jezus van Nazareth (‘Christus’) gezien wordt als messias."
+            "definition": "Monotheïstisch geloof dat ontstond rond 30 n.Chr. waarin Jezus Christus als messias wordt gezien"
           },
           {
             "term": "Jodendom",
-            "definition": "Monotheïstisch geloof, ontstaan rond 1750 v.Chr. in het Midden-Oosten, waarin de aanhangers geloven in de komst van een messias."
+            "definition": "Monotheïstisch geloof, ontstaan rond 1750 v.Chr., met verwachting van een messias"
+          },
+          {
+            "term": "Messias",
+            "definition": "Iemand die door God gestuurd is om de mensen te verlossen"
           },
           {
             "term": "Profeet",
-            "definition": "Boodschapper van God."
+            "definition": "Boodschapper van God"
           },
           {
             "term": "Staatsgodsdienst",
-            "definition": "De officiële godsdienst van een land."
+            "definition": "De officiële godsdienst van een land"
           },
           {
             "term": "Vervolgen",
-            "definition": "Een groep onderdrukken of doden."
+            "definition": "Een groep onderdrukken of doden"
           },
           {
             "term": "Volksverhuizingen",
-            "definition": "De verhuizing van een heel volk als gevolg van een oorlog of een hongersnood."
+            "definition": "De verhuizing van een heel volk als gevolg van oorlog of hongersnood"
+          },
+          {
+            "term": "Adel",
+            "definition": "Een groep mensen die landgoederen bezit en een machtige positie heeft. In de tijd van monniken en ridders moesten zij vechten en beschermen"
+          },
+          {
+            "term": "Boerenstand",
+            "definition": "Een groep mensen die boer was. Hun taak was zorgen voor eten"
           },
           {
             "term": "Centraal bestuur",
-            "definition": "De organisatie van het bestuur vanuit één vaste plaats."
+            "definition": "De organisatie van het bestuur vanuit één vaste plaats"
           },
           {
             "term": "Geestelijkheid",
-            "definition": "De groep mensen die voor de kerk werkt. In de tijd van monniken en ridders was het de taak van deze groep om voor iedereen te bidden."
+            "definition": "De groep mensen die voor de kerk werkt. Hun taak was voor iedereen bidden"
+          },
+          {
+            "term": "Keizer",
+            "definition": "De hoogst mogelijke titel voor een vorst, boven andere vorsten zoals koningen en hertogen. Komt van Caesar"
+          },
+          {
+            "term": "Macht",
+            "definition": "Invloed die iemand heeft op anderen"
           },
           {
             "term": "Standenmaatschappij",
-            "definition": "Een samenleving die is verdeeld in groepen (standen) die ieder hun eigen rechten en taken hebben."
+            "definition": "Een samenleving die is verdeeld in standen, met elk hun eigen rechten en taken"
+          },
+          {
+            "term": "Symbool",
+            "definition": "Een betekenisdrager: iets tastbaars dat iets minder tastbaars voorstelt"
+          },
+          {
+            "term": "Tijd van monniken en ridders",
+            "definition": "Het tijdvak 500–1000, ook wel vroege middeleeuwen"
+          },
+          {
+            "term": "Vroege middeleeuwen",
+            "definition": "De naam voor de periode 500–1000"
           },
           {
             "term": "Byzantijnse Rijk",
-            "definition": "Benaming voor het Oost-Romeinse Rijk na de val van het West-Romeinse Rijk."
+            "definition": "Benaming voor het Oost-Romeinse Rijk na de val van het West-Romeinse Rijk"
           },
           {
             "term": "Franken",
-            "definition": "Germaans volk dat vanaf de 5e eeuw een eigen koninkrijk had."
+            "definition": "Germaans volk dat vanaf de 5e eeuw een eigen koninkrijk had"
           },
           {
             "term": "Paus",
-            "definition": "Leider van de katholieke kerk."
+            "definition": "Leider van de katholieke kerk"
+          },
+          {
+            "term": "Saksen",
+            "definition": "Germaans volk"
           },
           {
             "term": "Bondgenootschap",
-            "definition": "Afspraak tussen landen of mensen die elkaar steun beloven."
+            "definition": "Afspraak tussen landen of mensen die elkaar steun beloven"
           },
           {
             "term": "Huwelijkspolitiek",
-            "definition": "Het inzetten van huwelijken om bezit van grondgebied te vergroten of bondgenoten te krijgen."
+            "definition": "Het inzetten van huwelijken om bezit of bondgenoten te krijgen"
           },
           {
-            "term": "Achterleenmannen",
-            "definition": "Leenman van een leenman van de koning of keizer."
+            "term": "Achterleenman",
+            "definition": "Leenman van een leenman van de koning of keizer"
           },
           {
             "term": "Domein",
-            "definition": "Een afgebakend stuk land met een dorpje en landbouwgrond."
+            "definition": "Een afgebakend stuk land met een dorp en landbouwgrond"
+          },
+          {
+            "term": "Eed van trouw",
+            "definition": "De plechtige belofte om iemand trouw te blijven"
           },
           {
             "term": "Leen",
-            "definition": "Een stuk land dat een leenman van een leenheer kreeg. Een leen bestond uit één of meerdere domeinen."
+            "definition": "Een stuk land dat een leenman van een leenheer kreeg"
           },
           {
             "term": "Leenheer",
-            "definition": "De edelman die gebieden onder zijn gezag laat besturen door leenmannen."
+            "definition": "Edelman die gebieden laat besturen door leenmannen"
           },
           {
             "term": "Leenman",
-            "definition": "Een edelman die een gebied bestuur in opdracht van een leenheer."
+            "definition": "Edelman die een gebied bestuurt in opdracht van een leenheer"
           },
           {
             "term": "Autarkisch",
-            "definition": "Zelfvoorzienend. Als alles wat nodig is om te leven door de mensen zelf wordt gemaakt."
+            "definition": "Zelfvoorzienend. Alles wat nodig is wordt door de mensen zelf gemaakt"
+          },
+          {
+            "term": "Drieslagstelsel",
+            "definition": "Landbouwmethode met zomergraan, wintergraan en braakligging"
           },
           {
             "term": "Herendiensten",
-            "definition": "Klussen die horige boeren voor hun heer moesten doen."
+            "definition": "Klussen die horige boeren voor hun heer moesten doen"
           },
           {
             "term": "Horige",
-            "definition": "Een niet-vrije boer die hoorde bij het land van een heer. Hij moest het land van zijn heer bewerken en herendiensten verrichten, maar had ook een eigen stukje land."
+            "definition": "Niet-vrije boer die bij het land van een heer hoort, maar een eigen stukje grond heeft"
+          },
+          {
+            "term": "Landheer",
+            "definition": "Rijke, machtige persoon die domeinen bezit"
           },
           {
             "term": "Lijfeigene",
-            "definition": "Een niet-vrije boer die hoorde bij het land van een heer. Hij had geen een eigen stukje land."
+            "definition": "Niet-vrije boer die bij het land hoort en geen eigen stukje land heeft"
           },
           {
             "term": "Pacht",
-            "definition": "Een ander woord voor huur van een stuk land. In de vroege middeleeuwen werd deze huur betaald met een deel van de oogst."
+            "definition": "Huur van een stuk land, in de vroege middeleeuwen vaak betaald met oogst"
           },
           {
             "term": "Vrije boer",
-            "definition": "Een boer die een eigen stuk land had waarvoor hij pacht betaalde."
+            "definition": "Boer met eigen land waarvoor hij pacht betaalde"
           },
           {
             "term": "Bekeren",
-            "definition": "Iemand overtuigen om in een andere godsdienst te geloven."
+            "definition": "Iemand overtuigen om in een andere godsdienst te geloven"
+          },
+          {
+            "term": "Bisdom",
+            "definition": "Gebied waar een bisschop de leiding over heeft"
+          },
+          {
+            "term": "Bisschop",
+            "definition": "Een hoge geestelijke, leider van een bisdom"
           },
           {
             "term": "Heidenen",
-            "definition": "Het woord dat christenen voor niet-christenen gebruikten in de tijd van monniken en ridders."
+            "definition": "Woord dat christenen gebruikten voor niet-christenen"
+          },
+          {
+            "term": "Kerstenen",
+            "definition": "Het christelijk maken van een bevolking"
           },
           {
             "term": "Klooster",
-            "definition": "Een plek waar de monniken of nonnen leven."
+            "definition": "Plek waar monniken of nonnen leven"
           },
           {
             "term": "Missionaris",
-            "definition": "Iemand die het christelijke geloof verspreidt."
+            "definition": "Iemand die het christendom verspreidt"
           },
           {
             "term": "Monniken",
-            "definition": "Mannelijke bewoners van een klooster."
+            "definition": "Mannelijke bewoners van een klooster"
           },
           {
             "term": "Nonnen",
-            "definition": "Vrouwelijke bewoners van een klooster."
+            "definition": "Vrouwelijke bewoners van een klooster"
+          },
+          {
+            "term": "Ora et labora",
+            "definition": "Latijn voor ‘bidden en werken’, de hoofdtaken van monniken en nonnen"
+          },
+          {
+            "term": "Pastoor",
+            "definition": "Iemand die kerkdiensten leidt in kleine gemeenschappen"
+          },
+          {
+            "term": "Hoge Middeleeuwen",
+            "definition": "Periode in West-Europa van het jaar 1000 tot ongeveer 1250"
+          },
+          {
+            "term": "Landbouwsamenleving",
+            "definition": "Samenleving waar de meerderheid van de bevolking leeft van de landbouw"
+          },
+          {
+            "term": "Landbouwstedelijke samenleving",
+            "definition": "Samenleving waarin de meerderheid van de bevolking leeft van landbouw, maar ook een grote groep mensen in steden woont"
+          },
+          {
+            "term": "Late Middeleeuwen",
+            "definition": "Periode in West-Europa van het jaar 1250 tot ongeveer 1500"
+          },
+          {
+            "term": "Samenleving",
+            "definition": "Groep mensen die volgens afspraken samenleeft op een bepaalde plek"
           },
           {
             "term": "Staat",
-            "definition": "Land met duidelijke grenzen waarbinnen dezelfde wetten gelden."
+            "definition": "Land met duidelijke grenzen waarbinnen dezelfde wetten gelden"
           },
           {
             "term": "Stadsrechten",
-            "definition": "Rechten die in de middeleeuwen aan steden werden verleend door landheren. Stadsrechten gaven een stad meer vrijheid om zichzelf te besturen en zelf afspraken te maken."
+            "definition": "Rechten die in de middeleeuwen aan steden werden verleend, waardoor ze meer vrijheid kregen"
+          },
+          {
+            "term": "Gevolg",
+            "definition": "Het effect van een gebeurtenis"
           },
           {
             "term": "Ontginningen",
-            "definition": "Het geschikt maken van grond voor de landbouw."
+            "definition": "Het geschikt maken van grond voor de landbouw"
+          },
+          {
+            "term": "Oorzaak",
+            "definition": "Een reden waarom iets gebeurt"
+          },
+          {
+            "term": "Bedoeld gevolg",
+            "definition": "Uitkomst van een gebeurtenis die van tevoren gewenst was"
           },
           {
             "term": "Heilige land",
-            "definition": "Gebied dat we nu Israël en Palestina noemen. In dit gebied liggen veel plaatsen die in de Bijbel voorkomen. Het gebied is heilig voor christenen, maar ook voor joden en moslims."
+            "definition": "Gebied dat we nu Israël en Palestina noemen, heilig voor christenen, joden en moslims"
           },
           {
             "term": "Heilige oorlog",
-            "definition": "Oorlog voor een godsdienstig doel. Een oorlog waarvan mensen geloven dat hun god het wil."
+            "definition": "Oorlog voor een godsdienstig doel"
           },
           {
             "term": "Kathedraal",
-            "definition": "Grote kerk. Kerk van een bisschop."
+            "definition": "Grote kerk, kerk van een bisschop"
+          },
+          {
+            "term": "Kortetermijngevolg",
+            "definition": "Gevolg van een gebeurtenis dat al snel merkbaar is"
           },
           {
             "term": "Kruistocht",
-            "definition": "Reis van christenen naar het Midden-Oosten om daar met geweld christelijke heilige plaatsen in te nemen."
+            "definition": "Reis van christenen naar het Midden-Oosten om daar met geweld heilige plaatsen in te nemen"
           },
           {
             "term": "Kruisvaarder",
-            "definition": "Deelnemer aan een kruistocht."
+            "definition": "Deelnemer aan een kruistocht"
+          },
+          {
+            "term": "Kruisvaardersstaten",
+            "definition": "Staten in het Midden-Oosten die door kruisvaarders werden gesticht"
+          },
+          {
+            "term": "Langtermijngevolg",
+            "definition": "Gevolg van een gebeurtenis dat pas veel later merkbaar wordt"
+          },
+          {
+            "term": "Onbedoeld gevolg",
+            "definition": "Uitkomst van een gebeurtenis die niet zo bedoeld of gewenst was"
           },
           {
             "term": "Pelgrim",
-            "definition": "Iemand die een heilige reis maakt."
+            "definition": "Iemand die een heilige reis maakt"
+          },
+          {
+            "term": "Reliek",
+            "definition": "Overblijfsel van een heilige of een voorwerp van een heilige"
           },
           {
             "term": "Gezel",
-            "definition": "Leerling van een ambachtsman."
+            "definition": "Leerling van een ambachtsman"
           },
           {
             "term": "Gilde",
-            "definition": "Organisatie van mensen met hetzelfde beroep die elkaar controleren en voor elkaar opkomen."
+            "definition": "Organisatie van mensen met hetzelfde beroep die elkaar helpen en controleren"
           },
           {
             "term": "Meesterproef",
-            "definition": "Soort examen voor een ambachtsman waarmee hij kan laten zien dat hij klaar is om zijn eigen zaak te beginnen."
-          }
-        ]
-      },
-      {
-        "name": "PPK klas 2",
-        "termLang": "nl-NL",
-        "defLang": "nl-NL",
-        "words": [
-          {
-            "term": "Protestanten",
-            "definition": "Christenen die zich in de 16e eeuw afsplitsen van de katholieke kerk."
-          },
-          {
-            "term": "Reformatie",
-            "definition": "Splitsing van de christenen in katholieken en protestanten in de 16e eeuw."
-          },
-          {
-            "term": "Renaissance",
-            "definition": "Periode in West-Europa waarin de interesse voor kunst, cultuur en wetenschap van de oude Grieken en Romeinen opleefde. De renaissance begon in de 14e eeuw en was op haar hoogtepunt in de 16e eeuw."
-          },
-          {
-            "term": "Indië",
-            "definition": "Naam die rond 1500 gebruikt werd voor heel Oost-Azië."
-          },
-          {
-            "term": "Kolonisatie",
-            "definition": "Innemen van een land om er zich te vestigen of er economische activiteiten op te zetten."
-          },
-          {
-            "term": "Ontdekkingsreizen",
-            "definition": "Zeereizen van Europeanen via onbekende routes naar gebieden waar ze nog nooit zijn geweest met als doel het vinden van nieuwe handelsroutes en -producten, uitbreiding van politieke macht en status en het verspreiden van het christendom."
-          },
-          {
-            "term": "Aflaat",
-            "definition": "Bief waarin staat dat je zonden vergeven zijn."
-          },
-          {
-            "term": "Contrareformatie",
-            "definition": "Hervormingen binnen de katholieke kerk die een reactie waren op de reformatie."
-          },
-          {
-            "term": "Corruptie",
-            "definition": "Misbruik van macht en rijkdom."
-          },
-          {
-            "term": "Hervormer",
-            "definition": "Iemand die de organisatie en gebruiken van de katholieke kerk probeert te veranderen."
-          },
-          {
-            "term": "Humanisme",
-            "definition": "Overtuiging dat mensen zelf moeten nadenken over hun leven en geloof."
-          },
-          {
-            "term": "Katholiek",
-            "definition": "Christen die trouw is aan de paus in Rome."
-          },
-          {
-            "term": "Ketter",
-            "definition": "Naam die katholieken gebruikten voor protestanten."
-          },
-          {
-            "term": "Zonde",
-            "definition": "Woord dat christenen gebruiken voor gedrag dat volgens de kerk niet mag."
-          },
-          {
-            "term": "Beeldenstorm",
-            "definition": "Bestorming en vernieling van katholieke kerken en kloosters in de Nederlanden in 1566."
-          },
-          {
-            "term": "Beleg",
-            "definition": "Omsingelen en afsluiten van toegangswegen naar een stad of land om het te dwingen zich over te geven."
+            "definition": "Soort examen voor een ambachtsman om te laten zien dat hij een eigen zaak kan beginnen"
           },
           {
             "term": "Centralisatie",
-            "definition": "Bestuur van een land of rijk zoveel mogelijk vanuit één centrale plek regelen."
+            "definition": "Macht uitoefenen vanuit één plek en overal dezelfde wetten invoeren"
+          },
+          {
+            "term": "Hanze",
+            "definition": "Netwerk van handelssteden die samenwerkten"
+          },
+          {
+            "term": "Honderdjarige Oorloog",
+            "definition": "Reeks oorlogen om Frankrijk en Engeland tussen 1337 en 1453"
+          },
+          {
+            "term": "Beeldenstorm",
+            "definition": "Vernielingen en plunderingen van katholieke kerken en kloosters in de Nederlanden in 1566"
+          },
+          {
+            "term": "Calvinist",
+            "definition": "Volgeling van Calvijn. Volgens hem hebben gelovigen het recht om in opstand te komen tegen een vorst"
+          },
+          {
+            "term": "Centraal bestuur",
+            "definition": "Een bestuur waarbij dezelfde regels en vaste belastingen gelden voor alle gewesten"
           },
           {
             "term": "Gewest",
-            "definition": "Gebied te vergelijken met een provincie."
-          },
-          {
-            "term": "Nederlandse Opstand",
-            "definition": "Opstand van de Nederlandse gewesten tegen het Spaanse gezag die duurde van 1568 tot 1648. Ook wel de Tachtigjarige Oorlog genoemd."
-          },
-          {
-            "term": "Pacificatie van Gent",
-            "definition": "Samenwerking van de Nederlandse gewesten met als doel het verjaren van de plunderende Spaanse soldaten (1576)."
-          },
-          {
-            "term": "Plakkaat van Verlatinghe",
-            "definition": "Document waarin vertegenwoordigers van de noordelijke gewesten Filips II niet langer te erkennen als hun landheer (1581)."
-          },
-          {
-            "term": "Propaganda",
-            "definition": "Overtuigen van mensen met als doel steun of aanhangers te vinden of een ander te schaden."
-          },
-          {
-            "term": "Smeekschrift der edelen",
-            "definition": "Document met eisen van de Nederlandse edelen dat aangeboden werd aan de landvoogdes Margareta van Parma (1566)."
-          },
-          {
-            "term": "Stadhouder",
-            "definition": "Bestuurder van één of meerdere Nederlandse gewesten. In de tijd van Filips II: plaatsvervanger van de koning. Later: hoogste legereider van de Nederlandse Republiek."
-          },
-          {
-            "term": "Staten-Generaal",
-            "definition": "Vergadering van vertegenwoordigers uit de verschillende gewesten van de Nederlandse Republiek die samen het land bestuurden."
-          },
-          {
-            "term": "Twaalfjarig Bestand",
-            "definition": "Wapenstilstand die twaalf jaar duurde tussen Spanje en de Republiek (1609-1621)."
-          },
-          {
-            "term": "Unie van Utrecht",
-            "definition": "Samenwerking van noordelijke gewesten die Filips II niet lagers als hun koning wilden (1579)."
-          },
-          {
-            "term": "Vrede van Augsburg",
-            "definition": "Afspraak dat koningen zelf mochten bepalen welke godsdienst in hun gebied leiden moest zijn (1555)."
-          },
-          {
-            "term": "Vrede van Münster",
-            "definition": "Vredesverdrag waarmee een einde kwam aan de Nederlandse Opstand (1648)."
-          },
-          {
-            "term": "Sola Fide",
-            "definition": "Idee van Luther dat je alleen door als een goed christen te leven je in de hemel kunt komen."
-          },
-          {
-            "term": "Predestinatieleer",
-            "definition": "Idee van Calvijn dat God al voordat je geboren wordt heeft bepaald of je naar de hemel of naar de hel gaat."
-          },
-          {
-            "term": "Unie van Atrecht",
-            "definition": "Samenwerking van de zuidelijke gewesten die de trouw blijven aan het katholieke geloof en de Spaanse heersers."
-          },
-          {
-            "term": "Inquisitie",
-            "definition": "Katholieke rechtbank die de taak had om ketters op te sporen, te vervolgen en straffen."
-          },
-          {
-            "term": "Burgerij",
-            "definition": "Burgers van een stad of land, die macht en aanzien hadden omdat ze rijk waren of een belangrijk beroep hadden."
-          },
-          {
-            "term": "Gouden Eeuw",
-            "definition": "Bijnaam van de 17e eeuw (van 100 tot 1700) in Nederland."
-          },
-          {
-            "term": "Rampjaar",
-            "definition": "Benaming voor het jaar 1672, waarin de Nederlandse Republiek aangevallen werd door vier landen tegelijk en als gevolg daarvan een grote crisis doormaakte."
-          },
-          {
-            "term": "Regent",
-            "definition": "Naam voor een bestuurder van de Nederlandse Republiek in de 17e eeuw. Vaak een rijke burger."
-          },
-          {
-            "term": "Republiek der Zeven Verenigde Nederlanden",
-            "definition": "Naam voor Nederland tussen 1588 en 1795."
-          },
-          {
-            "term": "Sociale verhoudingen",
-            "definition": "Hoe verschillende groepen mensen in een samenleving met elkaar omgaan."
-          },
-          {
-            "term": "Vorst(in)",
-            "definition": "Ander woord voor koning(in) of keizer(in)."
-          },
-          {
-            "term": "Wereldhandel",
-            "definition": "Handel tussen gebieden van verschillende werelddelen."
-          },
-          {
-            "term": "Handelskapitalisme",
-            "definition": "Vorm van economie waarin handelaren zoveel mogelijk winst proberen te maken."
-          },
-          {
-            "term": "Monopolie",
-            "definition": "Alleenrecht op handel in een bepaald product of bepaald gebied."
-          },
-          {
-            "term": "Moedernegotie",
-            "definition": "Bijnaam voor de Nederlandse Oostzeehandel in de 17e eeuw. Moedernegotie betekent letterlijk: de moeder van alle handel."
-          },
-          {
-            "term": "Oostzeehandel",
-            "definition": "Handel in graag uit de landen rond de Oostzee."
-          },
-          {
-            "term": "Stapelmarkt",
-            "definition": "Plaats waar producten van over de hele wereld naartoe werden vervoerd om te worden opgeslagen en door verhandeld."
-          },
-          {
-            "term": "Verenigde Oost-Indische Compagnie (VOC)",
-            "definition": "Nederlands handelsbedrijf met het alleenrecht op de handel in Indië (huidige Indonesië) en andere gebieden in Azië."
-          },
-          {
-            "term": "West-Indische Compagnie (WIC)",
-            "definition": "Nederlands handelsbedrijf dat in de 17e en 18e eeuw het alleenrecht had op de handel in Amerika (=West-Indië) en West-Afrika."
-          },
-          {
-            "term": "Beleid",
-            "definition": "Wetten, regels en de manier waarop die gehandhaafd worden."
+            "definition": "Een soort provincie in de Nederlanden met eigen wetten, munten en bestuurders"
           },
           {
             "term": "Gewestelijke Staten",
-            "definition": "Regering van een van de gewesten van de Republiek."
+            "definition": "Het bestuur van een gewest. Hierin zaten hoge edelen en afgevaardigden van steden en platteland"
           },
           {
-            "term": "Raadspensionaris",
-            "definition": "Bestuurder die je kunt vergelijken met de minister-president van nu. Hij hield zich bezig met de inkomsten en uitgaven van de Republiek en bereidde vergaderingen van de Staten-Generaal voor. Ook onderhield hij de contacten met het buitenland."
+            "term": "Hagenpreek",
+            "definition": "Bijeenkomst van protestanten in de openlucht"
+          },
+          {
+            "term": "Hervormer",
+            "definition": "Iemand die kritiek had op de kerk en deze wilde veranderen"
+          },
+          {
+            "term": "Hervorming",
+            "definition": "Letterlijk: een verandering. Het ontstaan van een nieuwe, protestantse kerk naast de katholieke kerk"
+          },
+          {
+            "term": "Humanist",
+            "definition": "Geleerde uit de renaissance die Griekse en Romeinse teksten bestudeerde, vertaalde en onderwijs belangrijk vond"
+          },
+          {
+            "term": "Inquisitie",
+            "definition": "Door de paus rond 1200 opgerichte kerkelijke rechtbank voor opsporing en veroordeling van ketters"
+          },
+          {
+            "term": "Ketter",
+            "definition": "Iemand die belangrijke delen van de officiële leer van de katholieke kerk afwees"
+          },
+          {
+            "term": "Landvoogd",
+            "definition": "Plaatsvervanger van de Spaanse koning die de Nederlanden bestuurde"
+          },
+          {
+            "term": "Lutheraan",
+            "definition": "Volgeling van Luther, die vond dat de vorst en niet de paus de baas moest zijn in de kerk"
+          },
+          {
+            "term": "Opstand (in de Nederlanden)",
+            "definition": "Het verzet van de Nederlandse gewesten tegen de Spaanse koning (1568–1648)"
+          },
+          {
+            "term": "Protestant",
+            "definition": "Iemand die het niet eens is met de katholieke kerk en zich aansluit bij een hervormer"
+          },
+          {
+            "term": "Renaissance",
+            "definition": "Letterlijk: wedergeboorte. Periode (15e–16e eeuw) met hernieuwde interesse in kunst en wetenschap van de oudheid"
+          },
+          {
+            "term": "Republiek der Zeven Verenigde Nederlanden",
+            "definition": "Sinds 1588 de naam voor de zeven Nederlandse gewesten die zich hadden losgemaakt van Spanje"
+          },
+          {
+            "term": "Rooms-Katholiek",
+            "definition": "Christen die vindt dat de paus in Rome de leiding heeft over de kerk"
+          },
+          {
+            "term": "Stadhouder",
+            "definition": "Onder Filips II: plaatsvervanger van de koning in een gewest. In de Republiek: legeraanvoerder"
+          },
+          {
+            "term": "Staten-Generaal",
+            "definition": "Vergadering van afgevaardigden van de zeven gewesten die samen beslisten over buitenlandse politiek en defensie"
+          },
+          {
+            "term": "Unie van Utrecht",
+            "definition": "Verbond uit 1579 waarin noordelijke gewesten afspraken de Opstand voort te zetten"
+          },
+          {
+            "term": "Watergeuzen",
+            "definition": "Protestantse vluchtelingen die als piraten de wateren rond de Nederlanden onveilig maakten"
+          },
+          {
+            "term": "Vrede van Münster",
+            "definition": "In 1648 eindigde hiermee de Opstand. Zuidelijke Nederlanden bleven bij Spanje, de noordelijke werden erkend als onafhankelijke staat"
+          },
+          {
+            "term": "Absolutisme",
+            "definition": "Vorm van bestuur waarbij de koning alle macht heeft"
           },
           {
             "term": "Driehoekshandel",
-            "definition": "Handel waarbij Europeanen in de driehoek Europa, Afrika en Amerika goederen en mensen(slaafgemaakte) vervoerden over de Atlantische Oceaan. In deze handel waren de schepen nooit leeg."
+            "definition": "Handel tussen West-Afrika, Amerika en Europa in een driehoek"
           },
           {
-            "term": "Kolonie",
-            "definition": "Gebied of land dat veroverd en gebruikt wordt door een land dat (vaak) niet in de buurt ligt. Een kolonie wordt bestuurd alsof het bij het eigen land hoort."
+            "term": "Gouden Eeuw",
+            "definition": "Periode van grote welvaart en bloei in kunst, techniek en wetenschap in de Republiek (ca. 1588–1700)"
           },
           {
-            "term": "Nieuwe Wereld",
-            "definition": "16e-eeuwse naam voor Noord- en Zuid-Amerika."
+            "term": "Handelskapitalisme",
+            "definition": "Een economie waarin kooplui zoveel mogelijk winst proberen te maken met handel"
           },
           {
-            "term": "Plantage",
-            "definition": "Groot landbouwbedrijf waarop één soort gewas verbouwd wordt, bijvoorbeeld: suikerriet, katoen of tabak."
+            "term": "Handelsmonopolie",
+            "definition": "Het recht om als enige handel te mogen drijven met een bepaald gebied"
           },
           {
-            "term": "Slaaf",
-            "definition": "Iemand die wordt behandeld als een bezit van iemand anders."
+            "term": "Monarchie",
+            "definition": "Vorm van bestuur met een koning aan het hoofd, opgevolgd door zijn zoon of dochter"
           },
           {
-            "term": "Trans-Atlantische slavenhandel",
-            "definition": "Handel in Afrikaanse slaafgemaakten die met schepen van Afrika naar Amerika werden vervoerd, in de 16e t/m 19e eeuw."
+            "term": "Oostzeevaart",
+            "definition": "Handel tussen Nederland en het Oostzeegebied"
           },
           {
-            "term": "Abolitionisme",
-            "definition": "Beweging die in de 18e eeuw in Europa ontstond en de afschaffing van de slavernij als doel had."
+            "term": "Rampjaar",
+            "definition": "1672: jaar waarin de Republiek tegelijk werd aangevallen door Frankrijk, Engeland, Keulen en Münster"
           },
           {
-            "term": "Wetenschappelijke methode",
-            "definition": "De regels en praktijken die bepalen hoe wetenschappelijk kennis verkregen moet worden. De kenmerken zijn: observeren, experimenteren en logisch redeneren."
+            "term": "Regenten",
+            "definition": "Bestuurders van de Republiek, vaak uit rijke koopmansfamilies"
+          },
+          {
+            "term": "Stapelmarkt",
+            "definition": "Plaats waar ingekochte producten werden opgeslagen om later door te verkopen"
+          },
+          {
+            "term": "Verdraagzaamheid",
+            "definition": "Manier van met elkaar omgaan waarbij veel van anderen wordt verdragen"
+          },
+          {
+            "term": "Verenigde Oost-Indische Compagnie (VOC)",
+            "definition": "Handelsmaatschappij opgericht in 1602 met monopolie op handel met Azië"
+          },
+          {
+            "term": "Wereldeconomie",
+            "definition": "Een economie die zich uitstrekt over de hele wereld doordat producten wereldwijd worden verhandeld"
+          },
+          {
+            "term": "West-Indische Compagnie (WIC)",
+            "definition": "Handelsmaatschappij opgericht in 1621 met monopolie op handel met Amerika en Afrika"
           },
           {
             "term": "Wetenschappelijke revolutie",
-            "definition": "Snelle verandering in de manier waarop geleerden in de 16e en 17e eeuw kennis verkregen, met veel nieuwe ontdekkingen en uitvindingen tot gevolg."
+            "definition": "Periode in de 17e eeuw waarin veel wetenschappelijke ontdekkingen werden gedaan"
+          },
+          {
+            "term": "Ancien Régime",
+            "definition": "Bestuur in Frankrijk waarbij de koning absolute macht heeft en standen met voorrechten"
+          },
+          {
+            "term": "Bataafse Revolutie",
+            "definition": "Grote verandering in Nederland vanaf 1795 waarbij de stadhouder verdween"
+          },
+          {
+            "term": "Burgerlijke stand",
+            "definition": "Overzicht van de overheid waarin geboorte, huwelijk en overlijden worden genoteerd"
+          },
+          {
+            "term": "Censuur",
+            "definition": "Verbod door de regering op het openbaar maken van teksten, toneel of muziek"
+          },
+          {
+            "term": "Dictatuur",
+            "definition": "Bestuur waarin één persoon of kleine groep mensen de macht heeft"
+          },
+          {
+            "term": "Eenheidsstaat",
+            "definition": "Land waarin overal dezelfde wetten gelden en waarin het centrale bestuur het belangrijkste is"
           },
           {
             "term": "Franse Revolutie",
-            "definition": "Grote politieke-bestuurlijke, sociale en cultureel-mentale omwenteling in Frankrijk die begon in 1789 en duurde tot 1799."
+            "definition": "Grote, plotselinge verandering van de Franse samenleving en het bestuur vanaf 1789"
           },
           {
-            "term": "Rationeel",
-            "definition": "Logisch, op basis van je verstand."
+            "term": "Gematigden",
+            "definition": "Groep mensen die weinig verandering wil of dit geleidelijk wil doorvoeren"
           },
           {
-            "term": "Rechtsstaat",
-            "definition": "Land waarin de belangrijkste rechten en plichten van mensen zijn vastgelegd in de wet."
-          },
-          {
-            "term": "Revolutie",
-            "definition": "Grote verandering in korte tijd."
-          },
-          {
-            "term": "Trias politica",
-            "definition": "Verdeling van de macht in drie delen: de wetgevende macht, de uitvoerende macht en de rechtsprekende macht."
-          },
-          {
-            "term": "Verlichte denkers",
-            "definition": "Denkers uit de 18e eeuw die geloofden dat je door gebruik van de rede (het verstand) vooruitgang kon bereiken."
-          },
-          {
-            "term": "Verlichting",
-            "definition": "Beweging in West-Europa van filosofen die geloofden dat alles met het verstand te verklaren en begrijpen moest zijn. Door rationeel denken kon vooruitgang en een betere samenleving bereikt worden (1700-1800)."
-          },
-          {
-            "term": "Absolute monarchie",
-            "definition": "Land met een koning die absolute macht heeft."
-          },
-          {
-            "term": "Privilege",
-            "definition": "Ander woord voor voorrecht: een bepaald recht dat anderen niet hebben."
-          },
-          {
-            "term": "Standen",
-            "definition": "Groepen mensen die van elkaar verschillen in rechten en plichten."
+            "term": "Grondrecht",
+            "definition": "Basisrecht van elke burger dat in de grondwet is vastgelegd"
           },
           {
             "term": "Grondwet",
-            "definition": "Rechten en plichten die gelden voor alle inwoners van een land en die de basis vormen voor het bestuur van dat land."
+            "definition": "Document waarin rechten en plichten van burgers en de organisatie van het bestuur zijn vastgelegd"
           },
           {
-            "term": "Nationale Vergadering (Later Nationale Conventie)",
-            "definition": "Nieuwe Franse volksvertegenwoordiging (of nationaal parlement) die opgericht werd door vertegenwoordigers van de derde stand in 1789 na het mislukken van de vergadering van de Staten-Generaal."
+            "term": "Patriotten",
+            "definition": "Groep Nederlanders in de tweede helft van de 18e eeuw die meer invloed van het volk en gelijke rechten wilden"
           },
           {
-            "term": "Verklaring van de mens en van de burger",
-            "definition": "Frans document uit 1789 met daarin alle belangrijke rechten van Franse burgers, geïnspireerd op ideeën uit de Verlichting."
+            "term": "Privilege",
+            "definition": "Voorrecht dat door de koning was verleend aan een geestelijke of edelman"
           },
           {
-            "term": "Gematigden/Girondijnen",
-            "definition": "Revolutionairen die hun idealen geleidelijk wilden invoeren, in kleine stapjes."
+            "term": "Publieke opinie",
+            "definition": "De mening van het grootste deel van de bevolking"
           },
           {
-            "term": "Radicalen/Jakobijnen",
-            "definition": "Revolutionairen die hun ideeën snel wilden invoeren, met grote stappen tegelijk, soms met geweld."
+            "term": "Radicalen",
+            "definition": "Groep mensen die snel en veel verandering wil"
+          },
+          {
+            "term": "Scheiding van de machten",
+            "definition": "Door Montesquieu bedachte verdeling van de macht in drie delen: wetgevend, uitvoerend en rechterlijk"
+          },
+          {
+            "term": "Standensamenleving",
+            "definition": "Samenleving verdeeld in drie standen: geestelijkheid, adel, burgers en boeren, met voorrechten voor de eerste twee"
           },
           {
             "term": "Terreur",
-            "definition": "Periode tussen september 1792 en eind 1794 in Frankrijk waarin ruim 40.000 mensen ter dood veroordeeld werden op verdenking van het tegenwerken van de revolutie."
+            "definition": "Periode in de Franse Revolutie (1793–1794) waarin radicalen de macht hadden en angst gebruikten om die te behouden"
           },
           {
-            "term": "Volkssoevereiniteit",
-            "definition": "Het idee dat het volk de hoogte macht in een land hoort te hebben."
-          },
-          {
-            "term": "Droit Devin",
-            "definition": "Het idee dat de vorst zijn macht rechtstreeks van God gekregen heeft. De vorst is alleen aan God verantwoording schuldig."
-          },
-          {
-            "term": "Huisnijverheid",
-            "definition": "Thuis met de hand producten maken."
-          },
-          {
-            "term": "Industrialisatie",
-            "definition": "Overgang van het produceren van producten met de hand naar produceren met machines."
-          },
-          {
-            "term": "Industriële Revolutie",
-            "definition": "Periode waarin de samenleving van West-Europa en delen van de Verenigde Staten sterk veranderde door de opkomst van industrie."
-          },
-          {
-            "term": "Stoommachine",
-            "definition": "Machine die met behulp van stoom dingen in beweging kan zetten."
-          },
-          {
-            "term": "Urbanisatie",
-            "definition": "Verstedelijking: de groei van steden en het ontstaan van nieuwe steden."
-          },
-          {
-            "term": "Confessionelen",
-            "definition": "Mensen die zich inzetten voor het belang van christelijke waarden en normen in de samenleving, zoals naastenliefde."
-          },
-          {
-            "term": "Klassensamenleving",
-            "definition": "Samenleving waarin geld en bezit je positie in de samenleving bepalen."
-          },
-          {
-            "term": "Liberalen",
-            "definition": "Mensen die zich inzetten voor meer vrijheid voor burgers in de samenleving. Zij komen in de 19e eeuw op voor rijke burgers en ondernemers."
-          },
-          {
-            "term": "Socialisten",
-            "definition": "Mensen die zich inzetten voor meer gelijkheid in de samenleving. Zij komen in de 19e eeuw op voort arbeiders en zetten zich af tegen de macht die ondernemers hebben over arbeiders."
-          },
-          {
-            "term": "Sociale kwestie",
-            "definition": "Vraag of en door wie de armen in de 19e eeuw geholpen moesten worden."
-          },
-          {
-            "term": "Sociale wetten",
-            "definition": "Wetten die inwoners van een land beschermen tegen armoede of ongeluk."
-          },
-          {
-            "term": "Industrieel kapitalisme",
-            "definition": "Economisch systeem waarin productiemiddelen, zoals fabrieken en machines, eigendom zijn van ondernemers. Ondernemers produceren en verkopen producten om winst te maken."
-          },
-          {
-            "term": "Kinderwetje van Van Houten",
-            "definition": "Wet uit 1874 die ervoor zorgde dat kinderen onder de 12 jaar niet meer in fabrieken mochten werken."
-          },
-          {
-            "term": "Parlement",
-            "definition": "Groep mensen die wetsvoorstellen mogen doen en die het beleid van de regering controleren. Tegenwoordig is dat in Nederland de Eerste en Tweede Kamer."
-          },
-          {
-            "term": "Vakbond",
-            "definition": "Vereniging van arbeiders die opkomt voor hun belangen."
+            "term": "Verlichting",
+            "definition": "Periode waarin geloof en traditie plaats maakten voor verstand en kritiek, met ideeën om kerk, bestuur en samenleving te verbeteren"
           },
           {
             "term": "Algemeen kiesrecht",
-            "definition": "Recht voor alle volwassen inwoners van een land om te stemmen en daarmee invloed uit te oefenen op politieke beslissingen."
+            "definition": "Kiesrecht voor iedereen, ongeacht bezit, opleiding of afkomst. In Nederland ingevoerd in 1919"
           },
           {
-            "term": "Eerste Feministische Golf",
-            "definition": "Periode waarin feministen zeer actief waren en grote successen boekten, van 1870 tot 1920."
+            "term": "Confessionelen",
+            "definition": "Mensen die vinden dat politiek gebaseerd moet zijn op godsdienstige overtuiging"
           },
           {
             "term": "Emancipatie",
-            "definition": "Streven van bevolkingsgroepen die achtergesteld zijn naar een gelijkwaardige positie in de samenleving."
+            "definition": "Toekennen van gelijke rechten aan mensen"
+          },
+          {
+            "term": "Fabriek",
+            "definition": "Bedrijf waar op grote schaal met machines producten worden gemaakt"
           },
           {
             "term": "Feminisme",
-            "definition": "Maatschappelijke beweging die zich inzet voor gelijke rechten voor mannen en vrouwen."
+            "definition": "Beweging die opkomt voor de rechten en positie van vrouwen"
           },
           {
-            "term": "Handelingsonbekwaam",
-            "definition": "Niet in staat zijn om zelfstandig belangrijke beslissingen te nemen in het leven en zelfstandig te handelen. Handelingsonbekwaam kan je door de wet opgelegd worden."
+            "term": "Huisnijverheid",
+            "definition": "Werk dat mensen thuis voor een ondernemer doen om wat extra geld te verdienen"
           },
           {
-            "term": "Ministers",
-            "definition": "Leden van de regering. Ministers voeren wetten uit, kunnen nieuwe wetsvoorstellen doen en zorgen dat wetten uitgevoerd worden."
+            "term": "Industrialisatie",
+            "definition": "De opkomst van industrie in een gebied waar eerst vooral landbouw was"
           },
           {
-            "term": "Parlementaire democratie",
-            "definition": "Vorm van democratie waarbij het volk vertegenwoordigd wordt door het parlement."
+            "term": "Industriële revolutie",
+            "definition": "Grote verandering door de komst van fabrieken en nieuwe vervoermiddelen (18e–19e eeuw)"
           },
           {
-            "term": "Tweede Kamer",
-            "definition": "Deel van het parlement of volksvertegenwoordiging dat sinds 1848 door (een deel van) de bevolking wordt gekozen."
+            "term": "Industriële samenleving",
+            "definition": "Samenleving waarin industrie het belangrijkste middel van bestaan is"
+          },
+          {
+            "term": "Infrastructuur",
+            "definition": "Alle wegen, spoorlijnen, waterwegen en verbindingen in een gebied"
+          },
+          {
+            "term": "Kapitalisme",
+            "definition": "Economisch systeem waarbij ondernemers winst maken met bezit van grond en fabrieken"
+          },
+          {
+            "term": "Liberalisme",
+            "definition": "Politieke stroming die opkomt voor zoveel mogelijk vrijheid voor burgers"
+          },
+          {
+            "term": "Liefdadigheid",
+            "definition": "Hulp geven aan mensen die dat nodig hebben, zonder er winst uit te halen"
+          },
+          {
+            "term": "Massaproductie",
+            "definition": "Met machines grote hoeveelheden van dezelfde producten maken"
+          },
+          {
+            "term": "Politieke partij",
+            "definition": "Vereniging van mensen met dezelfde opvattingen die stemmen wil winnen om invloed te hebben"
+          },
+          {
+            "term": "Schoolstrijd",
+            "definition": "Politieke strijd in de 19e eeuw over financiële gelijkstelling van bijzonder en openbaar onderwijs"
+          },
+          {
+            "term": "Sociaaldemocraten",
+            "definition": "Gematigde stroming in het socialisme die via het parlement de leefomstandigheden van arbeiders wilde verbeteren"
+          },
+          {
+            "term": "Sociale kwestie",
+            "definition": "Het probleem van armoede en slechte werk- en leefomstandigheden van arbeiders"
+          },
+          {
+            "term": "Sociale wet",
+            "definition": "Een wet die leef- en werksituatie van mensen verbetert, bijvoorbeeld kinderarbeid verbieden"
+          },
+          {
+            "term": "Socialisme",
+            "definition": "Politieke stroming die opkomt voor gelijkheid tussen arm en rijk"
+          },
+          {
+            "term": "Stemrecht",
+            "definition": "Het recht om te mogen stemmen"
+          },
+          {
+            "term": "Vakbond",
+            "definition": "Vereniging van werknemers die opkomt voor hun rechten en betere omstandigheden"
+          },
+          {
+            "term": "Afzetgebied",
+            "definition": "Gebied waar producten kunnen worden verkocht"
+          },
+          {
+            "term": "Belgische Opstand",
+            "definition": "Opstand tegen koning Willem I in 1830 die leidde tot onafhankelijkheid van België"
+          },
+          {
+            "term": "Brits-Indië",
+            "definition": "Britse kolonie in Zuid-Azië, bestaande uit o.a. India, Pakistan en Bangladesh"
           },
           {
             "term": "Conferentie van Berlijn",
-            "definition": "Conferentie in 1885 waarbij verschillende Europese landen overlegden over hoe zij om zouden gaan met Afrika en in feite de binnenlanden van Afrika onder elkaar verdeelden."
-          },
-          {
-            "term": "Modern Imperialisme",
-            "definition": "Ontwikkeling in de tweed helft van de 19e eeuw, waarbij (Europese) landen nieuwe koloniën gingen stichtten en zich inventiever met al bestaande koloniën gingen bemoeien."
+            "definition": "Bijeenkomst in Berlijn (1884–1885) van Europese landen om spelregels voor verdeling van Afrika te maken"
           },
           {
             "term": "Congres van Wenen",
-            "definition": "Bijeenkomst van een aantal Europese landen in Wenen (in 1814 en 1815), na de overwinning op Napoleon, waar gesproken werd over de toekomst van Europa)."
+            "definition": "Bijeenkomst in Wenen (1814–1815) waar landen na Napoleon afspraken maakten over de toekomst van Europa"
+          },
+          {
+            "term": "Cultuurstelsel",
+            "definition": "Systeem waarbij boeren op Java een vijfde van hun land voor de Nederlandse regering moesten verbouwen"
+          },
+          {
+            "term": "Duitse Bond",
+            "definition": "Bondgenootschap van Duitse staatjes, opgericht tijdens het Congres van Wenen"
+          },
+          {
+            "term": "Expeditie",
+            "definition": "Een ontdekkings- of onderzoeksreis naar onbekende gebieden"
+          },
+          {
+            "term": "Frans-Duitse Oorlog",
+            "definition": "Oorlog tussen Frankrijk en de Duitse Bond (onder leiding van Pruisen) in 1870–1871, leidde tot het Duitse Keizerrijk"
+          },
+          {
+            "term": "Imperium",
+            "definition": "Een overzees (wereld)rijk"
+          },
+          {
+            "term": "Indirect bestuur",
+            "definition": "Manier om een kolonie te besturen waarbij Europese bestuurders boven inlandse vorsten staan"
+          },
+          {
+            "term": "Militarisme",
+            "definition": "Voorliefde voor militair vertoon, zoals uniformen, wapens en discipline"
+          },
+          {
+            "term": "Modern Imperialisme",
+            "definition": "Periode 1870–1900 waarin Europese landen grote delen van Afrika en Azië veroverden"
           },
           {
             "term": "Nationalisme",
-            "definition": "Grote liefde voor eigen land, volk en cultuur."
+            "definition": "Grote liefde voor eigen land, volk en cultuur"
+          },
+          {
+            "term": "Nederlands-Indië",
+            "definition": "Nederlandse kolonie in Zuidoost-Azië (tegenwoordig Indonesië)"
+          },
+          {
+            "term": "Restauratie",
+            "definition": "Periode in Europa na het Congres van Wenen waarin oude koningen terugkeerden"
+          },
+          {
+            "term": "Superioriteitsdenken",
+            "definition": "Het gevoel dat je meer waard bent dan een ander"
+          },
+          {
+            "term": "Verdeel-en-heerspolitiek",
+            "definition": "Manier van besturen waarbij groepen in een land tegen elkaar worden opgezet om heersen makkelijker te maken"
+          },
+          {
+            "term": "Wedloop om Afrika",
+            "definition": "Periode van kolonisatie (1880–1914) waarin Europese landen Afrika onderling verdeelden"
           }
         ]
       }
@@ -948,7 +1131,174 @@
     "id": 8,
     "name": "Duits",
     "description": "Details over Duits",
-    "stof": ""
+    "stof": "",
+    "wordlists": [
+      {
+        "name": "worden in tt en vt",
+        "termLang": "nl-NL",
+        "defLang": "de-DE",
+        "words": [
+          {
+            "term": "ik word",
+            "definition": "ich werde"
+          },
+          {
+            "term": "jij wordt",
+            "definition": "du wirst"
+          },
+          {
+            "term": "hij/zij/het wordt",
+            "definition": "er/sie/es wird"
+          },
+          {
+            "term": "wij worden",
+            "definition": "wir werden"
+          },
+          {
+            "term": "jullie worden",
+            "definition": "ihr werdet"
+          },
+          {
+            "term": "zij worden / u wordt (formeel)",
+            "definition": "sie/Sie werden"
+          },
+          {
+            "term": "ik werd",
+            "definition": "ich wurde"
+          },
+          {
+            "term": "jij werd",
+            "definition": "du wurdest"
+          },
+          {
+            "term": "hij/zij/het werd",
+            "definition": "er/sie/es wurde"
+          },
+          {
+            "term": "wij werden",
+            "definition": "wir wurden"
+          },
+          {
+            "term": "jullie werden",
+            "definition": "ihr wurdet"
+          },
+          {
+            "term": "zij werden",
+            "definition": "u werd, sie/Sie wurden"
+          }
+        ]
+      },
+      {
+        "name": "Lernbox 1.1",
+        "termLang": "de-DE",
+        "defLang": "nl-NL",
+        "words": [
+          {
+            "term": "als",
+            "definition": "toen"
+          },
+          {
+            "term": "außer",
+            "definition": "behalve"
+          },
+          {
+            "term": "deswegen",
+            "definition": "daarom"
+          },
+          {
+            "term": "der Fluss",
+            "definition": "de rivier"
+          },
+          {
+            "term": "das Gebäude",
+            "definition": "het gebouw"
+          },
+          {
+            "term": "gehören zu",
+            "definition": "behoren tot"
+          },
+          {
+            "term": "jedes Jahr",
+            "definition": "ieder jaar"
+          },
+          {
+            "term": "oben",
+            "definition": "boven"
+          },
+          {
+            "term": "der Platz",
+            "definition": "de plek"
+          },
+          {
+            "term": "stattfinden",
+            "definition": "plaatsvinden"
+          },
+          {
+            "term": "unten",
+            "definition": "beneden"
+          },
+          {
+            "term": "versuchen",
+            "definition": "proberen"
+          }
+        ]
+      },
+      {
+        "name": "Lernbox 1.2",
+        "termLang": "de-DE",
+        "defLang": "nl-NL",
+        "words": [
+          {
+            "term": "außerdem",
+            "definition": "bovendien"
+          },
+          {
+            "term": "der Eintritt",
+            "definition": "de entree"
+          },
+          {
+            "term": "erhalten",
+            "definition": "krijgen"
+          },
+          {
+            "term": "der Flughafen",
+            "definition": "het vliegveld"
+          },
+          {
+            "term": "die öffentlichen Verkehrsmittel",
+            "definition": "het openbaar vervoer"
+          },
+          {
+            "term": "passieren",
+            "definition": "gebeuren"
+          },
+          {
+            "term": "recht haben",
+            "definition": "gelijk hebben"
+          },
+          {
+            "term": "die Sehenswürdigkeit",
+            "definition": "de bezienswaardigheid"
+          },
+          {
+            "term": "verpassen",
+            "definition": "missen"
+          },
+          {
+            "term": "wach",
+            "definition": "wakker"
+          },
+          {
+            "term": "weit",
+            "definition": "ver"
+          },
+          {
+            "term": "zu zweit",
+            "definition": "in tweetallen"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": 9,
@@ -1089,7 +1439,7 @@
         "defLang": "nl-NL",
         "words": [
           {
-            "term": "les gens m mv",
+            "term": "les gens",
             "definition": "de mensen"
           },
           {

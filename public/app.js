@@ -40,6 +40,23 @@ async function postData(endpoint, data) {
     return await response.json();
   } catch (error) {
     console.error('Error posting data:', error);
+    throw error;
+  }
+}
+
+// Functie om data te updaten
+async function putData(endpoint, data) {
+  try {
+    const response = await fetch(`/api/${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error('Error putting data:', error);
+    throw error;
   }
 }
 
@@ -53,6 +70,7 @@ if (document.getElementById('upcoming-tests-container')) {
   }
   loadDashboard();
 }
+
 
 // Bijv. voor bestanden.html
 if (document.getElementById('files-container')) {
@@ -198,6 +216,42 @@ function openPreviewModal(filePath, fileName) {
             .then(res => res.arrayBuffer())
             .then(arrayBuffer => {
               console.log('Starting PPTX preview');
+
+// Undo/Redo functionality
+let history = [];
+const MAX_HISTORY_SIZE = 10;
+
+function saveState() {
+    if (history.length >= MAX_HISTORY_SIZE) {
+        history.shift(); // Remove the oldest state
+    }
+    history.push(JSON.parse(JSON.stringify(plannedItems))); // Deep copy
+    updateUndoButtonVisibility();
+}
+
+function undoLastAction() {
+    if (history.length > 1) { // Keep at least one state (the initial state)
+        history.pop(); // Remove current state
+        plannedItems = JSON.parse(JSON.stringify(history[history.length - 1])); // Revert to previous state
+        renderPlanner();
+        renderFinalPlanner();
+        updateUndoButtonVisibility();
+    }
+}
+
+function updateUndoButtonVisibility() {
+    const undoBtn = document.getElementById('undo-btn');
+    if (undoBtn) {
+        undoBtn.style.display = history.length > 1 ? 'inline-flex' : 'none';
+    }
+}
+
+// Add event listener for the undo button
+const undoBtn = document.getElementById('undo-btn');
+if (undoBtn) {
+    undoBtn.addEventListener('click', undoLastAction);
+}
+updateUndoButtonVisibility();
               document.querySelector('#preview-container p').remove(); // Remove loading message
               pptxPreviewer.preview(arrayBuffer);
               console.log('PPTX preview called');
@@ -468,7 +522,7 @@ if (document.getElementById('planner-page')) {
 
             let eventsHtml = '';
             itemsForDay.forEach(item => {
-                eventsHtml += `<div class="event-item event-${item.type.toLowerCase()}">${item.title}</div>`;
+                eventsHtml += `<div class="event-item event-${item.type.toLowerCase()}" data-item-id="${item.id}">${item.title}</div>`;
             });
 
             const todayClass = new Date().toISOString().split('T')[0] === dayString ? 'today' : '';
@@ -480,6 +534,73 @@ if (document.getElementById('planner-page')) {
                 </div>
             `;
         }
+
+        document.querySelectorAll('.event-item').forEach(item => {
+            item.addEventListener('click', async (e) => {
+                const itemId = e.target.dataset.itemId;
+                const item = (await fetchData('items')).find(i => i.id == itemId);
+                if (item) {
+                    const modal = createModal();
+                    modal.innerHTML = `
+                        <h3>Bewerk Item</h3>
+                        <label for="edit-title">Titel:</label>
+                        <input type="text" id="edit-title" value="${item.title}">
+                        <label for="edit-date">Datum:</label>
+                        <input type="date" id="edit-date" value="${item.date}">
+                        <p><strong>Vak:</strong> ${item.vak}</p>
+                        <p><strong>Type:</strong> ${item.type}</p>
+                        <button id="save-item-btn">Opslaan</button>
+                        <button id="delete-item-btn">Verwijderen</button>
+                        <button id="close-modal-btn">Sluiten</button>
+                    `;
+                    document.body.appendChild(modal);
+
+                    document.getElementById('save-item-btn').addEventListener('click', async () => {
+                        const updatedItem = {
+                            ...item,
+                            title: document.getElementById('edit-title').value,
+                            date: document.getElementById('edit-date').value
+                        };
+                        try {
+                            const response = await fetch(`/api/items/${item.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(updatedItem)
+                            });
+                            if (response.ok) {
+                                document.body.removeChild(modal);
+                                renderPlanner();
+                            } else {
+                                alert('Bijwerken mislukt.');
+                            }
+                        } catch (error) {
+                            console.error('Error updating item:', error);
+                            alert('Er is een fout opgetreden bij het bijwerken.');
+                        }
+                    });
+
+                    document.getElementById('delete-item-btn').addEventListener('click', async () => {
+                        if (confirm('Weet je zeker dat je dit item wilt verwijderen?')) {
+                            try {
+                                const response = await fetch(`/api/items/${item.id}`, { method: 'DELETE' });
+                                if (response.ok) {
+                                    document.body.removeChild(modal);
+                                    renderPlanner();
+                                } else {
+                                    alert('Verwijderen mislukt.');
+                                }
+                            } catch (error) {
+                                console.error('Error deleting item:', error);
+                                alert('Er is een fout opgetreden bij het verwijderen.');
+                            }
+                        }
+                    });
+                    document.getElementById('close-modal-btn').addEventListener('click', () => {
+                        document.body.removeChild(modal);
+                    });
+                }
+            });
+        });
     }
 
     prevMonthBtn.addEventListener('click', async () => {
@@ -539,22 +660,20 @@ document.addEventListener('DOMContentLoaded', () => {
             setTheme(savedTheme);
         });
     }
-
-    async function saveStofForSubject(subjectId, stofText) {
-        if (!subjectId) return;
-        const subject = (await fetchData('subjects')).find(s => s.id === parseInt(subjectId));
-        if (subject) {
-            subject.stof = stofText;
-            await postData(`subjects/${subjectId}`, subject);
-            console.log(`Stof opgeslagen voor vak ${subjectId}`);
-        }
-    }
-
-    async function getStofForSubject(subjectId) {
-        if (!subjectId) return '';
-        const subject = (await fetchData('subjects')).find(s => s.id === parseInt(subjectId));
-        return subject ? subject.stof : '';
-    }
-
-
 });
+
+async function saveStofForSubject(subjectId, stofText) {
+    if (!subjectId) return;
+    const subject = (await fetchData('subjects')).find(s => s.id === parseInt(subjectId));
+    if (subject) {
+        subject.stof = stofText;
+        await putData(`subjects/${subjectId}`, subject);
+        console.log(`Stof opgeslagen voor vak ${subjectId}`);
+    }
+}
+
+async function getStofForSubject(subjectId) {
+    if (!subjectId) return '';
+    const subject = (await fetchData('subjects')).find(s => s.id === parseInt(subjectId));
+    return subject ? subject.stof : '';
+}
