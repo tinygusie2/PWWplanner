@@ -1,7 +1,135 @@
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap');
+/* Google Sans */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Normal_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Normal_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
-/* --- Kleurvariabelen (Light & Dark Theme) --- */
+/* Google Sans (Medium) */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Halfvet_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Halfvet_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Google Sans (Bold) */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Vet_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Vet_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Google Sans Text */
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Normal_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Normal_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Google Sans Text (Medium) */
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Halfvet_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Halfvet_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Google Sans Text (Bold) */
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Vet_latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/Google_Sans_Text_Vet_latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Material_Symbols_Outlined.woff2') format('woff2');
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+ /*--- Kleurvariabelen (Light & Dark Theme) --- */
 :root {
   --primary: #006e18;
   --on-primary: #ffffff;
@@ -19,12 +147,12 @@
   --on-error: #ffffff;
   --error-container: #ffdad6;
   --on-error-container: #410002;
-  --background: #fdfdf6;
-  --on-background: #1a1c18;
-  --surface: #fdfdf6;
-  --on-surface: #1a1c18;
-  --surface-variant: #dfe4d7;
-  --on-surface-variant: #43483f;
+  --background: #ffffff; /* Verbeterd contrast */
+  --on-background: #1a1c18; /* Verbeterd contrast */
+  --surface: #ffffff; /* Verbeterd contrast */
+  --on-surface: #1a1c18; /* Verbeterd contrast */
+  --surface-variant: #e2e3dc; /* Verbeterd contrast */
+  --on-surface-variant: #43483f; /* Verbeterd contrast */
   --outline: #73796e;
   --outline-variant: #c3c8bb;
   --shadow: #000000;
@@ -51,14 +179,14 @@
   --on-error: #690005;
   --error-container: #93000a;
   --on-error-container: #ffdad6;
-  --background: #1a1c18;
-  --on-background: #e2e3dc;
-  --surface: #1a1c18;
-  --on-surface: #e2e3dc;
-  --surface-variant: #43483f;
+  --background: #121212; /* Verbeterd contrast */
+  --on-background: #e2e3dc; /* Verbeterd contrast */
+  --surface: #1e1e1e; /* Verbeterd contrast */
+  --on-surface: #e2e3dc; /* Verbeterd contrast */
+  --surface-variant: #4f534a; /* Verbeterd contrast */
   --on-surface-variant: #c3c8bb;
   --outline: #8d9387;
-  --outline-variant: #43483f;
+  --outline-variant: #4f534a; /* Verbeterd contrast */
   --shadow: #000000;
   --scrim: #000000;
   --inverse-surface: #e2e3dc;

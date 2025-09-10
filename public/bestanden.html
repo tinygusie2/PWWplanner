@@ -5,39 +5,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PWW Planner - Bestanden Pagina</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="ico.svg" type="image/svg+xml">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-
-    <!-- Google Fonts Import -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet"> -->
+    
     <style>
         :root {
-            --bg-surface: #005312;
-            --bg-primary-container: #1a1c18;
-            --color-on-surface: #e2e3dc;
-            --color-primary: #6750a4;
-            --color-on-primary-container: #005312;
-            --color-secondary-container: #e2e3dc;
-            --color-outline: #e2e3dc;
-            --color-surface-variant: #ffffff;
+            --md-sys-color-primary: #80db73;
+            --md-sys-color-on-primary: #00390a;
+            --md-sys-color-primary-container: #005312;
+            --md-sys-color-on-primary-container: #9cf98d;
+            --md-sys-color-secondary-container: #3a4b38;
+            --md-sys-color-on-secondary-container: #d0e8c3;
+            --md-sys-color-background: #121212;
+            --md-sys-color-on-background: #e2e3dc;
+            --md-sys-color-surface: #1e1e1e;
+            --md-sys-color-on-surface: #e2e3dc;
+            --md-sys-color-surface-variant: #4f534a;
+            --md-sys-color-on-surface-variant: #c3c8bb;
+            --md-sys-color-outline: #8d9387;
+            --md-sys-color-inverse-surface: #e2e3dc;
+            --md-sys-color-inverse-on-surface: #1a1c18;
+            --md-sys-color-error: #ffb4ab;
+            --md-sys-color-on-error: #690005;
+            --md-sys-color-error-container: #93000a;
+            --md-sys-color-on-error-container: #ffdad6;
+            
+            /* Elevation */
+            --md-sys-elevation-level1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+            --md-sys-elevation-level2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
         }
 
-        body { 
-            font-family: 'Google Sans Text', Arial, sans-serif; 
-            background-color: var(--bg-primary-container);
-            color: var(--color-surface-variant);
+        body {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            margin: 0;
+            padding: 0;
         }
 
-        h2, h3 { 
-            font-family: 'Google Sans', Arial, sans-serif; 
-            font-weight: 500; 
+        .app-container {
+            display: flex;
+            min-height: 100vh;
         }
-        h2 { font-size: 2.25rem; font-weight: 700; }
-        p { font-family: 'Google Sans Text', Arial, sans-serif; }
 
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+        
+        .sidebar {
+            width: 256px;
+            background-color: var(--md-sys-color-surface);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: width 0.3s ease-in-out;
+        }
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            white-space: nowrap;
+        }
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .sidebar.collapsed h1 {
+            display: none;
+        }
+        /* .icon-bg {
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .m3-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            color: var(--md-sys-color-on-surface-variant);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .m3-nav-item:hover, .m3-nav-item.active {
+            background-color: var(--secondary-container);
+            color: var(--on-secondary-container);
+        }
+        .m3-nav-item span {
+            white-space: nowrap;
+        }
+        .sidebar.collapsed .m3-nav-item span:last-child {
+            display: none;
+        }
+        .sidebar-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--md-sys-color-outline);
+        }
+        .sidebar.collapsed .sidebar-footer {
+            align-items: center;
+        }
+        .sidebar.collapsed .sidebar-footer .button span:last-child {
+            display: none;
+        }
+
+        /* --- Buttons (M3-style) --- */
+        .m3-button {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: none;
+        }
+        .m3-button-elevated {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+        .m3-button-elevated:hover {
+            background-color: #383a35; /* Example hover state layer */
+            color: var(--md-sys-color-primary);
+        }
+        .m3-button-filled {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+        .m3-button-filled:hover {
+            background-color: #92e085; /* Example hover state layer */
+        }
+        
+        /* --- Page Header --- */
         .header {
             margin-bottom: 2rem;
             display: flex;
@@ -46,91 +176,95 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .header p { font-size: 1.125rem; color: #ffffff; }
-
-        .button {
-            font-family: 'Google Sans', sans-serif;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            background-color: var(--color-secondary-container);
-            color: var(--color-on-primary-container);
+        .header h2 { 
+            font-family: 'Google Sans', Arial, sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0;
         }
-        .button:hover { background-color: #80db73; }
-
-        /* --- Bestanden Pagina Specifiek --- */
+        .header p {
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            font-size: 1.125rem;
+            color: var(--md-sys-color-on-surface-variant);
+            margin: 0;
+        }
+        
+        /* --- Controls --- */
         .controls-container {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
         }
-
-        .search-bar {
+        .search-field {
             flex-grow: 1;
             position: relative;
         }
-        .search-bar i {
+        .search-field .material-symbols-outlined {
             position: absolute;
-            left: 1.5rem;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--color-outline);
+            color: var(--md-sys-color-on-surface-variant);
         }
-        .search-input {
+        .m3-input-field {
             font-family: 'Google Sans Text', sans-serif;
             font-size: 1rem;
-            width: 90%;
-            padding: 0.75rem 1rem 1rem 3rem;
-            border: 1px solid var(--color-outline);
-            border-radius: 9999px;
-            background-color: var(--bg-surface);
+            width: calc(100% - 3rem);
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: none;
+            border-bottom: 1px solid var(--md-sys-color-outline);
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface);
+            border-radius: 28px;
+            box-shadow: var(--md-sys-elevation-level1);
         }
-        .search-input:focus {
+        .m3-input-field:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 2px var(--color-secondary-container);
+            border-bottom: 2px solid var(--md-sys-color-primary);
         }
-
-        .filter-select {
+        .m3-select {
             font-family: 'Google Sans Text', sans-serif;
             font-size: 1rem;
             padding: 0.75rem 1rem;
-            border: 1px solid var(--color-outline);
+            border: none;
             border-radius: 8px;
-            background-color: var(--bg-surface);
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='none' d='M0 0h24v24H0V0z'/%3E%3Cpath fill='%238c9389' d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem top 50%;
+            background-size: 1.5rem;
+            cursor: pointer;
         }
         
-        .files-table {
+        /* --- Files Table --- */
+        .m3-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid var(--color-surface-variant);
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: var(--md-sys-elevation-level1);
+            background-color: var(--md-sys-color-surface);
         }
-        .files-table th, .files-table td {
+        .m3-table th, .m3-table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--color-surface-variant);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
         }
-        .files-table th {
+        .m3-table th {
             font-family: 'Google Sans', sans-serif;
             font-size: 0.875rem;
-            color: #ffffff;
-            background-color: var(--bg-surface);
+            color: var(--md-sys-color-on-surface-variant);
+            background-color: var(--md-sys-color-surface);
+            font-weight: 500;
         }
-        .files-table tr:last-child td {
+        .m3-table tr:last-child td {
             border-bottom: none;
         }
-        .files-table tr:hover {
-            background-color: #80db73;
+        .m3-table tr:hover {
+            background-color: rgba(128, 219, 115, 0.08); /* Hover state layer */
         }
 
         .file-name-cell {
@@ -139,40 +273,39 @@
             gap: 1rem;
         }
         .file-name-cell p {
-            font-family: 'Google Sans', sans-serif;
+            font-family: 'Google Sans Text', sans-serif;
             font-weight: 500;
+            margin: 0;
         }
         .file-icon {
-            padding: 0.5rem;
-            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .icon-pdf { background-color: #ffdad6; color: #410002; }
-        .icon-docx { background-color: #d8e2ff; color: #001b3f; }
-        .icon-pptx { background-color: #ffddc1; color: #442000; }
-        .icon-link { background-color: #d0f0c0; color: #00210b; }
+        .file-icon.pdf { background-color: #ffdad6; color: #410002; }
+        .file-icon.docx { background-color: #d8e2ff; color: #001b3f; }
+        .file-icon.pptx { background-color: #ffddc1; color: #442000; }
+        .file-icon.link { background-color: #d0f0c0; color: #00210b; }
 
-        .actions-cell {
-            text-align: right;
-        }
-        .action-button {
+        .actions-cell .m3-icon-button {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0.5rem;
             border-radius: 50%;
+            color: var(--md-sys-color-on-surface-variant);
+            transition: background-color 0.2s;
         }
-        .action-button:hover {
-            background-color: var(--color-secondary-container);
+        .actions-cell .m3-icon-button:hover {
+            background-color: rgba(226, 227, 220, 0.08); /* Hover state layer */
         }
-
     </style>
 </head>
 <body>
     <div class="app-container">
-        <div id="sidebar-container"></div>
         <aside class="sidebar">
             <div>
                 <div class="sidebar-header">
@@ -189,7 +322,7 @@
                         <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
                         <li><a href="/bestanden" class="m3-nav-item active"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
                         <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
-                        <li><a href="/pdf-maker.html" class="m3-nav-item"><span class="material-symbols-outlined">draw</span><span>PDF Maker</span></a></li>
+                        <li><a href="/cijfers.html" class="m3-nav-item"><span class="material-symbols-outlined">trending_up</span><span>Mijn Cijfers</span></a></li>
                     </ul>
                 </nav>
             </div>
@@ -210,24 +343,24 @@
                         <h2>Bestanden</h2>
                         <p>Jouw centrale bibliotheek voor al het studiemateriaal.</p>
                     </div>
-                    <button class="button" id="upload-file-btn">
+                    <button class="m3-button m3-button-filled" id="upload-file-btn">
                         <span class="material-symbols-outlined">upload</span>
                         Bestand Uploaden
                     </button>
                 </header>
 
                 <div class="controls-container">
-                    <div class="search-bar">
+                    <div class="search-field">
                         <span class="material-symbols-outlined">search</span>
-                        <input type="text" class="search-input" placeholder="Zoek bestanden...">
+                        <input type="text" class="m3-input-field" placeholder="Zoek bestanden...">
                     </div>
-                    <select class="filter-select" aria-label="Filter op vak">
+                    <select class="m3-select" aria-label="Filter op vak">
                         <option>Alle vakken</option>
                         <option>Wiskunde B</option>
                         <option>Natuurkunde</option>
                         <option>Nederlands</option>
                     </select>
-                    <select class="filter-select" aria-label="Filter op type">
+                    <select class="m3-select" aria-label="Filter op type">
                         <option>Alle types</option>
                         <option>PDF</option>
                         <option>Word-document</option>
@@ -236,7 +369,7 @@
                     </select>
                 </div>
 
-                <table class="files-table">
+                <table class="m3-table">
                     <thead>
                         <tr>
                             <th>Bestandsnaam</th>
@@ -246,18 +379,12 @@
                         </tr>
                     </thead>
                     <tbody id="files-container">
-                        <!-- Files will be dynamically inserted here -->
                     </tbody>
                 </table>
-
             </div>
         </main>
     </div>
 
     <script src="/app.js"></script>
-    <script>
-        // Initialize Lucide Icons
-        
-    </script>
 </body>
 </html>

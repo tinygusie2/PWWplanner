@@ -17,6 +17,7 @@ const itemsPath = path.join(__dirname, 'data', 'items.json');
 const filesPath = path.join(__dirname, 'data', 'files.json');
 const preferencesPath = path.join(__dirname, 'data', 'preferences.json');
 const plannerDataPath = path.join(__dirname, 'data', 'planner-data.json');
+const cijferPath = path.join(__dirname, 'data', 'cijfer.json');
 
 
 // Read JSON function
@@ -67,6 +68,38 @@ app.put('/api/preferences', async (req, res) => {
     res.status(500).json({ error: 'Error updating preferences' });
   }
 });
+
+app.get('/api/cijfers', async (req, res) => {
+  try {
+    const cijfer = await readJSON(cijferPath);
+    res.json(cijfer);
+  } catch (err) {
+    res.status(500).json({ error: 'Error met het lezen van cijfer' });
+  }
+});
+
+app.post('/api/cijfers', async (req, res) => {
+  try {
+    await writeJSON(cijferPath, req.body);
+    res.status(200).json({ message: 'Cijfer opgeslagen' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error met het opslaan van het cijfer'})
+  }
+});
+
+app.delete('/api/cijfers/:id', async (req, res) => {
+  try {
+    const cijfer = await readJSON(cijferPath);
+    const index = cijfer.findIndex(g => g.id === parseInt(req.params.id));
+    if (index === -1) return res.status(404).json({ error: 'Grade not found' });
+    const verwijderde = cijfer.splice(index, 1);
+    await writeJSON(cijferPath, cijfer);
+    res.status(200).json({ message: 'cijfer verwijderd:', verwijderde });
+  } catch (err) {
+    res.status(500).json({ error: 'Error met het verwijderen cijfer' });
+  }
+});
+
 
 // Planner data endpoints
 app.get('/api/planner-data', async (req, res) => {

@@ -8,15 +8,26 @@ function createModal() {
   modal.style.top = '50%';
   modal.style.left = '50%';
   modal.style.transform = 'translate(-50%, -50%)';
-  modal.style.background = 'black';
-  modal.style.padding = '20px';
-  modal.style.border = '1px solid black';
+  modal.style.background = 'var(--surface)';
+  modal.style.padding = '2rem';
+  modal.style.border = '1px solid var(--outline)';
   modal.style.zIndex = '1000';
-  modal.style.borderRadius = '10px';
+  modal.style.borderRadius = '16px';
+  modal.style.boxShadow = '0 4px 16px rgba(0,0,0,0.25)';
+  modal.style.color = 'var(--on-surface)';
+  
+  document.body.appendChild(modal);
+
+  // Add close method to modal
+  modal.close = () => {
+    if (document.body.contains(modal)) {
+      document.body.removeChild(modal);
+    }
+  };
+  
   return modal;
 }
 
-// Functie om data op te halen
 async function fetchData(endpoint) {
   try {
     const response = await fetch(`/api/${endpoint}`);
@@ -28,7 +39,6 @@ async function fetchData(endpoint) {
   }
 }
 
-// Functie om data te posten
 async function postData(endpoint, data) {
   try {
     const response = await fetch(`/api/${endpoint}`, {
@@ -44,7 +54,6 @@ async function postData(endpoint, data) {
   }
 }
 
-// Functie om data te updaten
 async function putData(endpoint, data) {
   try {
     const response = await fetch(`/api/${endpoint}`, {
@@ -72,7 +81,7 @@ if (document.getElementById('upcoming-tests-container')) {
 }
 
 
-// Bijv. voor bestanden.html
+// voor bestanden
 if (document.getElementById('files-container')) {
   async function loadFiles() {
     const files = await fetchData('files');
@@ -215,24 +224,24 @@ function openPreviewModal(filePath, fileName) {
           fetch(`/uploads/${filePath}`)
             .then(res => res.arrayBuffer())
             .then(arrayBuffer => {
-              console.log('Starting PPTX preview');
+              // console.log('Starting PPTX preview');
 
-// Undo/Redo functionality
-let history = [];
-const MAX_HISTORY_SIZE = 10;
+// voor control Z werkt nog niet hel
+let geschiedenis = [];
+const MAX_GESCHIEDENIS = 10;
 
 function saveState() {
-    if (history.length >= MAX_HISTORY_SIZE) {
-        history.shift(); // Remove the oldest state
+    if (geschiedenis.length >= MAX_GESCHIEDENIS) {
+        geschiedenis.shift(); 
     }
-    history.push(JSON.parse(JSON.stringify(plannedItems))); // Deep copy
+    geschiedenis.push(JSON.parse(JSON.stringify(plannedItems))); 
     updateUndoButtonVisibility();
 }
 
 function undoLastAction() {
-    if (history.length > 1) { // Keep at least one state (the initial state)
-        history.pop(); // Remove current state
-        plannedItems = JSON.parse(JSON.stringify(history[history.length - 1])); // Revert to previous state
+    if (geschiedenis.length > 1) { 
+        geschiedenis.pop(); 
+        plannedItems = JSON.parse(JSON.stringify(geschiedenis[geschiedenis.length - 1])); 
         renderPlanner();
         renderFinalPlanner();
         updateUndoButtonVisibility();
@@ -242,11 +251,11 @@ function undoLastAction() {
 function updateUndoButtonVisibility() {
     const undoBtn = document.getElementById('undo-btn');
     if (undoBtn) {
-        undoBtn.style.display = history.length > 1 ? 'inline-flex' : 'none';
+        undoBtn.style.display = geschiedenis.length > 1 ? 'inline-flex' : 'none';
     }
 }
 
-// Add event listener for the undo button
+
 const undoBtn = document.getElementById('undo-btn');
 if (undoBtn) {
     undoBtn.addEventListener('click', undoLastAction);
@@ -254,11 +263,10 @@ if (undoBtn) {
 updateUndoButtonVisibility();
               document.querySelector('#preview-container p').remove(); // Remove loading message
               pptxPreviewer.preview(arrayBuffer);
-              console.log('PPTX preview called');
-              // Add navigation for page-by-page viewing
+              // console.log('PPTX preview called');
               const wrapper = document.getElementById('pptx-wrapper');
               wrapper.style.overflow = 'hidden';
-              const slides = wrapper.querySelectorAll('div'); // Assuming slides are div elements
+              const slides = wrapper.querySelectorAll('div');
               if (slides.length > 1) {
                 let current = 0;
                 const showSlide = () => {
@@ -296,20 +304,20 @@ updateUndoButtonVisibility();
                 });
                 wrapper.appendChild(nextBtn);
               } else {
-                console.log('No multiple slides detected for navigation');
+                console.log('Niet meer dan een slide gevonden dus kan niet skippen');
               }
             })
             .catch(err => {
                console.error('Error loading PPTX:', err);
-               previewContainer.innerHTML += `<p>Error loading PPTX: ${err.message}</p>`;
+               previewContainer.innerHTML += `<p>Error bij laden van PPTX: ${err.message}</p>`;
              });
         }).catch(err => {
-           console.error('Failed to load PPTX preview library:', err);
-           previewContainer.innerHTML = `<p>Failed to load PPTX preview library: ${err.message}</p>`;
+           console.error('Iets mis met het laden van de PPTX Repo:', err);
+           previewContainer.innerHTML = `<p>Fout bij laden van PPTX preview library: ${err.message}</p>`;
          });
     } else if (['txt', 'md'].includes(extension)) {
         fetch(`/uploads/${filePath}`)
-            .then(response => response.ok ? response.text() : Promise.reject(`Network response was not ok (${response.status})`))
+            .then(response => response.ok ? response.text() : Promise.reject(`Netwerk response was niet ok (${response.status})`))
             .then(text => {
                 const pre = document.createElement('pre');
                 pre.style.whiteSpace = 'pre-wrap';
@@ -321,7 +329,7 @@ updateUndoButtonVisibility();
                 previewContainer.innerHTML = `<p>Fout bij laden van tekst: ${err}</p>`;
             });
     } else {
-        previewContainer.innerHTML = `<p>Preview niet ondersteund voor dit bestandstype. Download om te bekijken.</p>`;
+        previewContainer.innerHTML = `<p>Preview niet ondersteund voor dit bestand. Download om te bekijken.</p>`;
     }
 }
 
@@ -455,7 +463,7 @@ if (document.getElementById('subject-details-container')) {
             console.error('Upload failed');
           }
         } catch (error) {
-          console.error('Error uploading file:', error);
+          console.error('Error met het uploaden van het bestand:', error);
         }
       }
     });

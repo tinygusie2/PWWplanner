@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWW Planner - Mijn Cijfers</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/ico.svg" type="image/svg+xml">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+     -->
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .grade-circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .grade-circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 1rem;
+        }
+
+        .grade-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .grade-circle-bg {
+            stroke: var(--surface-variant);
+        }
+
+        .grade-circle-fg {
+            stroke: var(--primary);
+            transition: stroke-dasharray 1s ease-out;
+            stroke-linecap: round;
+        }
+
+        .grade-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .m3-card.graph-card {
+            grid-column: 1 / -1;
+        }
+        
+        .graph-container {
+            height: 300px;
+            width: 100%;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--outline-variant);
+        }
+        .data-table th {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 0.875rem;
+            color: var(--on-surface-variant);
+            background-color: var(--surface-variant);
+        }
+        .data-table tr:hover {
+            background-color: var(--surface);
+        }
+        .data-table .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .data-table .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--on-surface-variant);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            font-family: 'Google Sans Text', Arial, sans-serif;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+        }
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .modal-content .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-content label {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .modal-content input, .modal-content select {
+            padding: 0.75rem;
+            border: 1px solid var(--outline);
+            border-radius: 8px;
+            background-color: var(--surface-variant);
+            color: var(--on-surface-variant);
+            font-size: 1rem;
+        }
+        .modal-content .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h1>PWW Planner</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="/" class="m3-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a></li>
+                        <li><a href="/vakken" class="m3-nav-item"><span class="material-symbols-outlined">library_books</span><span>Mijn Vakken</span></a></li>
+                        <li><a href="/planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_month</span><span>Planner</span></a></li>
+                        <li><a href="/study-planner" class="m3-nav-item"><span class="material-symbols-outlined">calendar_view_day</span><span>Studieplanner</span></a></li>
+                        <li><a href="/bestanden" class="m3-nav-item"><span class="material-symbols-outlined">folder_open</span><span>Bestanden</span></a></li>
+                        <li><a href="/woordjes-leren.html" class="m3-nav-item"><span class="material-symbols-outlined">school</span><span>Woordjes Leren</span></a></li>
+                        <li><a href="/cijfers.html" class="m3-nav-item active"><span class="material-symbols-outlined">trending_up</span><span>Mijn Cijfers</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/nieuw-item" class="button button-primary">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Nieuw Item</span>
+                </a>
+                <button id="collapse-btn" class="button">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h2>Mijn Cijfers</h2>
+                    <p>Een overzicht van al je cijfers en je prestaties.</p>
+                </div>
+                <button class="button button-primary" id="add-grade-btn">
+                    <span class="material-symbols-outlined">add</span>
+                    Nieuw Cijfer
+                </button>
+            </header>
+
+            <div class="dashboard-grid">
+                <div class="m3-card grade-circle-container">
+                    <h3>Gewogen Gemiddelde</h3>
+                    <div class="grade-circle">
+                        <svg viewBox="0 0 36 36">
+                            <path class="grade-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3" />
+                            <path id="grade-circle-fg" class="grade-circle-fg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3" />
+                        </svg>
+                        <div id="grade-circle-text" class="grade-circle-text">N/A</div>
+                    </div>
+                </div>
+
+                <div class="m3-card">
+                    <h3>Recente Cijfers</h3>
+                    <div id="recent-grades-container">
+                        <p>Laden...</p>
+                    </div>
+                </div>
+
+                <div class="m3-card">
+                    <h3>Cijfer Voorspelling</h3>
+                    <div id="prediction-container">
+                         <p>Laden...</p>
+                    </div>
+                </div>
+                
+                <div class="m3-card graph-card">
+                    <h3>Cijfer Ontwikkeling</h3>
+                    <div class="graph-container">
+                        <canvas id="grade-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m3-card">
+                <h3>Alle Cijfers</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vak</th>
+                                <th>Toets</th>
+                                <th>Cijfer</th>
+                                <th>Weging</th>
+                                <th>Datum</th>
+                                <th>Acties</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grades-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="grade-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Nieuw Cijfer Toevoegen</h3>
+            <form id="grade-form">
+                <div class="form-group">
+                    <label for="grade-subject">Vak</label>
+                    <select id="grade-subject" name="subject" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="grade-title">Onderwerp</label>
+                    <input type="text" id="grade-title" name="title" placeholder="bv. Toets Hoofdstuk 3" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade-value">Cijfer</label>
+                    <input type="number" id="grade-value" name="grade" step="0.1" min="1.0" max="10.0" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade-weight">Weging</label>
+                    <input type="number" id="grade-weight" name="weight" step="0.1" min="0.1" value="1.0" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade-date">Datum</label>
+                    <input type="date" id="grade-date" name="date" required>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="button" id="cancel-grade-btn">Annuleren</button>
+                    <button type="submit" class="button button-primary">Opslaan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Aangepaste fetchData functie om van de API te halen
+            async function fetchData(endpoint) {
+                try {
+                    const response = await fetch(`/api/${endpoint}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Error fetching ${endpoint}:`, error);
+                    return [];
+                }
+            }
+
+            // Aangepaste postData functie om naar de API te sturen
+            async function postData(endpoint, data) {
+                try {
+                    const response = await fetch(`/api/${endpoint}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Error posting ${endpoint}:`, error);
+                    return null;
+                }
+            }
+
+            // Functie voor een basis cijfer voorspelling
+function populatePrediction() {
+    const predictionContainer = document.getElementById('prediction-container');
+    const sortedGrades = alleCijfers.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    if (sortedGrades.length >= 3) {
+        // Bereken de trend op basis van de laatste 3 cijfers
+        const latestGrades = sortedGrades.slice(0, 3).map(g => g.grade);
+        const averageLatest = latestGrades.reduce((a, b) => a + b, 0) / latestGrades.length;
+        
+        let predictionText;
+        if (averageLatest >= 8.5) {
+            predictionText = "Je bent op de goede weg! Blijf zo doorgaan voor een topgemiddelde. ✨";
+        } else if (averageLatest >= 7) {
+            predictionText = "Mooie constante lijn! Een beetje extra inspanning kan je gemiddelde omhoog stuwen. 🚀";
+        } else {
+            predictionText = "Je cijfers laten wat schommelingen zien. Misschien focus leggen op één vak? 🤔";
+        }
+        
+        predictionContainer.innerHTML = `
+            <div class="m3-expressive-prediction">
+                <p>${predictionText}</p>
+                <small>Gebaseerd op je laatste 3 cijfers.</small>
+            </div>
+        `;
+    } else {
+        predictionContainer.innerHTML = '<p>Voer minstens 3 cijfers in voor een voorspelling.</p>';
+    }
+}
+
+            // Functie om een cijfer te verwijderen via de API
+            async function deleteGrade(id) {
+                try {
+                    const response = await fetch(`/api/cijfers/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Error deleting grade with ID ${id}:`, error);
+                    return null;
+                }
+            }
+
+            const cijfersData = await fetchData('cijfers') || [];
+            const subjectsData = await fetchData('subjects') || [];
+            const gradeModal = document.getElementById('grade-modal');
+            const addGradeBtn = document.getElementById('add-grade-btn');
+            const cancelGradeBtn = document.getElementById('cancel-grade-btn');
+            const gradeForm = document.getElementById('grade-form');
+            const cijferVakKiezen = document.getElementById('grade-subject');
+
+            let alleCijfers = cijfersData;
+
+            // Vul de vakken in het formulier
+            function populateSubjects() {
+                cijferVakKiezen.innerHTML = subjectsData.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+            }
+            populateSubjects();
+
+            // Open/sluit modal
+            addGradeBtn.addEventListener('click', () => gradeModal.classList.add('visible'));
+            cancelGradeBtn.addEventListener('click', () => gradeModal.classList.remove('visible'));
+            gradeModal.addEventListener('click', (e) => {
+                if (e.target === gradeModal) gradeModal.classList.remove('visible');
+            });
+
+            // Formulier indienen
+            gradeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newGrade = {
+                    id: Date.now(),
+                    subject: cijferVakKiezen.value,
+                    title: document.getElementById('grade-title').value,
+                    grade: parseFloat(document.getElementById('grade-value').value),
+                    weight: parseFloat(document.getElementById('grade-weight').value),
+                    date: document.getElementById('grade-date').value
+                };
+                alleCijfers.push(newGrade);
+                await postData('cijfers', alleCijfers);
+                console.log("Cijfer toegevoegd:", newGrade); // Opslaan op de server
+                gradeModal.classList.remove('visible');
+                updateDashboard();
+                gradeForm.reset();
+            });
+            
+            async function updateDashboard() {
+                alleCijfers = await fetchData('cijfers') || [];
+                updateAverageGrade();
+                populateRecentGrades();
+                createGradeChart();
+                populateGradesTable();
+            }
+
+            // --- Geanimeerde Cirkel voor Gemiddeld Cijfer ---
+            function updateAverageGrade() {
+                const totalWeightedSum = alleCijfers.reduce((sum, item) => sum + (item.grade * item.weight), 0);
+                const totalWeight = alleCijfers.reduce((sum, item) => sum + item.weight, 0);
+                
+                const average = totalWeight > 0 ? (totalWeightedSum / totalWeight) : 0;
+                const percentage = (average / 10) * 100;
+                
+                const gradeCircleFg = document.getElementById('grade-circle-fg');
+                const gradeCircleText = document.getElementById('grade-circle-text');
+                
+                const circumference = 2 * Math.PI * 15.9155;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                gradeCircleFg.style.strokeDasharray = `${circumference - offset}, ${offset}`;
+                gradeCircleText.textContent = average.toFixed(1);
+            }
+
+            // --- Recente Cijfers & Cijfer Voorspelling ---
+            function populateRecentGrades() {
+                const recentGradesContainer = document.getElementById('recent-grades-container');
+                const sortedGrades = alleCijfers.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const recent = sortedGrades.slice(0, 3);
+                
+                if (recent.length > 0) {
+                    recentGradesContainer.innerHTML = recent.map(grade => `
+                        <div class="list-item">
+                            <div>
+                                <p><strong>${grade.subject}</strong>: ${grade.title}</p>
+                                <small>${new Date(grade.date).toLocaleDateString()}</small>
+                            </div>
+                            <span class="grade-badge">${grade.grade.toFixed(1)}</span>
+                        </div>
+                    `).join('');
+                } else {
+                    recentGradesContainer.innerHTML = '<p>Nog geen cijfers ingevoerd.</p>';
+                }
+            }
+            
+            // --- Cijfer Ontwikkeling Grafiek ---
+            let gradeChartInstance = null;
+            function createGradeChart() {
+                if (gradeChartInstance) {
+                    gradeChartInstance.destroy();
+                }
+
+                const gradeChart = document.getElementById('grade-chart');
+                const sortedGrades = alleCijfers.sort((a, b) => new Date(a.date) - new Date(b.date));
+                const labels = sortedGrades.map(grade => `${grade.subject} - ${new Date(grade.date).toLocaleDateString()}`);
+                const data = sortedGrades.map(grade => grade.grade);
+                
+                gradeChartInstance = new Chart(gradeChart, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cijfer',
+                            data: data,
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--primary'),
+                            backgroundColor: 'rgba(128, 219, 115, 0.2)',
+                            tension: 0.4,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                max: 10,
+                                min: 0,
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutQuart',
+                        },
+                    }
+                });
+            }
+
+            // --- Tabel met alle cijfers ---
+            function populateGradesTable() {
+                const tableBody = document.getElementById('grades-table-body');
+                if (alleCijfers.length > 0) {
+                    tableBody.innerHTML = alleCijfers.map(grade => `
+                        <tr>
+                            <td>${grade.subject}</td>
+                            <td>${grade.title}</td>
+                            <td>${grade.grade.toFixed(1)}</td>
+                            <td>${grade.weight.toFixed(1)}</td>
+                            <td>${new Date(grade.date).toLocaleDateString()}</td>
+                            <td class="actions">
+                                <button class="button delete-grade-btn" data-id="${grade.id}">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    
+                    document.querySelectorAll('.delete-grade-btn').forEach(button => {
+                        button.addEventListener('click', async (e) => {
+                            const gradeId = parseInt(e.currentTarget.dataset.id);
+                            await deleteGrade(gradeId); // Verwijder via de API
+                            console.log("Cijfer verwijderd")
+                            updateDashboard();
+                        });
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6">Nog geen cijfers ingevoerd.</td></tr>';
+                }
+            }
+            
+            // Initiële laad van het dashboard
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
